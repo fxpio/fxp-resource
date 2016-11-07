@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\DBAL\Exception\DriverException;
-use Sonatra\Bundle\ResourceBundle\Exception\ConstraintViolationException;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface;
-use Sonatra\Bundle\ResourceBundle\ResourceStatutes;
+use Sonatra\Component\Resource\Exception\ConstraintViolationException;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceListInterface;
+use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;

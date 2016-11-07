@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle;
+namespace Sonatra\Component\Resource;
 
-use Sonatra\Bundle\ResourceBundle\Exception\ClassNotInstantiableException;
+use Sonatra\Component\Resource\Exception\ClassNotInstantiableException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -29,7 +29,7 @@ final class ResourceEvents
      * before the persistence in doctrine. However, it's best to use directly the
      * listeners or subscribers of doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const PRE_CREATES = '.domain.pre_creates';
 
@@ -43,7 +43,7 @@ final class ResourceEvents
      * This event is mostly here for reading the list of resource instances after
      * the persistence and the flush in doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const POST_CREATES = '.domain.post_creates';
 
@@ -58,7 +58,7 @@ final class ResourceEvents
      * before the persistence in doctrine. However, it's best to use directly the
      * listeners or subscribers of doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const PRE_UPDATES = '.domain.pre_updates';
 
@@ -72,7 +72,7 @@ final class ResourceEvents
      * This event is mostly here for reading the list of resource instances after
      * the persistence and the flush in doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const POST_UPDATES = '.domain.post_updates';
 
@@ -87,7 +87,7 @@ final class ResourceEvents
      * before the persistence in doctrine. However, it's best to use directly the
      * listeners or subscribers of doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const PRE_UPSERTS = '.domain.pre_upserts';
 
@@ -101,7 +101,7 @@ final class ResourceEvents
      * This event is mostly here for reading the list of resource instances after
      * the persistence and the flush in doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const POST_UPSERTS = '.domain.post_upserts';
 
@@ -116,7 +116,7 @@ final class ResourceEvents
      * before the persistence in doctrine. However, it's best to use directly the
      * listeners or subscribers of doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const PRE_DELETES = '.domain.pre_deletes';
 
@@ -130,7 +130,7 @@ final class ResourceEvents
      * This event is mostly here for reading the list of resource instances after
      * the persistence and the flush in doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const POST_DELETES = '.domain.post_deletes';
 
@@ -145,7 +145,7 @@ final class ResourceEvents
      * before the persistence in doctrine. However, it's best to use directly the
      * listeners or subscribers of doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const PRE_UNDELETES = '.domain.pre_undeletes';
 
@@ -159,7 +159,7 @@ final class ResourceEvents
      * This event is mostly here for reading the list of resource instances after
      * the persistence and the flush in doctrine.
      *
-     * The event listener method receives a Sonatra\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     * The event listener method receives a Sonatra\Component\Resource\Event\ResourceEvent instance.
      */
     const POST_UNDELETES = '.domain.post_undeletes';
 

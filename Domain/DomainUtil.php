@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Exception\DriverException;
-use Sonatra\Bundle\ResourceBundle\Exception\ConstraintViolationException;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface;
-use Sonatra\Bundle\ResourceBundle\ResourceEvents;
-use Sonatra\Bundle\ResourceBundle\ResourceStatutes;
+use Sonatra\Component\Resource\Exception\ConstraintViolationException;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceListInterface;
+use Sonatra\Component\Resource\ResourceEvents;
+use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -111,6 +111,8 @@ abstract class DomainUtil
             $names = array(ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES);
         } elseif (Domain::TYPE_UPDATE === $type) {
             $names = array(ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES);
+        } elseif (Domain::TYPE_DELETE === $type) {
+            $names = array(ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES);
         } elseif (Domain::TYPE_UNDELETE === $type) {
             $names = array(ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES);
         }
@@ -163,8 +165,9 @@ abstract class DomainUtil
     public static function generateShortName($class)
     {
         $pos = strrpos($class, '\\');
+        $pos = false !== $pos ? $pos + 1 : 0;
 
-        return substr($class, $pos + 1);
+        return substr($class, $pos);
     }
 
     /**

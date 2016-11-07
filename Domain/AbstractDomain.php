@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Sonatra\Bundle\DefaultValueBundle\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Bundle\ResourceBundle\Event\ResourceEvent;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceList;
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidConfigurationException;
+use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
+use Sonatra\Component\Resource\Event\ResourceEvent;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceList;
+use Sonatra\Component\Resource\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;

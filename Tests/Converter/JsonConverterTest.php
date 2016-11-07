@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Converter;
+namespace Sonatra\Component\Resource\Tests\Converter;
 
-use Sonatra\Bundle\ResourceBundle\Converter\ConverterInterface;
-use Sonatra\Bundle\ResourceBundle\Converter\JsonConverter;
+use Sonatra\Component\Resource\Converter\ConverterInterface;
+use Sonatra\Component\Resource\Converter\JsonConverter;
 
 /**
  * Tests case for json converter.
@@ -37,7 +37,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidConverterException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidConverterException
      * @expectedExceptionMessage Body should be a JSON object
      */
     public function testInvalidConversion()

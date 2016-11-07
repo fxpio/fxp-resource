@@ -9,14 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Domain;
+namespace Sonatra\Component\Resource\Tests\Functional\Domain;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
-use Sonatra\Bundle\ResourceBundle\ResourceStatutes;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Bar;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Listener\ErrorListener;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Listener\SoftDeletableSubscriber;
+use Sonatra\Component\Resource\ResourceListInterface;
+use Sonatra\Component\Resource\ResourceStatutes;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar;
+use Sonatra\Component\Resource\Tests\Fixtures\Listener\ErrorListener;
 
 /**
  * Functional tests for delete methods of Domain.
@@ -25,41 +24,36 @@ use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Lis
  */
 class DomainDeleteTest extends AbstractDomainTest
 {
-    protected $softClass = 'Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Bar';
+    protected $softClass = Bar::class;
 
     public function testSoftDeletableListener()
     {
-        $this->assertTrue($this->getContainer()->has('doctrine.orm.subscriber.soft_deletable'));
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        /* @var SoftDeletableSubscriber $subscriber */
-        $subscriber = $this->getContainer()->get('doctrine.orm.subscriber.soft_deletable');
-        $subscriber->disable();
+        $this->softDeletable->disable();
 
         $domain = $this->createDomain($this->softClass);
         $objects = $this->insertResources($domain, 2);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 
-        $em->remove($objects[0]);
-        $em->flush();
+        $this->em->remove($objects[0]);
+        $this->em->flush();
         $this->assertCount(1, $domain->getRepository()->findAll());
 
-        $subscriber->enable();
+        $this->softDeletable->enable();
         $objects = $domain->getRepository()->findAll();
         $this->assertCount(1, $objects);
 
         // soft delete
-        $em->remove($objects[0]);
-        $em->flush();
+        $this->em->remove($objects[0]);
+        $this->em->flush();
         /* @var Bar[] $objects */
         $objects = $domain->getRepository()->findAll();
         $this->assertCount(1, $objects);
         $this->assertTrue($objects[0]->isDeleted());
 
         // hard delete
-        $em->remove($objects[0]);
-        $em->flush();
+        $this->em->remove($objects[0]);
+        $this->em->flush();
         $this->assertCount(0, $domain->getRepository()->findAll());
     }
 
@@ -114,7 +108,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $this->assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertFalse($resources->hasErrors());
 
         foreach ($resources->all() as $resource) {
@@ -151,7 +145,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $this->assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertFalse($resources->hasErrors());
 
         foreach ($resources->all() as $resource) {
@@ -212,7 +206,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $this->assertCount(0, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertTrue($resources->hasErrors());
 
         $this->assertFalse($resources->get(0)->isValid());
@@ -239,7 +233,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $this->assertCount(0, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertTrue($resources->hasErrors());
 
         foreach ($resources->all() as $resource) {
@@ -265,7 +259,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $this->assertCount(1, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertTrue($resources->hasErrors());
 
         $this->assertFalse($resources->get(0)->isValid());
@@ -305,7 +299,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $this->assertCount(1, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertTrue($resources->hasErrors());
 
         $this->assertFalse($resources->get(0)->isValid());
@@ -348,11 +342,9 @@ class DomainDeleteTest extends AbstractDomainTest
         $domain = $this->createDomain($this->softClass);
         $objects = $this->insertResources($domain, 2);
 
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->remove($objects[0]);
-        $em->remove($objects[1]);
-        $em->flush();
+        $this->em->remove($objects[0]);
+        $this->em->remove($objects[1]);
+        $this->em->flush();
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 
@@ -384,9 +376,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 2);
         $errorListener = new ErrorListener('deleted', true);
 
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
+        $this->em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 
@@ -413,9 +403,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 2);
         $errorListener = new ErrorListener('deleted');
 
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
+        $this->em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 
@@ -442,9 +430,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 2);
         $errorListener = new ErrorListener('deleted', true);
 
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
+        $this->em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 
@@ -471,9 +457,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 2);
         $errorListener = new ErrorListener('deleted', false);
 
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->getEventManager()->addEventListener(Events::preRemove, $errorListener);
+        $this->em->getEventManager()->addEventListener(Events::preRemove, $errorListener);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 
@@ -500,9 +484,7 @@ class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 2);
         $errorListener = new ErrorListener('deleted', true);
 
-        /* @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->getEventManager()->addEventListener(Events::preRemove, $errorListener);
+        $this->em->getEventManager()->addEventListener(Events::preRemove, $errorListener);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
 

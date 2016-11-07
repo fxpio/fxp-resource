@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Handler;
+namespace Sonatra\Component\Resource\Handler;
 
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidResourceException;
+use Sonatra\Component\Resource\Exception\InvalidResourceException;
 
 /**
  * A form config list.

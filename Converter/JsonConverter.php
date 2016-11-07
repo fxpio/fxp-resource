@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Converter;
+namespace Sonatra\Component\Resource\Converter;
 
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidJsonConverterException;
+use Sonatra\Component\Resource\Exception\InvalidJsonConverterException;
 
 /**
  * A request content converter interface.

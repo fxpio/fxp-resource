@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Converter;
+namespace Sonatra\Component\Resource\Converter;
 
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\ResourceBundle\Exception\UnexpectedTypeException;
+use Sonatra\Component\Resource\Exception\InvalidArgumentException;
+use Sonatra\Component\Resource\Exception\UnexpectedTypeException;
 
 /**
  * A request content converter manager interface.
@@ -31,13 +31,13 @@ class ConverterRegistry implements ConverterRegistryInterface
      *
      * @param ConverterInterface[] $converters
      *
-     * @throws UnexpectedTypeException When the converter is not an instance of "Sonatra\Bundle\ResourceBundle\Converter\ConverterInterface"
+     * @throws UnexpectedTypeException When the converter is not an instance of "Sonatra\Component\Resource\Converter\ConverterInterface"
      */
     public function __construct(array $converters)
     {
         foreach ($converters as $converter) {
             if (!$converter instanceof ConverterInterface) {
-                throw new UnexpectedTypeException($converter, 'Sonatra\Bundle\ResourceBundle\Converter\ConverterInterface');
+                throw new UnexpectedTypeException($converter, 'Sonatra\Component\Resource\Converter\ConverterInterface');
             }
             $this->converters[strtolower($converter->getName())] = $converter;
         }

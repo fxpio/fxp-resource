@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Handler;
+namespace Sonatra\Component\Resource\Handler;
 
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException;
+use Sonatra\Component\Resource\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

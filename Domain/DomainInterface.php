@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\QueryBuilder;
-use Sonatra\Bundle\DefaultValueBundle\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidConfigurationException;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface;
+use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
+use Sonatra\Component\Resource\Exception\InvalidConfigurationException;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceListInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -42,7 +42,7 @@ interface DomainInterface
      * @param ObjectManager $om             The object manager
      * @param array         $disableFilters The list of doctrine filters must be disabled for undelete resources
      *
-     * @throws InvalidConfigurationException When this resource domain class is not managed by doctrine.
+     * @throws InvalidConfigurationException When this resource domain class is not managed by doctrine
      */
     public function setObjectManager(ObjectManager $om, $disableFilters = array());
 

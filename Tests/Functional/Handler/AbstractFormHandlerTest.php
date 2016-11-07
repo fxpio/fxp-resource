@@ -9,29 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Handler;
+namespace Sonatra\Component\Resource\Tests\Functional\Handler;
 
-use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Sonatra\Bundle\ResourceBundle\Converter\ConverterRegistryInterface;
-use Sonatra\Bundle\ResourceBundle\Handler\FormHandler;
-use Sonatra\Bundle\ResourceBundle\Handler\FormHandlerInterface;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\TestAppKernel;
-use Symfony\Component\Form\FormFactoryInterface;
+use Sonatra\Component\Resource\Converter\ConverterRegistry;
+use Sonatra\Component\Resource\Converter\JsonConverter;
+use Sonatra\Component\Resource\Handler\FormHandler;
+use Sonatra\Component\Resource\Handler\FormHandlerInterface;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Abstract class for Functional tests for Form Handler.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractFormHandlerTest extends WebTestCase
+abstract class AbstractFormHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    protected static function createKernel(array $options = array())
-    {
-        return new TestAppKernel('test', true);
-    }
-
     /**
      * Create form handler.
      *
@@ -42,14 +38,19 @@ abstract class AbstractFormHandlerTest extends WebTestCase
      */
     protected function createFormHandler(Request $request = null, $limit = null)
     {
-        $container = $this->getContainer();
+        $converterRegistry = new ConverterRegistry(array(
+            new JsonConverter(),
+        ));
 
-        /* @var ConverterRegistryInterface $converterRegistry */
-        $converterRegistry = $container->get('sonatra_resource.converter_registry');
-        /* @var FormFactoryInterface $formFactory */
-        $formFactory = $container->get('form.factory');
-        /* @var RequestStack $requestStack */
-        $requestStack = $container->get('request_stack');
+        $validator = Validation::createValidatorBuilder()
+            ->addXmlMapping(__DIR__.'/../../Fixtures/config/validation.xml')
+            ->getValidator();
+
+        $formFactory = Forms::createFormFactoryBuilder()
+            ->addExtension(new ValidatorExtension($validator))
+            ->getFormFactory();
+
+        $requestStack = new RequestStack();
 
         if (null !== $request) {
             $requestStack->push($request);

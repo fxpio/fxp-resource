@@ -3,7 +3,7 @@ Getting Started
 
 ## Prerequisites
 
-This version of the bundle requires Symfony 2.5+.
+This version of the bundle requires Symfony 3.
 
 ## Installation
 
@@ -28,7 +28,7 @@ Add Sonatra ResourceBundle in your composer.json:
 Or tell composer to download the bundle by running the command:
 
 ```bash
-$ php composer.phar update sonatra/resource-bundle
+$ php composer.phar require sonatra/resource-bundle:"~1.0"
 ```
 
 Composer will install the bundle to your project's `vendor/sonatra` directory.
@@ -44,7 +44,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Sonatra\Bundle\ResourceBundle\SonatraResourceBundle(),
+        new Sonatra\Component\Resource\SonatraResourceBundle(),
     );
 }
 ```

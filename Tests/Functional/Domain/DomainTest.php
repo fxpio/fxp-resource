@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Domain;
+namespace Sonatra\Component\Resource\Tests\Functional\Domain;
+
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
 
 /**
  * Functional tests for Domain.
@@ -19,7 +21,7 @@ namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Domain;
 class DomainTest extends AbstractDomainTest
 {
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidConfigurationException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidConfigurationException
      * @expectedExceptionMessageRegExp /The "([\w\\\/]+)" class is not managed by doctrine object manager/
      */
     public function testMappingException()
@@ -40,16 +42,15 @@ class DomainTest extends AbstractDomainTest
     {
         $domain = $this->createDomain();
 
-        $valid = 'sonatra_bundle_resource_bundle_tests_functional_fixture_bundle_test_bundle_entity_foo';
+        $valid = 'sonatra_component_resource_tests_fixtures_entity_foo';
         $this->assertSame($valid, $domain->getEventPrefix());
     }
 
     public function testNewInstance()
     {
-        $class = 'Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo';
-        $domain = $this->createDomain($class);
+        $domain = $this->createDomain(Foo::class);
         $resource1 = $domain->newInstance();
-        $resource2 = $this->getContainer()->get('sonatra_default_value.factory')->create($class);
+        $resource2 = $this->objectFactory->create(Foo::class);
 
         $this->assertEquals($resource2, $resource1);
     }

@@ -9,18 +9,26 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Domain;
+namespace Sonatra\Component\Resource\Tests\Functional\Domain;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Sonatra\Bundle\DefaultValueBundle\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Bundle\ResourceBundle\Domain\Domain;
-use Sonatra\Bundle\ResourceBundle\Domain\DomainInterface;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Bar;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\TestAppKernel;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\Setup;
+use Sonatra\Component\DefaultValue\ObjectFactory;
+use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
+use Sonatra\Component\DefaultValue\ObjectRegistry;
+use Sonatra\Component\DefaultValue\ResolvedObjectTypeFactory;
+use Sonatra\Component\Resource\Domain\Domain;
+use Sonatra\Component\Resource\Domain\DomainInterface;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Sonatra\Component\Resource\Tests\Fixtures\Listener\SoftDeletableSubscriber;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -28,11 +36,87 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractDomainTest extends WebTestCase
+abstract class AbstractDomainTest extends \PHPUnit_Framework_TestCase
 {
-    protected static function createKernel(array $options = array())
+    /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    /**
+     * @var ObjectFactoryInterface
+     */
+    protected $objectFactory;
+
+    /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
+
+    /**
+     * @var SoftDeletableSubscriber
+     */
+    protected $softDeletable;
+
+    protected function setUp()
     {
-        return new TestAppKernel('test', true);
+        $config = Setup::createXMLMetadataConfiguration(array(
+            __DIR__.'/../../Fixtures/config/doctrine',
+        ), true);
+        $connectionOptions = array(
+            'driver' => 'pdo_sqlite',
+            'memory' => true,
+        );
+
+        $this->em = EntityManager::create($connectionOptions, $config);
+
+        $this->softDeletable = new SoftDeletableSubscriber();
+        $this->em->getEventManager()->addEventSubscriber($this->softDeletable);
+
+        $this->dispatcher = new EventDispatcher();
+
+        $resolvedTypeFactory = new ResolvedObjectTypeFactory();
+        $objectRegistry = new ObjectRegistry(array(), $resolvedTypeFactory);
+        $this->objectFactory = new ObjectFactory($objectRegistry, $resolvedTypeFactory);
+
+        $this->validator = Validation::createValidatorBuilder()
+            ->addXmlMapping(__DIR__.'/../../Fixtures/config/validation.xml')
+            ->getValidator();
+
+        $this->formFactory = Forms::createFormFactoryBuilder()
+            ->addExtension(new ValidatorExtension($this->validator))
+            ->getFormFactory();
+    }
+
+    protected function tearDown()
+    {
+        $tool = new SchemaTool($this->em);
+        $tool->dropDatabase();
+    }
+
+    /**
+     * Reset database and load the fixtures.
+     *
+     * @param array $fixtures The fixtures
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
+    protected function loadFixtures(array $fixtures)
+    {
+        $tool = new SchemaTool($this->em);
+        $tool->dropDatabase();
+        $this->em->getConnection()->getSchemaManager()->createDatabase($this->em->getConnection()->getDatabase());
+        $tool->createSchema($this->em->getMetadataFactory()->getAllMetadata());
     }
 
     /**
@@ -42,24 +126,14 @@ abstract class AbstractDomainTest extends WebTestCase
      *
      * @return Domain
      */
-    protected function createDomain($class = 'Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo')
+    protected function createDomain($class = Foo::class)
     {
-        $container = $this->getContainer();
-        /* @var ObjectManager $om */
-        $om = $container->get('doctrine.orm.entity_manager');
-        /* @var EventDispatcherInterface $ed */
-        $ed = $container->get('event_dispatcher');
-        /* @var ObjectFactoryInterface $of */
-        $of = $container->get('sonatra_default_value.factory');
-        /* @var ValidatorInterface $val */
-        $val = $container->get('validator');
-
         $domain = new Domain($class);
         $domain->setDebug(true);
-        $domain->setObjectManager($om, array('soft_deletable'));
-        $domain->setEventDispatcher($ed);
-        $domain->setObjectFactory($of);
-        $domain->setValidator($val);
+        $domain->setObjectManager($this->em, array('soft_deletable'));
+        $domain->setEventDispatcher($this->dispatcher);
+        $domain->setObjectFactory($this->objectFactory);
+        $domain->setValidator($this->validator);
 
         return $domain;
     }
@@ -88,8 +162,6 @@ abstract class AbstractDomainTest extends WebTestCase
     {
         $this->loadFixtures(array());
 
-        /* @var EntityManagerInterface $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $objects = array();
 
         for ($i = 0; $i < $size; ++$i) {
@@ -97,11 +169,11 @@ abstract class AbstractDomainTest extends WebTestCase
             $object = $domain->newInstance();
             $object->setName('Bar '.($i + 1));
             $object->setDetail('Detail '.($i + 1));
-            $em->persist($object);
+            $this->em->persist($object);
             $objects[] = $object;
         }
 
-        $em->flush();
+        $this->em->flush();
 
         return $objects;
     }

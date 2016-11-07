@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Event;
+namespace Sonatra\Component\Resource\Event;
 
-use Sonatra\Bundle\ResourceBundle\Domain\DomainInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface;
+use Sonatra\Component\Resource\Domain\DomainInterface;
+use Sonatra\Component\Resource\ResourceListInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

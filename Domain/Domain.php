@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Sonatra\Bundle\ResourceBundle\Event\ResourceEvent;
-use Sonatra\Bundle\ResourceBundle\Exception\BadMethodCallException;
-use Sonatra\Bundle\ResourceBundle\Model\SoftDeletableInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceItem;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface;
-use Sonatra\Bundle\ResourceBundle\Resource\ResourceUtil;
-use Sonatra\Bundle\ResourceBundle\ResourceEvents;
-use Sonatra\Bundle\ResourceBundle\ResourceStatutes;
+use Sonatra\Component\Resource\Event\ResourceEvent;
+use Sonatra\Component\Resource\Exception\BadMethodCallException;
+use Sonatra\Component\Resource\Model\SoftDeletableInterface;
+use Sonatra\Component\Resource\ResourceItem;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceListInterface;
+use Sonatra\Component\Resource\ResourceUtil;
+use Sonatra\Component\Resource\ResourceEvents;
+use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\Validator\ConstraintViolation;
 
 /**

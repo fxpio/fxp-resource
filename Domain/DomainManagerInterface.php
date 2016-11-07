@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException;
+use Sonatra\Component\Resource\Exception\InvalidArgumentException;
 
 /**
  * Domain manager interface.

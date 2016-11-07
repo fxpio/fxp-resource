@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Model;
+namespace Sonatra\Component\Resource\Model;
 
 /**
  * A soft deletable interface.

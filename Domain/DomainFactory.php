@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Domain;
+namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-use Sonatra\Bundle\DefaultValueBundle\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException;
+use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
+use Sonatra\Component\Resource\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

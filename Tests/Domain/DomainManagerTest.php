@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Domain;
+namespace Sonatra\Component\Resource\Tests\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
-use Sonatra\Bundle\DefaultValueBundle\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Bundle\ResourceBundle\Domain\Domain;
-use Sonatra\Bundle\ResourceBundle\Domain\DomainFactory;
-use Sonatra\Bundle\ResourceBundle\Domain\DomainInterface;
-use Sonatra\Bundle\ResourceBundle\Domain\DomainManager;
-use Sonatra\Bundle\ResourceBundle\Domain\DomainManagerInterface;
+use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
+use Sonatra\Component\Resource\Domain\Domain;
+use Sonatra\Component\Resource\Domain\DomainFactory;
+use Sonatra\Component\Resource\Domain\DomainInterface;
+use Sonatra\Component\Resource\Domain\DomainManager;
+use Sonatra\Component\Resource\Domain\DomainManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -77,13 +77,13 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $ed = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
 
         /* @var ObjectFactoryInterface|\PHPUnit_Framework_MockObject_MockObject $of */
-        $of = $this->getMockBuilder('Sonatra\Bundle\DefaultValueBundle\DefaultValue\ObjectFactoryInterface')->getMock();
+        $of = $this->getMockBuilder('Sonatra\Component\DefaultValue\ObjectFactoryInterface')->getMock();
 
         /* @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject $val */
         $val = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')->getMock();
 
         /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Bundle\ResourceBundle\Domain\DomainInterface')->getMock();
+        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
         $domain->expects($this->any())
             ->method('getClass')
             ->will($this->returnValue('Foo'));
@@ -114,7 +114,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->manager->all());
 
         /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Bundle\ResourceBundle\Domain\DomainInterface')->getMock();
+        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
         $domain->expects($this->any())
             ->method('getClass')
             ->will($this->returnValue('Bar'));
@@ -128,7 +128,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The resource domain for the class "Foo" already exist
      */
     public function testAddWithExistingClass()
@@ -136,7 +136,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->manager->all());
 
         /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Bundle\ResourceBundle\Domain\DomainInterface')->getMock();
+        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
         $domain->expects($this->any())
             ->method('getClass')
             ->will($this->returnValue('Foo'));
@@ -145,7 +145,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The resource domain for the short name "ShortFoo" already exist
      */
     public function testAddWithExistingShortName()
@@ -153,7 +153,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->manager->all());
 
         /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Bundle\ResourceBundle\Domain\DomainInterface')->getMock();
+        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
         $domain->expects($this->any())
             ->method('getShortName')
             ->will($this->returnValue('ShortFoo'));
@@ -184,7 +184,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessageRegExp /The "(\w+)" class is not registered in doctrine/
      */
     public function testGetNonRegisteredClass()
@@ -202,10 +202,10 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDomainWithCache()
     {
         $dom1 = $this->manager->get('Foo');
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Domain\DomainInterface', $dom1);
+        $this->assertInstanceOf('Sonatra\Component\Resource\Domain\DomainInterface', $dom1);
 
         $dom2 = $this->manager->get('ShortFoo');
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Domain\DomainInterface', $dom2);
+        $this->assertInstanceOf('Sonatra\Component\Resource\Domain\DomainInterface', $dom2);
 
         $this->assertSame($dom1, $dom2);
     }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Handler;
+namespace Sonatra\Component\Resource\Handler;
 
 use Symfony\Component\Form\FormInterface;
 

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Exception;
+namespace Sonatra\Component\Resource\Exception;
 
 /**
  * Base ExceptionInterface for the resource bundle.

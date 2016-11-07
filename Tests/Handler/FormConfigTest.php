@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Handler;
+namespace Sonatra\Component\Resource\Tests\Handler;
 
-use Sonatra\Bundle\ResourceBundle\Handler\FormConfig;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Form\FooType;
+use Sonatra\Component\Resource\Handler\FormConfig;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,7 +24,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testWithStringType()
     {
-        $type = FooType::class;
+        $type = FormType::class;
         $config = new FormConfig($type);
         $this->assertSame('json', $config->getConverter());
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
@@ -35,7 +35,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testWithStringTypeAndPatchMethod()
     {
-        $type = FooType::class;
+        $type = FormType::class;
         $config = new FormConfig($type, array(), Request::METHOD_PATCH);
         $this->assertSame('json', $config->getConverter());
         $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
@@ -46,16 +46,16 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetType()
     {
-        $config = new FormConfig(FooType::class);
+        $config = new FormConfig(FormType::class);
 
-        $this->assertSame(FooType::class, $config->getType());
+        $this->assertSame(FormType::class, $config->getType());
 
-        $config->setType(FooType::class);
-        $this->assertSame(FooType::class, $config->getType());
+        $config->setType(FormType::class);
+        $this->assertSame(FormType::class, $config->getType());
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The form type of domain form config must be an string of class name of form type
      */
     public function testSetInvalidType()
@@ -66,7 +66,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetOptions()
     {
-        $config = new FormConfig(FooType::class);
+        $config = new FormConfig(FormType::class);
 
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
         $this->assertEquals(array(
@@ -87,7 +87,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMethod()
     {
-        $config = new FormConfig(FooType::class);
+        $config = new FormConfig(FormType::class);
 
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
         $this->assertEquals(array(
@@ -150,7 +150,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSubmitClearMissing($submitClearMissing, $method, $validSubmitClearMissing)
     {
-        $config = new FormConfig(FooType::class);
+        $config = new FormConfig(FormType::class);
         $config->setMethod($method);
         $config->setSubmitClearMissing($submitClearMissing);
 

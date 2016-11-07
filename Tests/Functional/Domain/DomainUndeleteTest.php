@@ -9,13 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Domain;
+namespace Sonatra\Component\Resource\Tests\Functional\Domain;
 
 use Doctrine\ORM\EntityManager;
-use Sonatra\Bundle\ResourceBundle\ResourceListStatutes;
-use Sonatra\Bundle\ResourceBundle\ResourceStatutes;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Bar;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo;
+use Sonatra\Component\Resource\ResourceListStatutes;
+use Sonatra\Component\Resource\ResourceStatutes;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Sonatra\Component\Resource\Tests\Fixtures\Filter\SoftDeletableFilter;
 
 /**
  * Functional tests for undelete methods of Domain.
@@ -24,7 +25,7 @@ use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Ent
  */
 class DomainUndeleteTest extends AbstractDomainTest
 {
-    protected $softClass = 'Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Bar';
+    protected $softClass = Bar::class;
 
     public function getAutoCommits()
     {
@@ -369,10 +370,9 @@ class DomainUndeleteTest extends AbstractDomainTest
 
     protected function configureEntityManager()
     {
-        $em = $this->getEntityManager();
-        $em->getConfiguration()
-            ->addFilter('soft_deletable', 'Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Filter\SoftDeletableFilter');
-        $em->getFilters()->enable('soft_deletable');
+        $this->em->getConfiguration()
+            ->addFilter('soft_deletable', SoftDeletableFilter::class);
+        $this->em->getFilters()->enable('soft_deletable');
     }
 
     /**
@@ -380,6 +380,6 @@ class DomainUndeleteTest extends AbstractDomainTest
      */
     protected function getEntityManager()
     {
-        return $this->getContainer()->get('doctrine.orm.entity_manager');
+        return $this->em;
     }
 }

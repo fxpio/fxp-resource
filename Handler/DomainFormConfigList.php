@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Handler;
+namespace Sonatra\Component\Resource\Handler;
 
-use Sonatra\Bundle\ResourceBundle\Domain\DomainInterface;
+use Sonatra\Component\Resource\Domain\DomainInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;

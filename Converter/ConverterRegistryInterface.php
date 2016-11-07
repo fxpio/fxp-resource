@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Converter;
+namespace Sonatra\Component\Resource\Converter;
 
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\ResourceBundle\Exception\UnexpectedTypeException;
+use Sonatra\Component\Resource\Exception\InvalidArgumentException;
+use Sonatra\Component\Resource\Exception\UnexpectedTypeException;
 
 /**
  * A request content converter manager interface.

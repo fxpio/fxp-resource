@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Handler;
+namespace Sonatra\Component\Resource\Handler;
 
-use Sonatra\Bundle\ResourceBundle\Converter\ConverterRegistryInterface;
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\ResourceBundle\Exception\InvalidResourceException;
+use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
+use Sonatra\Component\Resource\Exception\InvalidArgumentException;
+use Sonatra\Component\Resource\Exception\InvalidResourceException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,6 +117,7 @@ class FormHandler implements FormHandlerInterface
 
         foreach ($objects as $i => $object) {
             $form = $this->formFactory->create($config->getType(), $object, $config->getOptions());
+
             $form->submit($dataList[$i], $config->getSubmitClearMissing());
             $forms[] = $form;
         }

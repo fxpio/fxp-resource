@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests;
+namespace Sonatra\Component\Resource\Tests;
 
-use Sonatra\Bundle\ResourceBundle\ResourceListStatutes;
+use Sonatra\Component\Resource\ResourceListStatutes;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -19,7 +19,7 @@ use Sonatra\Bundle\ResourceBundle\ResourceListStatutes;
 class ResourceListStatutesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\ClassNotInstantiableException
+     * @expectedException \Sonatra\Component\Resource\Exception\ClassNotInstantiableException
      */
     public function testInstantiationOfClass()
     {

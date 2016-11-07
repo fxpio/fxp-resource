@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Handler;
+namespace Sonatra\Component\Resource\Tests\Functional\Handler;
 
-use Sonatra\Bundle\ResourceBundle\Handler\FormConfig;
-use Sonatra\Bundle\ResourceBundle\Handler\FormConfigList;
-use Sonatra\Bundle\ResourceBundle\Handler\FormConfigListInterface;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Form\FooType;
+use Sonatra\Component\Resource\Handler\FormConfig;
+use Sonatra\Component\Resource\Handler\FormConfigList;
+use Sonatra\Component\Resource\Handler\FormConfigListInterface;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Sonatra\Component\Resource\Tests\Fixtures\Form\FooType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 class FormHandlerTest extends AbstractFormHandlerTest
 {
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The current request is required in request stack
      */
     public function testEmptyCurrentRequestException()
@@ -97,7 +97,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidResourceException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessage The records field is required
      */
     public function testProcessFormsWithoutRecordsField()
@@ -130,7 +130,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidResourceException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessage The size of the request data list (1) is different that the object instance list (2)
      */
     public function testProcessFormsWithDifferentSize()
@@ -174,7 +174,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
      * @param int|null $defaultLimit
      * @param int|null $methodLimit
      *
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidResourceException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessageRegExp /The list of resource sent exceeds the permitted limit \(\d+\)/
      */
     public function testLimitMethod($size, $defaultLimit, $methodLimit)

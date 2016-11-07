@@ -9,14 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Functional\Domain;
+namespace Sonatra\Component\Resource\Tests\Functional\Domain;
 
-use Sonatra\Bundle\ResourceBundle\Domain\DomainInterface;
-use Sonatra\Bundle\ResourceBundle\Event\ResourceEvent;
-use Sonatra\Bundle\ResourceBundle\ResourceEvents;
-use Sonatra\Bundle\ResourceBundle\ResourceListStatutes;
-use Sonatra\Bundle\ResourceBundle\ResourceStatutes;
-use Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo;
+use Sonatra\Component\Resource\Domain\DomainInterface;
+use Sonatra\Component\Resource\Event\ResourceEvent;
+use Sonatra\Component\Resource\ResourceEvents;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceListInterface;
+use Sonatra\Component\Resource\ResourceListStatutes;
+use Sonatra\Component\Resource\ResourceStatutes;
+use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
@@ -81,16 +83,15 @@ class DomainUpsertTest extends AbstractDomainTest
     {
         $preEvent = false;
         $postEvent = false;
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
@@ -132,16 +133,15 @@ class DomainUpsertTest extends AbstractDomainTest
 
         $preEvent = false;
         $postEvent = false;
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain, $isUpdate) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain, $isUpdate) {
             $postEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
@@ -222,16 +222,15 @@ class DomainUpsertTest extends AbstractDomainTest
     {
         $preEvent = false;
         $postEvent = false;
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $autoCommit, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $autoCommit, $domain) {
             $postEvent = true;
             $this->assertSame($domain, $e->getDomain());
             $resources = $e->getResources();
@@ -244,7 +243,7 @@ class DomainUpsertTest extends AbstractDomainTest
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
         $resources = $domain->upserts($objects);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
         $this->assertTrue($resources->hasErrors());
 
         /* @var ConstraintViolationListInterface $errors */
@@ -299,16 +298,15 @@ class DomainUpsertTest extends AbstractDomainTest
 
         $preEvent = false;
         $postEvent = false;
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
@@ -319,7 +317,7 @@ class DomainUpsertTest extends AbstractDomainTest
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
         $resources = $domain->upserts($objects, true);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
 
         $this->assertTrue($resources->hasErrors());
         $this->assertRegExp('/This value should not be blank./', $resources->get(0)->getErrors()->get(0)->getMessage());
@@ -361,16 +359,15 @@ class DomainUpsertTest extends AbstractDomainTest
 
         $preEvent = false;
         $postEvent = false;
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_UPSERTS, function (ResourceEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_UPSERTS, function (ResourceEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
             $this->assertSame($domain, $e->getDomain());
             foreach ($e->getResources() as $resource) {
@@ -381,7 +378,7 @@ class DomainUpsertTest extends AbstractDomainTest
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
         $resources = $domain->upserts($objects, true);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceListInterface', $resources);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
 
         $this->assertTrue($resources->hasErrors());
 
@@ -428,8 +425,8 @@ class DomainUpsertTest extends AbstractDomainTest
         $this->assertCount($isUpdate ? 2 : 1, $domain->getRepository()->findAll());
 
         $this->assertCount(2, $resources);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface', $resources->get(0));
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface', $resources->get(1));
+        $this->assertInstanceOf(ResourceInterface::class, $resources->get(0));
+        $this->assertInstanceOf(ResourceInterface::class, $resources->get(1));
 
         $this->assertSame(ResourceListStatutes::MIXED, $resources->getStatus());
         $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
@@ -477,8 +474,8 @@ class DomainUpsertTest extends AbstractDomainTest
         $this->assertCount(2, $domain->getRepository()->findAll());
 
         $this->assertCount(2, $resources);
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface', $resources->get(0));
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Resource\ResourceInterface', $resources->get(1));
+        $this->assertInstanceOf(ResourceInterface::class, $resources->get(0));
+        $this->assertInstanceOf(ResourceInterface::class, $resources->get(1));
 
         $this->assertSame(ResourceListStatutes::SUCCESSFULLY, $resources->getStatus());
         $this->assertSame($isUpdate ? ResourceStatutes::UPDATED
@@ -488,8 +485,8 @@ class DomainUpsertTest extends AbstractDomainTest
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Sonatra\Bundle\ResourceBundle\Tests\Functional\Fixture\Bundle\TestBundle\Entity\Foo", "integer" given at the position "0"
+     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedExceptionMessage Expected argument of type "Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo", "integer" given at the position "0"
      */
     public function testInvalidObjectType()
     {
@@ -507,6 +504,8 @@ class DomainUpsertTest extends AbstractDomainTest
      */
     public function testErrorIdentifier($isUpdate)
     {
+        $this->loadFixtures(array());
+
         $domain = $this->createDomain();
 
         if ($isUpdate) {

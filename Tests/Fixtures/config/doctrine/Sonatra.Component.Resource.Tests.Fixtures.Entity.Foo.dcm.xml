@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo" table="foo">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="name" column="name" type="string" length="255" nullable="false" />
+
+        <field name="description" column="description" type="string" length="255" nullable="true" />
+
+        <field name="detail" column="detail" type="string" length="255" nullable="false" />
+
+    </entity>
+
+</doctrine-mapping>

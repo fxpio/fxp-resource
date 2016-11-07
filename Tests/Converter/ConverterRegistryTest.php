@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\ResourceBundle\Tests\Converter;
+namespace Sonatra\Component\Resource\Tests\Converter;
 
-use Sonatra\Bundle\ResourceBundle\Converter\ConverterRegistry;
-use Sonatra\Bundle\ResourceBundle\Converter\ConverterRegistryInterface;
+use Sonatra\Component\Resource\Converter\ConverterRegistry;
+use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
 
 /**
  * Tests case for converter registry.
@@ -28,7 +28,7 @@ class ConverterRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $converter = $this->getMockBuilder('Sonatra\Bundle\ResourceBundle\Converter\ConverterInterface')->getMock();
+        $converter = $this->getMockBuilder('Sonatra\Component\Resource\Converter\ConverterInterface')->getMock();
         $converter->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('foo'));
@@ -39,8 +39,8 @@ class ConverterRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Sonatra\Bundle\ResourceBundle\Converter\ConverterInterface", "DateTime" given
+     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedExceptionMessage Expected argument of type "Sonatra\Component\Resource\Converter\ConverterInterface", "DateTime" given
      */
     public function testUnexpectedTypeException()
     {
@@ -56,7 +56,7 @@ class ConverterRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\UnexpectedTypeException
+     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "(\w+)", "(\w+)" given/
      */
     public function testGetInvalidType()
@@ -65,7 +65,7 @@ class ConverterRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\ResourceBundle\Exception\InvalidArgumentException
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessageRegExp /Could not load content converter "(\w+)"/
      */
     public function testGetNonExistentConverter()
@@ -77,6 +77,6 @@ class ConverterRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $converter = $this->registry->get('foo');
 
-        $this->assertInstanceOf('Sonatra\Bundle\ResourceBundle\Converter\ConverterInterface', $converter);
+        $this->assertInstanceOf('Sonatra\Component\Resource\Converter\ConverterInterface', $converter);
     }
 }
