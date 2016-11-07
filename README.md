@@ -36,7 +36,9 @@ Features include:
   - to have the possibility to do an transaction with rollback for each resource of the list or for all resources in only one time
   - to have the possibility to skip the errors of an resource, and continue to run the rest of the list (compatible only with the transaction for each resource)
   - to return the list of resources with the status of the action (created, updated, error ...) on each resource of the list
-- Compiler pass for override or add a custom resource domain
+- Request content converter:
+  - JSON converter
+- Form handler to work with Symfony Form
 
 > **Note:**
 > <sup>1</sup> A resource is an doctrine entity or doctrine document
