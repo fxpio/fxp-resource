@@ -5,7 +5,7 @@ Sonatra Resource
 [![Build Status](https://img.shields.io/travis/sonatra/sonatra-resource/master.svg)](https://travis-ci.org/sonatra/sonatra-resource)
 [![Coverage Status](https://img.shields.io/coveralls/sonatra/sonatra-resource/master.svg)](https://coveralls.io/r/sonatra/sonatra-resource?branch=master)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/sonatra/sonatra-resource/master.svg)](https://scrutinizer-ci.com/g/sonatra/sonatra-resource?branch=master)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/9048a77d-9d67-40cb-8d31-1783e5bf6738.svg)](https://insight.sensiolabs.com/projects/9048a77d-9d67-40cb-8d31-1783e5bf6738)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/4a011831-ccae-417c-9789-49476cdde93e.svg)](https://insight.sensiolabs.com/projects/4a011831-ccae-417c-9789-49476cdde93e)
 
 The Sonatra Resource is a resource management layer for doctrine. This library has been
 designed to facilitate the creation of a Batch API for processing a list of resources<sup>1</sup>
