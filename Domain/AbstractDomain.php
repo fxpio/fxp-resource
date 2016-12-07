@@ -207,6 +207,14 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
+    public function getEventName($name)
+    {
+        return $this->getEventPrefix().$name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function newInstance(array $options = array())
     {
         return $this->of->create($this->getClass(), null, $options);
@@ -286,9 +294,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     protected function dispatchEvent($name, ResourceEvent $event)
     {
-        $name = $this->eventPrefix.$name;
-
-        return $this->ed->dispatch($name, $event);
+        return $this->ed->dispatch($this->getEventName($name), $event);
     }
 
     /**

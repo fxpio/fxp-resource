@@ -112,6 +112,15 @@ interface DomainInterface
     public function getEventPrefix();
 
     /**
+     * Get the full qualified event name.
+     *
+     * @param string $name The event name defined in Sonatra\Component\Resource\ResourceEvents
+     *
+     * @return string
+     */
+    public function getEventName($name);
+
+    /**
      * Generate a new resource instance with default values.
      *
      * @param array $options The options of sonatra default value factory
