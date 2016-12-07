@@ -13,6 +13,7 @@ namespace Sonatra\Component\Resource\Event;
 
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Sonatra\Component\Resource\ResourceListInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -62,5 +63,32 @@ class ResourceEvent extends Event
     public function getResources()
     {
         return $this->resources;
+    }
+
+    /**
+     * Build the name of event of the resource.
+     *
+     * @param string $name  The name of event
+     * @param string $class The classname of resource
+     *
+     * @return string
+     */
+    public static function build($name, $class)
+    {
+        return static::formatEventPrefix($class).$name;
+    }
+
+    /**
+     * Format the prefix of event.
+     *
+     * @param string $class The classname of resource
+     *
+     * @return string
+     */
+    public static function formatEventPrefix($class)
+    {
+        $name = Container::underscore($class);
+
+        return str_replace(array('\\', '/'), '_', $name);
     }
 }

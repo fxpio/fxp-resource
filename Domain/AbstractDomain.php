@@ -21,7 +21,6 @@ use Sonatra\Component\Resource\Event\ResourceEvent;
 use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\ResourceList;
 use Sonatra\Component\Resource\Exception\InvalidConfigurationException;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -99,7 +98,7 @@ abstract class AbstractDomain implements DomainInterface
     {
         $this->class = $class;
         $this->shortName = null === $shortName ? DomainUtil::generateShortName($class) : $shortName;
-        $this->eventPrefix = $this->formatEventPrefix($class);
+        $this->eventPrefix = ResourceEvent::formatEventPrefix($class);
         $this->debug = false;
         $this->disableFilters = array();
     }
@@ -337,20 +336,6 @@ abstract class AbstractDomain implements DomainInterface
                 }
             }
         }
-    }
-
-    /**
-     * Format the prefix event.
-     *
-     * @param string $class The class name
-     *
-     * @return string
-     */
-    private function formatEventPrefix($class)
-    {
-        $name = Container::underscore($class);
-
-        return str_replace(array('\\', '/'), '_', $name);
     }
 
     /**
