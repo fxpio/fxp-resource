@@ -54,7 +54,10 @@ class FormConfig implements FormConfigInterface
      * @param string $method    The request method
      * @param string $converter The data converter for request content
      */
-    public function __construct($type, array $options = array(), $method = Request::METHOD_POST, $converter = 'json')
+    public function __construct($type,
+                                array $options = array(),
+                                $method = Request::METHOD_POST,
+                                $converter = 'json')
     {
         $this->setType($type);
         $this->setOptions($options);

@@ -57,7 +57,9 @@ class FormHandler implements FormHandlerInterface
      * @throws InvalidArgumentException When the current request is request stack is empty
      */
     public function __construct(ConverterRegistryInterface $converterRegistry,
-                                FormFactoryInterface $formFactory, RequestStack $requestStack, $defaultLimit = null)
+                                FormFactoryInterface $formFactory,
+                                RequestStack $requestStack,
+                                $defaultLimit = null)
     {
         $this->converterRegistry = $converterRegistry;
         $this->formFactory = $formFactory;
