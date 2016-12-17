@@ -119,7 +119,7 @@ class FormHandlerTest extends \PHPUnit_Framework_TestCase
 
         $forms = $this->formHandler->processForms($config, $objects);
 
-        $this->assertTrue(is_array($forms));
+        $this->assertInternalType('array', $forms);
         $this->assertCount(1, $forms);
         $this->assertInstanceOf(FormInterface::class, $forms[0]);
     }
@@ -137,7 +137,7 @@ class FormHandlerTest extends \PHPUnit_Framework_TestCase
 
         $forms = $this->formHandler->processForms($config, array());
 
-        $this->assertTrue(is_array($forms));
+        $this->assertInternalType('array', $forms);
         $this->assertCount(1, $forms);
         $this->assertInstanceOf(FormInterface::class, $forms[0]);
     }
