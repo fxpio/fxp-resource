@@ -13,6 +13,7 @@ namespace Sonatra\Component\Resource\Tests\Event;
 
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Sonatra\Component\Resource\Event\ResourceEvent;
+use Sonatra\Component\Resource\ResourceEvents;
 use Sonatra\Component\Resource\ResourceListInterface;
 
 /**
@@ -31,5 +32,10 @@ class ResourceEventTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($domain, $event->getDomain());
         $this->assertSame($list, $event->getResources());
+    }
+
+    public function testBuild()
+    {
+        $this->assertSame('std_class.domain.pre_creates', ResourceEvent::build(ResourceEvents::PRE_CREATES, \stdClass::class));
     }
 }
