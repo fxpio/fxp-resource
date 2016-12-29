@@ -29,9 +29,6 @@ use Symfony\Component\Form\FormInterface;
  */
 class DomainUpdateFormTest extends AbstractDomainTest
 {
-    /**
-     * @group bug
-     */
     public function testUpdateWithErrorValidation()
     {
         $domain = $this->createDomain();
