@@ -31,6 +31,11 @@ class DomainManager implements DomainManagerInterface
     protected $shortNames;
 
     /**
+     * @var array
+     */
+    protected $resolveTargets;
+
+    /**
      * @var DomainFactoryInterface
      */
     protected $factory;
@@ -50,12 +55,23 @@ class DomainManager implements DomainManagerInterface
     {
         $this->domains = array();
         $this->shortNames = array();
+        $this->resolveTargets = array();
         $this->factory = $factory;
         $this->cache = array();
 
         foreach ($domains as $domain) {
             $this->add($domain);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addResolveTargets(array $resolveTargets)
+    {
+        $this->resolveTargets = array_merge($this->resolveTargets, $resolveTargets);
+
+        return $this;
     }
 
     /**
@@ -91,7 +107,12 @@ class DomainManager implements DomainManagerInterface
      */
     public function remove($class)
     {
-        unset($this->domains[$this->findClassName($class)]);
+        $class = $this->findClassName($class);
+
+        if (isset($this->domains[$class])) {
+            unset($this->shortNames[$this->domains[$class]->getShortName()]);
+            unset($this->domains[$class]);
+        }
     }
 
     /**
@@ -126,23 +147,27 @@ class DomainManager implements DomainManagerInterface
         $this->cache[$getClass] = $class;
 
         if (!isset($this->domains[$class])) {
-            $this->domains[$class] = $this->factory->create($class);
+            $this->add($this->factory->create($class));
         }
 
         return $this->domains[$class];
     }
 
     /**
-     * Find the real class name of short name.
+     * Find the real class name of short name or doctrine resolve target.
      *
-     * @param string $shortName The short name or class name
+     * @param string $class The short name or class name or the doctrine resolve target
      *
      * @return string The real class of short name
      */
-    protected function findClassName($shortName)
+    protected function findClassName($class)
     {
-        return isset($this->shortNames[$shortName])
-            ? $this->shortNames[$shortName]
-            : $shortName;
+        $class = isset($this->shortNames[$class])
+            ? $this->shortNames[$class]
+            : $class;
+
+        return isset($this->resolveTargets[$class])
+            ? $this->resolveTargets[$class]
+            : $class;
     }
 }

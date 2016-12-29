@@ -119,7 +119,7 @@ abstract class AbstractDomain implements DomainInterface
         $this->om = $om;
 
         try {
-            $this->getClassMetadata();
+            $this->class = $this->getClassMetadata()->getName();
         } catch (MappingException $e) {
             $msg = sprintf('The "%s" class is not managed by doctrine object manager', $this->getClass());
             throw new InvalidConfigurationException($msg, 0, $e);

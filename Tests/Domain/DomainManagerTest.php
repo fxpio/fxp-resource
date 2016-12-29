@@ -70,7 +70,7 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $or->expects($this->any())
             ->method('getManagerForClass')
             ->will($this->returnCallback(function ($value) use ($om) {
-                return 'InvalidClass' === $value ? null : $om;
+                return in_array($value, array('InvalidClass', 'FooInterface')) ? null : $om;
             }));
 
         /* @var EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject $ed */
@@ -217,5 +217,19 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($valid, $this->manager->getShortNames());
+    }
+
+    public function testResolveTarget()
+    {
+        $this->assertFalse($this->manager->has('FooInterface'));
+
+        $this->manager->addResolveTargets(array(
+            'FooInterface' => 'Foo',
+        ));
+
+        $this->assertTrue($this->manager->has('FooInterface'));
+        $domain = $this->manager->get('FooInterface');
+        $this->assertInstanceOf(DomainInterface::class, $domain);
+        $this->assertSame('Foo', $domain->getClass());
     }
 }

@@ -70,4 +70,13 @@ interface DomainManagerInterface
      * @throws InvalidArgumentException When the class of resource domain is not managed
      */
     public function get($class);
+
+    /**
+     * Add the resolve targets.
+     *
+     * @param array $resolveTargets The resolve targets
+     *
+     * @return self
+     */
+    public function addResolveTargets(array $resolveTargets);
 }

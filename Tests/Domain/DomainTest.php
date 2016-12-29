@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Domain;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -49,7 +50,14 @@ class DomainTest extends \PHPUnit_Framework_TestCase
     public function testCreateQueryBuilder()
     {
         $domain = new Domain(\stdClass::class);
+        $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
+        $meta->expects($this->once())
+            ->method('getName')
+            ->willReturn(\stdClass::class);
         $om = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        $om->expects($this->once())
+            ->method('getClassMetadata')
+            ->willReturn($meta);
         /* @var EntityManager $om */
         $domain->setObjectManager($om);
         $qb = $domain->createQueryBuilder('f');
@@ -89,7 +97,14 @@ class DomainTest extends \PHPUnit_Framework_TestCase
     {
         $domain = new Domain(\stdClass::class);
         /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
+        $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
+        $meta->expects($this->once())
+            ->method('getName')
+            ->willReturn(\stdClass::class);
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $om->expects($this->once())
+            ->method('getClassMetadata')
+            ->willReturn($meta);
 
         $domain->setObjectManager($om);
 
