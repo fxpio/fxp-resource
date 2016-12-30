@@ -85,7 +85,7 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function isManagedClass($class)
     {
-        return null !== $this->or->getManagerForClass($class);
+        return null !== $this->getManager($class);
     }
 
     /**
@@ -93,7 +93,7 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function getManagedClass($class)
     {
-        return $this->getManager($class)->getClassMetadata($class)->getName();
+        return $this->getRequiredManager($class)->getClassMetadata($class)->getName();
     }
 
     /**
@@ -101,9 +101,16 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function create($class, $shortName = null)
     {
-        $domain = new Domain($class, $shortName);
+        return new Domain($class, $shortName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function injectDependencies(DomainInterface $domain)
+    {
         $domain->setDebug($this->debug);
-        $domain->setObjectManager($this->getManager($class), $this->undeleteDisableFilters);
+        $domain->setObjectManager($this->getRequiredManager($domain->getClass()), $this->undeleteDisableFilters);
         $domain->setEventDispatcher($this->ed);
         $domain->setObjectFactory($this->of);
         $domain->setValidator($this->validator);
@@ -123,6 +130,22 @@ class DomainFactory implements DomainFactoryInterface
     protected function getManager($class)
     {
         $manager = $this->or->getManagerForClass($class);
+
+        if (null === $manager) {
+            foreach ($this->or->getManagers() as $objectManager) {
+                if ($objectManager->getMetadataFactory()->hasMetadataFor($class)) {
+                    $manager = $objectManager;
+                    break;
+                }
+            }
+        }
+
+        return $manager;
+    }
+
+    protected function getRequiredManager($class)
+    {
+        $manager = $this->getManager($class);
 
         if (null === $manager) {
             throw new InvalidArgumentException(sprintf('The "%s" class is not registered in doctrine', $class));

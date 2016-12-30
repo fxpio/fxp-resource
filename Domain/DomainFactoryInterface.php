@@ -51,4 +51,13 @@ interface DomainFactoryInterface
      * @throws InvalidArgumentException When the class is not registered in doctrine
      */
     public function create($class, $shortName = null);
+
+    /**
+     * * Inject the dependencies of domain.
+     *
+     * @param DomainInterface $domain The resource domain
+     *
+     * @return DomainInterface
+     */
+    public function injectDependencies(DomainInterface $domain);
 }

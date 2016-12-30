@@ -13,6 +13,7 @@ namespace Sonatra\Component\Resource\Tests\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Domain\Domain;
@@ -49,11 +50,17 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue('Foo'));
 
+        /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $metaBaz */
+        $metaBaz = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $metaBaz->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Baz'));
+
         /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
         $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $om->expects($this->any())
             ->method('getClassMetadata')
-            ->will($this->returnCallback(function ($value) use ($metaBar, $metaFoo) {
+            ->will($this->returnCallback(function ($value) use ($metaBar, $metaFoo, $metaBaz) {
                 $ret = null;
                 if ('Bar' === $value) {
                     $ret = $metaBar;
@@ -61,17 +68,32 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
                 if ('Foo' === $value) {
                     $ret = $metaFoo;
                 }
+                if (in_array($value, array('Baz', 'BazInterface'))) {
+                    $ret = $metaBaz;
+                }
 
                 return $ret;
             }));
+        $mf = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $mf->expects($this->any())
+            ->method('hasMetadataFor')
+            ->willReturnCallback(function ($value) {
+                return in_array($value, array('Baz', 'BazInterface'));
+            });
+        $om->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($mf);
 
         /* @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject $or */
         $or = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
         $or->expects($this->any())
             ->method('getManagerForClass')
             ->will($this->returnCallback(function ($value) use ($om) {
-                return in_array($value, array('InvalidClass', 'FooInterface')) ? null : $om;
+                return in_array($value, array('InvalidClass', 'FooInterface', 'BazInterface')) ? null : $om;
             }));
+        $or->expects($this->any())
+            ->method('getManagers')
+            ->willReturn(array($om));
 
         /* @var EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject $ed */
         $ed = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
@@ -231,5 +253,13 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $domain = $this->manager->get('FooInterface');
         $this->assertInstanceOf(DomainInterface::class, $domain);
         $this->assertSame('Foo', $domain->getClass());
+    }
+
+    public function testResolveTargetInDoctrineObjectManager()
+    {
+        $this->assertTrue($this->manager->has('BazInterface'));
+        $domain = $this->manager->get('BazInterface');
+        $this->assertInstanceOf(DomainInterface::class, $domain);
+        $this->assertSame('Baz', $domain->getClass());
     }
 }

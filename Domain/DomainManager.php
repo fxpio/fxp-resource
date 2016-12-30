@@ -98,6 +98,8 @@ class DomainManager implements DomainManagerInterface
             throw new InvalidArgumentException(sprintf('The resource domain for the short name "%s" already exist', $domain->getShortName()));
         }
 
+        $this->factory->injectDependencies($domain);
+
         $this->domains[$domain->getClass()] = $domain;
         $this->shortNames[$domain->getShortName()] = $domain->getClass();
     }
