@@ -120,6 +120,27 @@ class DomainTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($mockRepo, $repo);
     }
 
+    public function testGetClassMetadata()
+    {
+        $domain = new Domain(\stdClass::class);
+        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
+        $mockMeta = $this->getMockBuilder(ClassMetadata::class)->getMock();
+        $mockMeta->expects($this->once())
+            ->method('getName')
+            ->willReturn(\stdClass::class);
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $om->expects($this->atLeast(2))
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($mockMeta);
+
+        $domain->setObjectManager($om);
+
+        $meta = $domain->getClassMetadata();
+
+        $this->assertSame($mockMeta, $meta);
+    }
+
     public function testGetEventPrefix()
     {
         $domain = new Domain(\stdClass::class);

@@ -11,19 +11,10 @@
 
 namespace Sonatra\Component\Resource\Tests\Domain;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
-use Doctrine\Common\Persistence\ObjectManager;
-use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Component\Resource\Domain\Domain;
 use Sonatra\Component\Resource\Domain\DomainAwareInterface;
-use Sonatra\Component\Resource\Domain\DomainFactory;
+use Sonatra\Component\Resource\Domain\DomainFactoryInterface;
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Sonatra\Component\Resource\Domain\DomainManager;
-use Sonatra\Component\Resource\Domain\DomainManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Tests case for Domain Manager.
@@ -33,245 +24,160 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class DomainManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DomainManagerInterface
+     * @var DomainFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $factory;
+
+    /**
+     * @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $domain;
+
+    /**
+     * @var DomainManager
      */
     protected $manager;
 
     protected function setUp()
     {
-        /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $metaBar */
-        $metaBar = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
-        $metaBar->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Bar'));
+        $this->domain = $this->getMockBuilder(DomainInterface::class)->getMock();
+        $this->factory = $this->getMockBuilder(DomainFactoryInterface::class)->getMock();
 
-        /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $metaFoo */
-        $metaFoo = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
-        $metaFoo->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Foo'));
-
-        /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $metaBaz */
-        $metaBaz = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
-        $metaBaz->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Baz'));
-
-        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
-        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
-        $om->expects($this->any())
-            ->method('getClassMetadata')
-            ->will($this->returnCallback(function ($value) use ($metaBar, $metaFoo, $metaBaz) {
-                $ret = null;
-                if ('Bar' === $value) {
-                    $ret = $metaBar;
-                }
-                if ('Foo' === $value) {
-                    $ret = $metaFoo;
-                }
-                if (in_array($value, array('Baz', 'BazInterface'))) {
-                    $ret = $metaBaz;
-                }
-
-                return $ret;
-            }));
-        $mf = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
-        $mf->expects($this->any())
-            ->method('hasMetadataFor')
-            ->willReturnCallback(function ($value) {
-                return in_array($value, array('Baz', 'BazInterface'));
-            });
-        $om->expects($this->any())
-            ->method('getMetadataFactory')
-            ->willReturn($mf);
-
-        /* @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject $or */
-        $or = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
-        $or->expects($this->any())
-            ->method('getManagerForClass')
-            ->will($this->returnCallback(function ($value) use ($om) {
-                return in_array($value, array('InvalidClass', 'FooInterface', 'BazInterface')) ? null : $om;
-            }));
-        $or->expects($this->any())
-            ->method('getManagers')
-            ->willReturn(array($om));
-
-        /* @var EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject $ed */
-        $ed = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-
-        /* @var ObjectFactoryInterface|\PHPUnit_Framework_MockObject_MockObject $of */
-        $of = $this->getMockBuilder('Sonatra\Component\DefaultValue\ObjectFactoryInterface')->getMock();
-
-        /* @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject $val */
-        $val = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')->getMock();
-
-        /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
-        $domain->expects($this->any())
+        $this->domain->expects($this->any())
             ->method('getClass')
             ->will($this->returnValue('Foo'));
-        $domain->expects($this->any())
+
+        $this->domain->expects($this->any())
             ->method('getShortName')
             ->will($this->returnValue('ShortFoo'));
 
-        $df = new DomainFactory($or, $ed, $of, $val);
+        $this->factory->expects($this->atLeastOnce())
+            ->method('injectDependencies')
+            ->willReturn($this->domain);
 
-        $this->manager = new DomainManager(array($domain), $df);
+        $this->factory->expects($this->atLeastOnce())
+            ->method('getShortNames')
+            ->willReturn(array(
+                'std' => \stdClass::class,
+            ));
+
+        $this->manager = new DomainManager(array($this->domain), $this->factory);
     }
 
-    public function testConstructor()
+    public function testHas()
     {
-        $this->assertCount(1, $this->manager->all());
-    }
+        $this->factory->expects($this->at(0))
+            ->method('isManagedClass')
+            ->with('Bar')
+            ->willReturn(false);
 
-    public function testHasDomainClass()
-    {
         $this->assertTrue($this->manager->has('Foo'));
         $this->assertTrue($this->manager->has('ShortFoo'));
-        $this->assertTrue($this->manager->has('Bar'));
-        $this->assertFalse($this->manager->has('InvalidClass'));
+        $this->assertFalse($this->manager->has('Bar'));
     }
 
-    public function testAdd()
+    public function testAddDomainAware()
     {
-        $this->assertCount(1, $this->manager->all());
+        /* @var DomainAwareInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
+        $domain = $this->getMockBuilder(DomainAwareInterface::class)->getMock();
 
-        /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
-        $domain->expects($this->any())
-            ->method('getClass')
-            ->will($this->returnValue('Bar'));
+        $domain->expects($this->once())
+            ->method('setDomainManager')
+            ->with($this->manager);
 
         $this->manager->add($domain);
-
-        $this->assertCount(2, $this->manager->all());
-
-        $this->assertTrue($this->manager->has('Foo'));
-        $this->assertTrue($this->manager->has('Bar'));
     }
 
     /**
      * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The resource domain for the class "Foo" already exist
      */
-    public function testAddWithExistingClass()
+    public function testAddAlreadyExistingClass()
     {
-        $this->assertCount(1, $this->manager->all());
-
         /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
-        $domain->expects($this->any())
+        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
+        $domain->expects($this->once())
             ->method('getClass')
-            ->will($this->returnValue('Foo'));
+            ->willReturn('Foo');
 
         $this->manager->add($domain);
     }
 
-    /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The resource domain for the short name "ShortFoo" already exist
-     */
-    public function testAddWithExistingShortName()
+    public function testRemove()
     {
-        $this->assertCount(1, $this->manager->all());
+        $this->assertTrue($this->manager->has('Foo'));
 
-        /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder('Sonatra\Component\Resource\Domain\DomainInterface')->getMock();
-        $domain->expects($this->any())
-            ->method('getShortName')
-            ->will($this->returnValue('ShortFoo'));
+        $this->factory->expects($this->once())
+            ->method('getManagedClass')
+            ->with('Foo')
+            ->willReturn('Foo');
 
-        $this->manager->add($domain);
+        $this->manager->remove('Foo');
+
+        $this->assertFalse($this->manager->has('Foo'));
     }
 
-    public function getRemoveTestConfig()
+    public function testAll()
     {
-        return array(
-            array('Foo'),
-            array('ShortFoo'),
+        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
+        $domain->expects($this->once())
+            ->method('getClass')
+            ->willReturn(\stdClass::class);
+
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->with(\stdClass::class)
+            ->willReturn($domain);
+
+        $expected = array(
+            'Foo' => $this->domain,
+            \stdClass::class => $domain,
         );
-    }
 
-    /**
-     * @dataProvider getRemoveTestConfig
-     *
-     * @param string $classOrShortName
-     */
-    public function testRemove($classOrShortName)
-    {
-        $this->assertCount(1, $this->manager->all());
-
-        $this->manager->remove($classOrShortName);
-
-        $this->assertCount(0, $this->manager->all());
-    }
-
-    /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The "(\w+)" class is not registered in doctrine/
-     */
-    public function testGetNonRegisteredClass()
-    {
-        $this->manager->get('InvalidClass');
-    }
-
-    public function testGetDomainNotAddedManually()
-    {
-        $domain = $this->manager->get('Bar');
-
-        $this->assertInstanceOf(Domain::class, $domain);
-    }
-
-    public function testGetDomainWithCache()
-    {
-        $dom1 = $this->manager->get('Foo');
-        $this->assertInstanceOf('Sonatra\Component\Resource\Domain\DomainInterface', $dom1);
-
-        $dom2 = $this->manager->get('ShortFoo');
-        $this->assertInstanceOf('Sonatra\Component\Resource\Domain\DomainInterface', $dom2);
-
-        $this->assertSame($dom1, $dom2);
+        $this->assertSame($expected, $this->manager->all());
     }
 
     public function testGetShortNames()
     {
-        $valid = array(
+        $expected = array(
+            'std' => \stdClass::class,
             'ShortFoo' => 'Foo',
         );
 
-        $this->assertEquals($valid, $this->manager->getShortNames());
+        $this->assertSame($expected, $this->manager->getShortNames());
     }
 
-    public function testResolveTarget()
+    public function testGet()
     {
-        $this->assertFalse($this->manager->has('FooInterface'));
+        $this->assertTrue($this->manager->has('Foo'));
 
-        $this->manager->addResolveTargets(array(
-            'FooInterface' => 'Foo',
-        ));
+        $this->factory->expects($this->once())
+            ->method('getManagedClass')
+            ->with('Foo')
+            ->willReturn('Foo');
 
-        $this->assertTrue($this->manager->has('FooInterface'));
-        $domain = $this->manager->get('FooInterface');
-        $this->assertInstanceOf(DomainInterface::class, $domain);
-        $this->assertSame('Foo', $domain->getClass());
+        $this->assertSame($this->domain, $this->manager->get('Foo'));
     }
 
-    public function testResolveTargetInDoctrineObjectManager()
+    public function testGetWithoutExistingDomain()
     {
-        $this->assertTrue($this->manager->has('BazInterface'));
-        $domain = $this->manager->get('BazInterface');
-        $this->assertInstanceOf(DomainInterface::class, $domain);
-        $this->assertSame('Baz', $domain->getClass());
-    }
+        $this->assertFalse($this->manager->has(\stdClass::class));
 
-    public function testInjectDomainManagerInDomainAware()
-    {
-        /* @var DomainAwareInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder(DomainAwareInterface::class)->getMock();
+        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
         $domain->expects($this->once())
-            ->method('setDomainManager')
-            ->with($this->manager);
+            ->method('getClass')
+            ->willReturn(\stdClass::class);
 
-        $this->manager->add($domain);
+        $this->factory->expects($this->once())
+            ->method('getManagedClass')
+            ->with(\stdClass::class)
+            ->willReturn(\stdClass::class);
+
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->with(\stdClass::class)
+            ->willReturn($domain);
+
+        $this->assertSame($domain, $this->manager->get(\stdClass::class));
     }
 }

@@ -21,6 +21,22 @@ use Sonatra\Component\Resource\Exception\InvalidArgumentException;
 interface DomainFactoryInterface
 {
     /**
+     * Add the resolve targets.
+     *
+     * @param array $resolveTargets The resolve targets
+     *
+     * @return self
+     */
+    public function addResolveTargets(array $resolveTargets);
+
+    /**
+     * Get the map of short names and class names.
+     *
+     * @return array
+     */
+    public function getShortNames();
+
+    /**
      * Check if the class is managed by doctrine.
      *
      * @param string $class The class name

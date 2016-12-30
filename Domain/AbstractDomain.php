@@ -97,7 +97,7 @@ abstract class AbstractDomain implements DomainInterface
     public function __construct($class, $shortName = null)
     {
         $this->class = $class;
-        $this->shortName = null === $shortName ? DomainUtil::generateShortName($class) : $shortName;
+        $this->shortName = $shortName;
         $this->eventPrefix = ResourceEvent::formatEventPrefix($class);
         $this->debug = false;
         $this->disableFilters = array();
@@ -119,7 +119,8 @@ abstract class AbstractDomain implements DomainInterface
         $this->om = $om;
 
         try {
-            $this->class = $this->getClassMetadata()->getName();
+            $this->class = $om->getClassMetadata($this->class)->getName();
+            $this->eventPrefix = ResourceEvent::formatEventPrefix($this->class);
         } catch (MappingException $e) {
             $msg = sprintf('The "%s" class is not managed by doctrine object manager', $this->getClass());
             throw new InvalidConfigurationException($msg, 0, $e);
@@ -176,6 +177,10 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function getShortName()
     {
+        if (null === $this->shortName) {
+            $this->shortName = DomainUtil::generateShortName($this->class);
+        }
+
         return $this->shortName;
     }
 

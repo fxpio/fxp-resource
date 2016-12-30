@@ -12,6 +12,7 @@
 namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Exception\InvalidArgumentException;
@@ -56,6 +57,11 @@ class DomainFactory implements DomainFactoryInterface
     protected $debug;
 
     /**
+     * @var array
+     */
+    protected $resolveTargets;
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry          $or                     The doctrine registry
@@ -78,6 +84,34 @@ class DomainFactory implements DomainFactoryInterface
         $this->validator = $validator;
         $this->undeleteDisableFilters = $undeleteDisableFilters;
         $this->debug = $debug;
+        $this->resolveTargets = array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addResolveTargets(array $resolveTargets)
+    {
+        $this->resolveTargets = array_merge($this->resolveTargets, $resolveTargets);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getShortNames()
+    {
+        $names = array();
+
+        foreach ($this->or->getManagers() as $manager) {
+            /* @var ClassMetadata $meta */
+            foreach ($manager->getMetadataFactory()->getAllMetadata() as $meta) {
+                $names[DomainUtil::generateShortName($meta->getName())] = $meta->getName();
+            }
+        }
+
+        return $names;
     }
 
     /**
@@ -129,6 +163,7 @@ class DomainFactory implements DomainFactoryInterface
      */
     protected function getManager($class)
     {
+        $class = $this->findClassName($class);
         $manager = $this->or->getManagerForClass($class);
 
         if (null === $manager) {
@@ -152,5 +187,12 @@ class DomainFactory implements DomainFactoryInterface
         }
 
         return $manager;
+    }
+
+    protected function findClassName($class)
+    {
+        return isset($this->resolveTargets[$class])
+            ? $this->resolveTargets[$class]
+            : $class;
     }
 }

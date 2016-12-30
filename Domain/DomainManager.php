@@ -31,19 +31,14 @@ class DomainManager implements DomainManagerInterface
     protected $shortNames;
 
     /**
-     * @var array
-     */
-    protected $resolveTargets;
-
-    /**
      * @var DomainFactoryInterface
      */
     protected $factory;
 
     /**
-     * @var array
+     * @var bool
      */
-    protected $cache;
+    protected $initialized = false;
 
     /**
      * Constructor.
@@ -54,10 +49,8 @@ class DomainManager implements DomainManagerInterface
     public function __construct(array $domains, DomainFactoryInterface $factory)
     {
         $this->domains = array();
-        $this->shortNames = array();
-        $this->resolveTargets = array();
+        $this->shortNames = $factory->getShortNames();
         $this->factory = $factory;
-        $this->cache = array();
 
         foreach ($domains as $domain) {
             $this->add($domain);
@@ -67,21 +60,11 @@ class DomainManager implements DomainManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function addResolveTargets(array $resolveTargets)
-    {
-        $this->resolveTargets = array_merge($this->resolveTargets, $resolveTargets);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function has($class)
     {
-        $class = $this->findClassName($class);
+        $class = $this->findClassName($class, false);
 
-        return isset($this->domains[$this->findClassName($class)])
+        return isset($this->domains[$class])
             || $this->factory->isManagedClass($class);
     }
 
@@ -90,22 +73,19 @@ class DomainManager implements DomainManagerInterface
      */
     public function add(DomainInterface $domain)
     {
-        if (isset($this->domains[$domain->getClass()])) {
-            throw new InvalidArgumentException(sprintf('The resource domain for the class "%s" already exist', $domain->getClass()));
-        }
-
-        if (isset($this->shortNames[$domain->getShortName()])) {
-            throw new InvalidArgumentException(sprintf('The resource domain for the short name "%s" already exist', $domain->getShortName()));
-        }
-
         $this->factory->injectDependencies($domain);
+        $class = $domain->getClass();
 
         if ($domain instanceof DomainAwareInterface) {
             $domain->setDomainManager($this);
         }
 
-        $this->domains[$domain->getClass()] = $domain;
-        $this->shortNames[$domain->getShortName()] = $domain->getClass();
+        if (isset($this->domains[$class])) {
+            throw new InvalidArgumentException(sprintf('The resource domain for the class "%s" already exist', $class));
+        }
+
+        $this->domains[$class] = $domain;
+        $this->shortNames[$domain->getShortName()] = $class;
     }
 
     /**
@@ -126,6 +106,8 @@ class DomainManager implements DomainManagerInterface
      */
     public function all()
     {
+        $this->init();
+
         return $this->domains;
     }
 
@@ -144,14 +126,6 @@ class DomainManager implements DomainManagerInterface
     {
         $class = $this->findClassName($class);
 
-        if (isset($this->cache[$class])) {
-            return $this->domains[$this->cache[$class]];
-        }
-
-        $getClass = $class;
-        $class = $this->factory->getManagedClass($class);
-        $this->cache[$getClass] = $class;
-
         if (!isset($this->domains[$class])) {
             $this->add($this->factory->create($class));
         }
@@ -162,18 +136,35 @@ class DomainManager implements DomainManagerInterface
     /**
      * Find the real class name of short name or doctrine resolve target.
      *
-     * @param string $class The short name or class name or the doctrine resolve target
+     * @param string $class    The short name or class name or the doctrine resolve target
+     * @param bool   $required Check if the class name must be managed by doctrine
      *
      * @return string The real class of short name
      */
-    protected function findClassName($class)
+    protected function findClassName($class, $required = true)
     {
         $class = isset($this->shortNames[$class])
             ? $this->shortNames[$class]
             : $class;
 
-        return isset($this->resolveTargets[$class])
-            ? $this->resolveTargets[$class]
+        return $required
+            ? $this->factory->getManagedClass($class)
             : $class;
+    }
+
+    /**
+     * Initialize all resource domains.
+     */
+    private function init()
+    {
+        if (!$this->initialized) {
+            $this->initialized = true;
+
+            foreach ($this->shortNames as $class) {
+                if (!isset($this->domains[$class])) {
+                    $this->add($this->factory->create($class));
+                }
+            }
+        }
     }
 }
