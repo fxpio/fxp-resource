@@ -100,6 +100,10 @@ class DomainManager implements DomainManagerInterface
 
         $this->factory->injectDependencies($domain);
 
+        if ($domain instanceof DomainAwareInterface) {
+            $domain->setDomainManager($this);
+        }
+
         $this->domains[$domain->getClass()] = $domain;
         $this->shortNames[$domain->getShortName()] = $domain->getClass();
     }

@@ -17,6 +17,7 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Domain\Domain;
+use Sonatra\Component\Resource\Domain\DomainAwareInterface;
 use Sonatra\Component\Resource\Domain\DomainFactory;
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Sonatra\Component\Resource\Domain\DomainManager;
@@ -261,5 +262,16 @@ class DomainManagerTest extends \PHPUnit_Framework_TestCase
         $domain = $this->manager->get('BazInterface');
         $this->assertInstanceOf(DomainInterface::class, $domain);
         $this->assertSame('Baz', $domain->getClass());
+    }
+
+    public function testInjectDomainManagerInDomainAware()
+    {
+        /* @var DomainAwareInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
+        $domain = $this->getMockBuilder(DomainAwareInterface::class)->getMock();
+        $domain->expects($this->once())
+            ->method('setDomainManager')
+            ->with($this->manager);
+
+        $this->manager->add($domain);
     }
 }
