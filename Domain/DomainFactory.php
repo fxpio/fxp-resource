@@ -14,6 +14,7 @@ namespace Sonatra\Component\Resource\Domain;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -105,9 +106,13 @@ class DomainFactory implements DomainFactoryInterface
         $names = array();
 
         foreach ($this->or->getManagers() as $manager) {
-            /* @var ClassMetadata $meta */
+            /* @var ClassMetadata|OrmClassMetadata $meta */
             foreach ($manager->getMetadataFactory()->getAllMetadata() as $meta) {
-                $names[DomainUtil::generateShortName($meta->getName())] = $meta->getName();
+                $isOrmMeta = $meta instanceof OrmClassMetadata;
+
+                if (!$isOrmMeta || ($isOrmMeta && !$meta->isMappedSuperclass)) {
+                    $names[DomainUtil::generateShortName($meta->getName())] = $meta->getName();
+                }
             }
         }
 
@@ -157,9 +162,7 @@ class DomainFactory implements DomainFactoryInterface
      *
      * @param string $class The class name or doctrine shortcut class name
      *
-     * @return ObjectManager
-     *
-     * @throws InvalidArgumentException When the class is not registered in doctrine
+     * @return ObjectManager|null
      */
     protected function getManager($class)
     {
@@ -175,20 +178,59 @@ class DomainFactory implements DomainFactoryInterface
             }
         }
 
+        if (null !== $manager) {
+            $manager = $this->validateManager($class, $manager);
+        }
+
         return $manager;
     }
 
+    /**
+     * Get the required object manager.
+     *
+     * @param string $class The class name
+     *
+     * @return ObjectManager
+     *
+     * @throws InvalidArgumentException When the class is not registered in doctrine
+     */
     protected function getRequiredManager($class)
     {
         $manager = $this->getManager($class);
 
-        if (null === $manager) {
+        return $this->validateManager($class, $manager);
+    }
+
+    /**
+     * Validate the object manager.
+     *
+     * @param string             $class   The class name
+     * @param ObjectManager|null $manager The object manager
+     *
+     * @return ObjectManager
+     *
+     * @throws InvalidArgumentException When the class is not registered in doctrine
+     */
+    protected function validateManager($class, $manager)
+    {
+        /* @var ClassMetadata|OrmClassMetadata|null $meta */
+        $meta = null !== $manager ? $manager->getClassMetadata($class) : null;
+        $isOrmMeta = $meta instanceof OrmClassMetadata;
+
+        if (null === $manager || ($isOrmMeta && $meta->isMappedSuperclass)) {
             throw new InvalidArgumentException(sprintf('The "%s" class is not registered in doctrine', $class));
         }
 
         return $manager;
     }
 
+    /**
+     * Find the class name by the the short name.
+     *
+     * @param string $class The class name
+     *
+     * @return string
+     */
     protected function findClassName($class)
     {
         return isset($this->resolveTargets[$class])

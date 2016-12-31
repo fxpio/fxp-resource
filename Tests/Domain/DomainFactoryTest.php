@@ -155,7 +155,7 @@ class DomainFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue(\stdClass::class));
 
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects($this->atLeast(2))
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willReturn($meta);
