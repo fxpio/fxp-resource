@@ -166,8 +166,13 @@ abstract class DomainUtil
     {
         $pos = strrpos($class, '\\');
         $pos = false !== $pos ? $pos + 1 : 0;
+        $name = substr($class, $pos);
 
-        return substr($class, $pos);
+        if (false !== $pos = strrpos($name, 'Interface')) {
+            $name = substr($name, 0, $pos);
+        }
+
+        return $name;
     }
 
     /**

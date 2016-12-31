@@ -174,6 +174,8 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame('MockDriverException', DomainUtil::generateShortName(MockDriverException::class));
         $this->assertSame('stdClass', DomainUtil::generateShortName(\stdClass::class));
+        $this->assertSame('Foo', DomainUtil::generateShortName('FooInterface'));
+        $this->assertSame('Bar', DomainUtil::generateShortName('Foo\BarInterface'));
     }
 
     public function testInjectErrorMessage()
