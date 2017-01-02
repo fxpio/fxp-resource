@@ -38,4 +38,9 @@ class ResourceEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame('std_class.domain.pre_creates', ResourceEvent::build(ResourceEvents::PRE_CREATES, \stdClass::class));
     }
+
+    public function testBuildShortName()
+    {
+        $this->assertSame('foo_bar.domain.pre_creates', ResourceEvent::build(ResourceEvents::PRE_CREATES, 'Foo Bar'));
+    }
 }

@@ -66,29 +66,29 @@ class ResourceEvent extends Event
     }
 
     /**
-     * Build the name of event of the resource.
+     * Build the name of resource event.
      *
-     * @param string $name  The name of event
-     * @param string $class The classname of resource
+     * @param string $name      The name of event
+     * @param string $shortName The short name of resource
      *
      * @return string
      */
-    public static function build($name, $class)
+    public static function build($name, $shortName)
     {
-        return static::formatEventPrefix($class).$name;
+        return static::formatEventPrefix($shortName).$name;
     }
 
     /**
      * Format the prefix of event.
      *
-     * @param string $class The classname of resource
+     * @param string $shortName The short name of resource
      *
      * @return string
      */
-    public static function formatEventPrefix($class)
+    public static function formatEventPrefix($shortName)
     {
-        $name = Container::underscore($class);
+        $name = Container::underscore($shortName);
 
-        return str_replace(array('\\', '/'), '_', $name);
+        return str_replace(array('\\', '/', ' '), '_', $name);
     }
 }

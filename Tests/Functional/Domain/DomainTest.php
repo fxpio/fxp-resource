@@ -42,7 +42,7 @@ class DomainTest extends AbstractDomainTest
     {
         $domain = $this->createDomain();
 
-        $valid = 'sonatra_component_resource_tests_fixtures_entity_foo';
+        $valid = 'foo';
         $this->assertSame($valid, $domain->getEventPrefix());
     }
 

@@ -204,7 +204,7 @@ abstract class AbstractDomain implements DomainInterface
     public function getEventPrefix()
     {
         if (null === $this->eventPrefix) {
-            $this->eventPrefix = ResourceEvent::formatEventPrefix($this->getClass());
+            $this->eventPrefix = ResourceEvent::formatEventPrefix($this->getShortName());
         }
 
         return $this->eventPrefix;
