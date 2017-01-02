@@ -98,7 +98,6 @@ abstract class AbstractDomain implements DomainInterface
     {
         $this->class = $class;
         $this->shortName = $shortName;
-        $this->eventPrefix = ResourceEvent::formatEventPrefix($class);
         $this->debug = false;
         $this->disableFilters = array();
     }
@@ -120,7 +119,6 @@ abstract class AbstractDomain implements DomainInterface
 
         try {
             $this->class = $om->getClassMetadata($this->class)->getName();
-            $this->eventPrefix = ResourceEvent::formatEventPrefix($this->class);
         } catch (MappingException $e) {
             $msg = sprintf('The "%s" class is not managed by doctrine object manager', $this->getClass());
             throw new InvalidConfigurationException($msg, 0, $e);
@@ -205,6 +203,10 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function getEventPrefix()
     {
+        if (null === $this->eventPrefix) {
+            $this->eventPrefix = ResourceEvent::formatEventPrefix($this->getClass());
+        }
+
         return $this->eventPrefix;
     }
 
