@@ -167,22 +167,8 @@ class DomainFactory implements DomainFactoryInterface
     protected function getManager($class)
     {
         $class = $this->findClassName($class);
-        $manager = $this->or->getManagerForClass($class);
 
-        if (null === $manager) {
-            foreach ($this->or->getManagers() as $objectManager) {
-                if ($objectManager->getMetadataFactory()->hasMetadataFor($class)) {
-                    $manager = $objectManager;
-                    break;
-                }
-            }
-        }
-
-        if (null !== $manager) {
-            $manager = $this->validateManager($class, $manager);
-        }
-
-        return $manager;
+        return DomainDoctrineUtil::getManager($this->or, $class);
     }
 
     /**
@@ -196,32 +182,9 @@ class DomainFactory implements DomainFactoryInterface
      */
     protected function getRequiredManager($class)
     {
-        $manager = $this->getManager($class);
+        $class = $this->findClassName($class);
 
-        return $this->validateManager($class, $manager);
-    }
-
-    /**
-     * Validate the object manager.
-     *
-     * @param string             $class   The class name
-     * @param ObjectManager|null $manager The object manager
-     *
-     * @return ObjectManager
-     *
-     * @throws InvalidArgumentException When the class is not registered in doctrine
-     */
-    protected function validateManager($class, $manager)
-    {
-        /* @var ClassMetadata|OrmClassMetadata|null $meta */
-        $meta = null !== $manager ? $manager->getClassMetadata($class) : null;
-        $isOrmMeta = $meta instanceof OrmClassMetadata;
-
-        if (null === $manager || ($isOrmMeta && $meta->isMappedSuperclass)) {
-            throw new InvalidArgumentException(sprintf('The "%s" class is not registered in doctrine', $class));
-        }
-
-        return $manager;
+        return DomainDoctrineUtil::getRequiredManager($this->or, $class);
     }
 
     /**
