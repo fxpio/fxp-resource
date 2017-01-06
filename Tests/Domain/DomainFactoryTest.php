@@ -15,6 +15,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Domain\Domain;
 use Sonatra\Component\Resource\Domain\DomainFactory;
@@ -180,6 +181,29 @@ class DomainFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('hasMetadataFor')
             ->with(\stdClass::class)
             ->willReturn(false);
+
+        $this->factory->getManagedClass(\stdClass::class);
+    }
+
+    /**
+     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The "stdClass" class is not registered in doctrine
+     */
+    public function testGetManagedClassWithOrmMappedSuperClass()
+    {
+        /* @var OrmClassMetadata|\PHPUnit_Framework_MockObject_MockObject $meta */
+        $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
+        $meta->isMappedSuperclass = true;
+
+        $this->objectManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($meta);
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with(\stdClass::class)
+            ->willReturn($this->objectManager);
 
         $this->factory->getManagedClass(\stdClass::class);
     }

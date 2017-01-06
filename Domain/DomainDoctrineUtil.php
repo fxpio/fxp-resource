@@ -12,7 +12,6 @@
 namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Sonatra\Component\Resource\Exception\InvalidArgumentException;
@@ -66,26 +65,28 @@ abstract class DomainDoctrineUtil
     {
         $manager = static::getManager($or, $class);
 
+        if (null === $manager) {
+            throw new InvalidArgumentException(sprintf('The "%s" class is not registered in doctrine', $class));
+        }
+
         return static::validateManager($class, $manager);
     }
 
     /**
      * Validate the object manager.
      *
-     * @param string             $class   The class name
-     * @param ObjectManager|null $manager The object manager
+     * @param string        $class   The class name
+     * @param ObjectManager $manager The object manager
      *
      * @return ObjectManager
      *
      * @throws InvalidArgumentException When the class is not registered in doctrine
      */
-    public static function validateManager($class, $manager)
+    public static function validateManager($class, ObjectManager $manager)
     {
-        /* @var ClassMetadata|OrmClassMetadata|null $meta */
-        $meta = null !== $manager ? $manager->getClassMetadata($class) : null;
-        $isOrmMeta = $meta instanceof OrmClassMetadata;
+        $meta = $manager->getClassMetadata($class);
 
-        if (null === $manager || ($isOrmMeta && $meta->isMappedSuperclass)) {
+        if ($meta instanceof OrmClassMetadata && $meta->isMappedSuperclass) {
             throw new InvalidArgumentException(sprintf('The "%s" class is not registered in doctrine', $class));
         }
 
