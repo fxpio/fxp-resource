@@ -16,12 +16,12 @@ use Doctrine\ORM\QueryBuilder;
 use Sonatra\Component\Resource\Event\ResourceEvent;
 use Sonatra\Component\Resource\Exception\BadMethodCallException;
 use Sonatra\Component\Resource\Model\SoftDeletableInterface;
-use Sonatra\Component\Resource\ResourceItem;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceUtil;
 use Sonatra\Component\Resource\ResourceEvents;
+use Sonatra\Component\Resource\ResourceInterface;
+use Sonatra\Component\Resource\ResourceItem;
+use Sonatra\Component\Resource\ResourceListInterface;
 use Sonatra\Component\Resource\ResourceStatutes;
+use Sonatra\Component\Resource\ResourceUtil;
 use Symfony\Component\Validator\ConstraintViolation;
 
 /**

@@ -13,8 +13,8 @@ namespace Sonatra\Component\Resource\Tests\Fixtures\Listener;
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
-use Symfony\Component\Validator\ConstraintViolation;
 use Sonatra\Component\Resource\Exception\ConstraintViolationException;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
