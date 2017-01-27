@@ -14,9 +14,9 @@ namespace Sonatra\Component\Resource\Domain;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
+use Sonatra\Component\DoctrineExtensions\Util\SqlFilterUtil;
 use Sonatra\Component\Resource\Event\ResourceEvent;
 use Sonatra\Component\Resource\Exception\InvalidConfigurationException;
 use Sonatra\Component\Resource\ResourceInterface;
@@ -310,18 +310,8 @@ abstract class AbstractDomain implements DomainInterface
      */
     protected function disableFilters()
     {
-        $previous = array();
-
-        if ($this->om instanceof EntityManager) {
-            $oFilters = $this->om->getFilters();
-
-            foreach ($this->disableFilters as $filterName) {
-                if ($oFilters->has($filterName)) {
-                    $previous[$filterName] = $oFilters->isEnabled($filterName);
-                    $oFilters->disable($filterName);
-                }
-            }
-        }
+        $previous = SqlFilterUtil::findFilters($this->om, $this->disableFilters);
+        SqlFilterUtil::disableFilters($this->om, $previous);
 
         return $previous;
     }
@@ -333,16 +323,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     protected function enableFilters(array $previousValues = array())
     {
-        if ($this->om instanceof EntityManager) {
-            $oFilters = $this->om->getFilters();
-
-            foreach ($this->disableFilters as $filterName) {
-                if ($oFilters->has($filterName) && !$oFilters->isEnabled($filterName)
-                        && isset($previousValues[$filterName]) && $previousValues[$filterName]) {
-                    $oFilters->enable($filterName);
-                }
-            }
-        }
+        SqlFilterUtil::enableFilters($this->om, $previousValues);
     }
 
     /**
