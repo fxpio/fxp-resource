@@ -12,6 +12,7 @@
 namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\Exception\DriverException;
 use Sonatra\Component\Resource\Exception\ConstraintViolationException;
 use Sonatra\Component\Resource\ResourceEvents;
@@ -64,7 +65,7 @@ abstract class DomainUtil
     public static function getIdentifier(ObjectManager $om, $object)
     {
         $propertyAccess = PropertyAccess::createPropertyAccessor();
-        $meta = $om->getClassMetadata(get_class($object));
+        $meta = $om->getClassMetadata(ClassUtils::getClass($object));
         $ids = $meta->getIdentifier();
         $value = null;
 
