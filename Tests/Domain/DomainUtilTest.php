@@ -40,7 +40,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         /* @var DriverException|\PHPUnit_Framework_MockObject_MockObject $ex */
         $ex = $this->getMockBuilder(DriverException::class)->disableOriginalConstructor()->getMock();
 
-        $message = DomainUtil::extractDriverExceptionMessage($ex, false);
+        $message = DomainUtil::getExceptionMessage($ex, false);
 
         $this->assertSame('Database error', $message);
     }
@@ -52,7 +52,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $prevEx = new MockDriverException('Previous exception', 1, $rootEx);
         $ex = new DriverException('Exception message', $prevEx);
 
-        $message = DomainUtil::extractDriverExceptionMessage($ex, true);
+        $message = DomainUtil::getExceptionMessage($ex, true);
 
         $this->assertSame('Database error: General error: 1364 Field \'foo\' doesn\'t have a default value', $message);
     }
@@ -186,7 +186,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $res->getErrors());
 
         $ex = new \Exception('Error message');
-        DomainUtil::injectErrorMessage($res, $ex);
+        DomainUtil::injectErrorMessage($res, $ex, true);
 
         $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
         $this->assertCount(1, $res->getErrors());
@@ -204,7 +204,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $list->add(new ConstraintViolation('Violation message', 'Violation message', array(), $res->getRealData(), null, null));
         $list->add(new ConstraintViolation('Violation message 2', 'Violation message 2', array(), $res->getRealData(), null, null));
         $ex = new ConstraintViolationException($list, 'Error message');
-        DomainUtil::injectErrorMessage($res, $ex);
+        DomainUtil::injectErrorMessage($res, $ex, true);
 
         $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
         $this->assertCount(2, $res->getErrors());

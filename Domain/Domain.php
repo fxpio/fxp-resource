@@ -194,7 +194,7 @@ class Domain extends BaseDomain
                 $this->om->persist($object);
                 $hasFlushError = $this->doAutoCommitFlushTransaction($resource, $autoCommit);
             } catch (\Exception $e) {
-                $hasFlushError = DomainUtil::injectErrorMessage($resource, $e);
+                $hasFlushError = DomainUtil::injectErrorMessage($resource, $e, $this->debug);
             }
         }
 
@@ -322,7 +322,7 @@ class Domain extends BaseDomain
         try {
             $this->om->remove($resource->getRealData());
         } catch (\Exception $e) {
-            DomainUtil::injectErrorMessage($resource, $e);
+            DomainUtil::injectErrorMessage($resource, $e, $this->debug);
         }
     }
 }

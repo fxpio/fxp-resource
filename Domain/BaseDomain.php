@@ -11,7 +11,6 @@
 
 namespace Sonatra\Component\Resource\Domain;
 
-use Doctrine\DBAL\Exception\DriverException;
 use Sonatra\Component\Resource\Exception\ConstraintViolationException;
 use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\ResourceListInterface;
@@ -145,9 +144,7 @@ abstract class BaseDomain extends AbstractDomain
         if ($e instanceof ConstraintViolationException) {
             $violations->addAll($e->getConstraintViolations());
         } else {
-            $message = $e instanceof DriverException
-                ? DomainUtil::extractDriverExceptionMessage($e, $this->debug)
-                : $e->getMessage();
+            $message = DomainUtil::getExceptionMessage($e, $this->debug);
 
             $violations->add(new ConstraintViolation($message, $message, array(), $object, null, null));
         }

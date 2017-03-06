@@ -31,30 +31,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 abstract class DomainUtil
 {
     /**
-     * Format pdo driver exception.
-     *
-     * @param DriverException $exception The exception
-     * @param bool            $debug     The debug mode
-     *
-     * @return string
-     */
-    public static function extractDriverExceptionMessage(DriverException $exception, $debug = false)
-    {
-        $message = 'Database error';
-
-        if ($debug && null !== $exception->getPrevious()) {
-            $prevMessage = static::getFirstException($exception)->getMessage();
-            $pos = strpos($prevMessage, ':');
-
-            if ($pos > 0 && 0 === strpos($prevMessage, 'SQLSTATE[')) {
-                $message .= ': '.trim(substr($prevMessage, $pos + 1));
-            }
-        }
-
-        return $message;
-    }
-
-    /**
      * Get the value of resource identifier.
      *
      * @param ObjectManager $om     The doctrine object manager
@@ -122,18 +98,6 @@ abstract class DomainUtil
     }
 
     /**
-     * Add the error in resource.
-     *
-     * @param ResourceInterface $resource The resource
-     * @param string            $message  The error message
-     */
-    public static function addResourceError(ResourceInterface $resource, $message)
-    {
-        $resource->setStatus(ResourceStatutes::ERROR);
-        $resource->getErrors()->add(new ConstraintViolation($message, $message, array(), $resource->getRealData(), null, null));
-    }
-
-    /**
      * Extract the identifier that are not a object.
      *
      * @param array $identifiers The list containing identifier or object
@@ -174,26 +138,6 @@ abstract class DomainUtil
         }
 
         return $name;
-    }
-
-    /**
-     * Inject the exception message in resource error list.
-     *
-     * @param ResourceInterface $resource The resource
-     * @param \Exception        $e        The exception on persist action
-     *
-     * @return bool
-     */
-    public static function injectErrorMessage(ResourceInterface $resource, \Exception $e)
-    {
-        if ($e instanceof ConstraintViolationException) {
-            $resource->setStatus(ResourceStatutes::ERROR);
-            $resource->getErrors()->addAll($e->getConstraintViolations());
-        } else {
-            static::addResourceError($resource, $e->getMessage());
-        }
-
-        return true;
     }
 
     /**
@@ -251,6 +195,60 @@ abstract class DomainUtil
     }
 
     /**
+     * Get the exception message.
+     *
+     * @param \Exception $exception The exception
+     * @param bool       $debug     The debug mode
+     *
+     * @return string
+     */
+    public static function getExceptionMessage(\Exception $exception, $debug = false)
+    {
+        $message = 'Database error';
+
+        if ($exception instanceof DriverException) {
+            return static::extractDriverExceptionMessage($exception, $message, $debug);
+        }
+
+        return $debug
+            ? $exception->getMessage()
+            : $message;
+    }
+
+    /**
+     * Add the error in resource.
+     *
+     * @param ResourceInterface $resource The resource
+     * @param string            $message  The error message
+     */
+    public static function addResourceError(ResourceInterface $resource, $message)
+    {
+        $resource->setStatus(ResourceStatutes::ERROR);
+        $resource->getErrors()->add(new ConstraintViolation($message, $message, array(), $resource->getRealData(), null, null));
+    }
+
+    /**
+     * Inject the exception message in resource error list.
+     *
+     * @param ResourceInterface $resource The resource
+     * @param \Exception        $e        The exception on persist action
+     * @param bool              $debug    The debug mode
+     *
+     * @return bool
+     */
+    public static function injectErrorMessage(ResourceInterface $resource, \Exception $e, $debug = false)
+    {
+        if ($e instanceof ConstraintViolationException) {
+            $resource->setStatus(ResourceStatutes::ERROR);
+            $resource->getErrors()->addAll($e->getConstraintViolations());
+        } else {
+            static::addResourceError($resource, static::getExceptionMessage($e, $debug));
+        }
+
+        return true;
+    }
+
+    /**
      * Get the map of object hash and constraint violation list.
      *
      * @param ConstraintViolationListInterface $errors
@@ -273,6 +271,29 @@ abstract class DomainUtil
         }
 
         return $maps;
+    }
+
+    /**
+     * Format pdo driver exception.
+     *
+     * @param DriverException $exception The exception
+     * @param string          $message   The message
+     * @param bool            $debug     The debug mode
+     *
+     * @return string
+     */
+    protected static function extractDriverExceptionMessage(DriverException $exception, $message, $debug = false)
+    {
+        if ($debug && null !== $exception->getPrevious()) {
+            $prevMessage = static::getFirstException($exception)->getMessage();
+            $pos = strpos($prevMessage, ':');
+
+            if ($pos > 0 && 0 === strpos($prevMessage, 'SQLSTATE[')) {
+                $message .= ': '.trim(substr($prevMessage, $pos + 1));
+            }
+        }
+
+        return $message;
     }
 
     /**
