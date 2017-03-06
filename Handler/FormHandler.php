@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * A form handler.
@@ -42,6 +43,11 @@ class FormHandler implements FormHandlerInterface
     protected $request;
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * @var int|null
      */
     protected $defaultLimit;
@@ -52,6 +58,7 @@ class FormHandler implements FormHandlerInterface
      * @param ConverterRegistryInterface $converterRegistry The converter registry
      * @param FormFactoryInterface       $formFactory       The form factory
      * @param RequestStack               $requestStack      The request stack
+     * @param TranslatorInterface        $translator        The translator
      * @param int|null                   $defaultLimit      The limit of max data rows
      *
      * @throws InvalidArgumentException When the current request is request stack is empty
@@ -59,11 +66,13 @@ class FormHandler implements FormHandlerInterface
     public function __construct(ConverterRegistryInterface $converterRegistry,
                                 FormFactoryInterface $formFactory,
                                 RequestStack $requestStack,
+                                TranslatorInterface $translator,
                                 $defaultLimit = null)
     {
         $this->converterRegistry = $converterRegistry;
         $this->formFactory = $formFactory;
         $this->request = $requestStack->getCurrentRequest();
+        $this->translator = $translator;
         $this->defaultLimit = $this->validateLimit($defaultLimit);
 
         if (null === $this->request) {
@@ -113,8 +122,11 @@ class FormHandler implements FormHandlerInterface
         $forms = array();
 
         if (count($objects) !== count($dataList)) {
-            $msg = 'The size of the request data list (%s) is different that the object instance list (%s)';
-            throw new InvalidResourceException(sprintf($msg, count($dataList), count($objects)));
+            $msg = $this->translator->trans('form_handler.different_size_request_list', array(
+                '{{ requestSize }}' => count($dataList),
+                '{{ objectSize }}' => count($objects),
+            ), 'SonatraResource');
+            throw new InvalidResourceException($msg);
         }
 
         foreach ($objects as $i => $object) {
@@ -141,7 +153,9 @@ class FormHandler implements FormHandlerInterface
         $dataList = $this->getDataList($config);
 
         if (null !== $limit && count($dataList) > $limit) {
-            $msg = 'The list of resource sent exceeds the permitted limit (%s)';
+            $msg = $this->translator->trans('form_handler.size_exceeds', array(
+                '{{ limit }}' => $limit,
+            ), 'SonatraResource');
             throw new InvalidResourceException(sprintf($msg, $limit));
         }
 

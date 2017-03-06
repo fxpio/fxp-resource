@@ -144,7 +144,7 @@ abstract class BaseDomain extends AbstractDomain
         if ($e instanceof ConstraintViolationException) {
             $violations->addAll($e->getConstraintViolations());
         } else {
-            $message = DomainUtil::getExceptionMessage($e, $this->debug);
+            $message = DomainUtil::getExceptionMessage($this->translator, $e, $this->debug);
 
             $violations->add(new ConstraintViolation($message, $message, array(), $object, null, null));
         }
@@ -203,13 +203,13 @@ abstract class BaseDomain extends AbstractDomain
         $idError = null;
 
         if (Domain::TYPE_CREATE === $type && null !== $idValue) {
-            $idError = 'The resource cannot be created because it has an identifier';
+            $idError = $this->translator->trans('domain.identifier.error_create', array(), 'SonatraResource');
         } elseif (Domain::TYPE_UPDATE === $type && null === $idValue) {
-            $idError = 'The resource cannot be updated because it has not an identifier';
+            $idError = $this->translator->trans('domain.identifier.error_update', array(), 'SonatraResource');
         } elseif (Domain::TYPE_DELETE === $type && null === $idValue) {
-            $idError = 'The resource cannot be deleted because it has not an identifier';
+            $idError = $this->translator->trans('domain.identifier.error_delete', array(), 'SonatraResource');
         } elseif (Domain::TYPE_UNDELETE === $type && null === $idValue) {
-            $idError = 'The resource cannot be undeleted because it has not an identifier';
+            $idError = $this->translator->trans('domain.identifier.error_undeleted', array(), 'SonatraResource');
         }
 
         return $idError;

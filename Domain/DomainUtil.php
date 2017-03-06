@@ -20,6 +20,7 @@ use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\ResourceListInterface;
 use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -197,14 +198,15 @@ abstract class DomainUtil
     /**
      * Get the exception message.
      *
-     * @param \Exception $exception The exception
-     * @param bool       $debug     The debug mode
+     * @param TranslatorInterface $translator The translator
+     * @param \Exception          $exception  The exception
+     * @param bool                $debug      The debug mode
      *
      * @return string
      */
-    public static function getExceptionMessage(\Exception $exception, $debug = false)
+    public static function getExceptionMessage(TranslatorInterface $translator, \Exception $exception, $debug = false)
     {
-        $message = 'Database error';
+        $message = $translator->trans('domain.database_error', array(), 'SonatraResource');
 
         if ($exception instanceof DriverException) {
             return static::extractDriverExceptionMessage($exception, $message, $debug);
@@ -230,19 +232,20 @@ abstract class DomainUtil
     /**
      * Inject the exception message in resource error list.
      *
-     * @param ResourceInterface $resource The resource
-     * @param \Exception        $e        The exception on persist action
-     * @param bool              $debug    The debug mode
+     * @param TranslatorInterface $translator The translator
+     * @param ResourceInterface   $resource   The resource
+     * @param \Exception          $e          The exception on persist action
+     * @param bool                $debug      The debug mode
      *
      * @return bool
      */
-    public static function injectErrorMessage(ResourceInterface $resource, \Exception $e, $debug = false)
+    public static function injectErrorMessage(TranslatorInterface $translator, ResourceInterface $resource, \Exception $e, $debug = false)
     {
         if ($e instanceof ConstraintViolationException) {
             $resource->setStatus(ResourceStatutes::ERROR);
             $resource->getErrors()->addAll($e->getConstraintViolations());
         } else {
-            static::addResourceError($resource, static::getExceptionMessage($e, $debug));
+            static::addResourceError($resource, static::getExceptionMessage($translator, $e, $debug));
         }
 
         return true;

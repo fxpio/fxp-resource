@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>domain.identifier.error_create</source>
+                <target>The resource cannot be created because it has an identifier</target>
+            </trans-unit>
+
+            <trans-unit id="2">
+                <source>domain.identifier.error_update</source>
+                <target>The resource cannot be updated because it has not an identifier</target>
+            </trans-unit>
+
+            <trans-unit id="3">
+                <source>domain.identifier.error_delete</source>
+                <target>The resource cannot be deleted because it has not an identifier</target>
+            </trans-unit>
+
+            <trans-unit id="4">
+                <source>domain.identifier.error_undeleted</source>
+                <target>The resource cannot be undeleted because it has not an identifier</target>
+            </trans-unit>
+
+            <trans-unit id="5">
+                <source>domain.object_does_not_exist</source>
+                <target>The object with the identifier "{{ id }}" does not exist</target>
+            </trans-unit>
+
+            <trans-unit id="6">
+                <source>domain.database_previous_error</source>
+                <target>Caused by previous internal database error</target>
+            </trans-unit>
+
+            <trans-unit id="7">
+                <source>domain.database_error</source>
+                <target>Database error</target>
+            </trans-unit>
+
+            <trans-unit id="8">
+                <source>domain.resource_type_not_undeleted</source>
+                <target>The resource type can not be undeleted</target>
+            </trans-unit>
+
+            <trans-unit id="9">
+                <source>form_handler.different_size_request_list</source>
+                <target>The size of the request data list ({{ requestSize }}) is different that the object instance list ({{ objectSize }})</target>
+            </trans-unit>
+
+            <trans-unit id="10">
+                <source>form_handler.size_exceeds</source>
+                <target>The list of resource sent exceeds the permitted limit ({{ limit }})</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

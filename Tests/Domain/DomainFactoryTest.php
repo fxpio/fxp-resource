@@ -21,6 +21,7 @@ use Sonatra\Component\Resource\Domain\Domain;
 use Sonatra\Component\Resource\Domain\DomainFactory;
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -65,11 +66,17 @@ class DomainFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $validator;
 
+    /**
+     * @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translator;
+
     protected function setUp()
     {
         $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         $this->objectFactory = $this->getMockBuilder(ObjectFactoryInterface::class)->getMock();
         $this->validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
+        $this->translator = $this->getMockBuilder(TranslatorInterface::class)->getMock();
         $this->objectManager = $this->getMockBuilder(ObjectManager::class)->getMock();
         $this->metaFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
         $this->registry = $this->getMockBuilder(ManagerRegistry::class)->getMock();
@@ -77,7 +84,8 @@ class DomainFactoryTest extends \PHPUnit_Framework_TestCase
             $this->registry,
             $this->eventDispatcher,
             $this->objectFactory,
-            $this->validator
+            $this->validator,
+            $this->translator
         );
 
         $this->objectManager->expects($this->any())

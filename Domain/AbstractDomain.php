@@ -23,6 +23,7 @@ use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\ResourceList;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -72,6 +73,11 @@ abstract class AbstractDomain implements DomainInterface
      * @var ValidatorInterface;
      */
     protected $validator;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
 
     /**
      * @var string
@@ -160,6 +166,14 @@ abstract class AbstractDomain implements DomainInterface
     public function setValidator(ValidatorInterface $validator)
     {
         $this->validator = $validator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
     }
 
     /**

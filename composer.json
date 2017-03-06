@@ -19,6 +19,7 @@
         "symfony/form": "~3.0",
         "symfony/http-foundation": "~3.0",
         "symfony/expression-language": "~3.0",
+        "symfony/translation": "~3.0",
         "doctrine/orm": "~2.5",
         "sonatra/doctrine-extensions": "~1.0@dev",
         "sonatra/default-value": "~1.0@dev"

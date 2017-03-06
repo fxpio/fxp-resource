@@ -15,10 +15,13 @@ use Sonatra\Component\Resource\Converter\ConverterRegistry;
 use Sonatra\Component\Resource\Converter\JsonConverter;
 use Sonatra\Component\Resource\Handler\FormHandler;
 use Sonatra\Component\Resource\Handler\FormHandlerInterface;
+use Sonatra\Component\Resource\ResourceInterface;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -52,10 +55,15 @@ abstract class AbstractFormHandlerTest extends \PHPUnit_Framework_TestCase
 
         $requestStack = new RequestStack();
 
+        $translator = new Translator('en');
+        $ref = new \ReflectionClass(ResourceInterface::class);
+        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $translator->addLoader('xml', new XliffFileLoader());
+
         if (null !== $request) {
             $requestStack->push($request);
         }
 
-        return new FormHandler($converterRegistry, $formFactory, $requestStack, $limit);
+        return new FormHandler($converterRegistry, $formFactory, $requestStack, $translator, $limit);
     }
 }

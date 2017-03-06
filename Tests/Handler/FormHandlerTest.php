@@ -17,11 +17,14 @@ use Sonatra\Component\Resource\Handler\FormConfigInterface;
 use Sonatra\Component\Resource\Handler\FormConfigListInterface;
 use Sonatra\Component\Resource\Handler\FormHandler;
 use Sonatra\Component\Resource\Handler\FormHandlerInterface;
+use Sonatra\Component\Resource\ResourceInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Tests case for Form Config Handler.
@@ -44,6 +47,11 @@ class FormHandlerTest extends \PHPUnit_Framework_TestCase
      * @var Request|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
+
+    /**
+     * @var Translator
+     */
+    protected $translator;
 
     /**
      * @var int
@@ -69,10 +77,16 @@ class FormHandlerTest extends \PHPUnit_Framework_TestCase
         $this->request = $request;
         $this->defaultLimit = 10;
 
+        $this->translator = new Translator('en');
+        $ref = new \ReflectionClass(ResourceInterface::class);
+        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $this->translator->addLoader('xml', new XliffFileLoader());
+
         $this->formHandler = new FormHandler(
             $this->converterRegistry,
             $this->formFactory,
             $requestStack,
+            $this->translator,
             $this->defaultLimit
         );
     }
@@ -92,6 +106,7 @@ class FormHandlerTest extends \PHPUnit_Framework_TestCase
             $this->converterRegistry,
             $this->formFactory,
             $requestStack,
+            $this->translator,
             $this->defaultLimit
         );
     }

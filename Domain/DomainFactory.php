@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -48,6 +49,11 @@ class DomainFactory implements DomainFactoryInterface
     protected $validator;
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * @var array
      */
     protected $undeleteDisableFilters;
@@ -69,6 +75,7 @@ class DomainFactory implements DomainFactoryInterface
      * @param EventDispatcherInterface $ed                     The event dispatcher
      * @param ObjectFactoryInterface   $of                     The default value object factory
      * @param ValidatorInterface       $validator              The validator
+     * @param TranslatorInterface      $translator             The translator
      * @param array                    $undeleteDisableFilters The undelete disable filters
      * @param bool                     $debug                  The debug mode
      */
@@ -76,6 +83,7 @@ class DomainFactory implements DomainFactoryInterface
                                 EventDispatcherInterface $ed,
                                 ObjectFactoryInterface $of,
                                 ValidatorInterface $validator,
+                                TranslatorInterface $translator,
                                 array $undeleteDisableFilters = array(),
                                 $debug = false)
     {
@@ -83,6 +91,7 @@ class DomainFactory implements DomainFactoryInterface
         $this->ed = $ed;
         $this->of = $of;
         $this->validator = $validator;
+        $this->translator = $translator;
         $this->undeleteDisableFilters = $undeleteDisableFilters;
         $this->debug = $debug;
         $this->resolveTargets = array();
@@ -153,6 +162,7 @@ class DomainFactory implements DomainFactoryInterface
         $domain->setEventDispatcher($this->ed);
         $domain->setObjectFactory($this->of);
         $domain->setValidator($this->validator);
+        $domain->setTranslator($this->translator);
 
         return $domain;
     }

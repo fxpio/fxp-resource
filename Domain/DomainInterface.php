@@ -20,6 +20,7 @@ use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\ResourceListInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -73,6 +74,13 @@ interface DomainInterface
      * @param ValidatorInterface $validator The validator
      */
     public function setValidator(ValidatorInterface $validator);
+
+    /**
+     * Set the translator.
+     *
+     * @param TranslatorInterface $translator The translator
+     */
+    public function setTranslator(TranslatorInterface $translator);
 
     /**
      * Get the class name for this resource domain.

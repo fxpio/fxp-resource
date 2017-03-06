@@ -24,6 +24,8 @@ use Sonatra\Component\Resource\ResourceList;
 use Sonatra\Component\Resource\ResourceListInterface;
 use Sonatra\Component\Resource\ResourceStatutes;
 use Sonatra\Component\Resource\Tests\Fixtures\Exception\MockDriverException;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -40,7 +42,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         /* @var DriverException|\PHPUnit_Framework_MockObject_MockObject $ex */
         $ex = $this->getMockBuilder(DriverException::class)->disableOriginalConstructor()->getMock();
 
-        $message = DomainUtil::getExceptionMessage($ex, false);
+        $message = DomainUtil::getExceptionMessage($this->getTranslator(), $ex, false);
 
         $this->assertSame('Database error', $message);
     }
@@ -52,7 +54,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $prevEx = new MockDriverException('Previous exception', 1, $rootEx);
         $ex = new DriverException('Exception message', $prevEx);
 
-        $message = DomainUtil::getExceptionMessage($ex, true);
+        $message = DomainUtil::getExceptionMessage($this->getTranslator(), $ex, true);
 
         $this->assertSame('Database error: General error: 1364 Field \'foo\' doesn\'t have a default value', $message);
     }
@@ -186,7 +188,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $res->getErrors());
 
         $ex = new \Exception('Error message');
-        DomainUtil::injectErrorMessage($res, $ex, true);
+        DomainUtil::injectErrorMessage($this->getTranslator(), $res, $ex, true);
 
         $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
         $this->assertCount(1, $res->getErrors());
@@ -204,7 +206,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $list->add(new ConstraintViolation('Violation message', 'Violation message', array(), $res->getRealData(), null, null));
         $list->add(new ConstraintViolation('Violation message 2', 'Violation message 2', array(), $res->getRealData(), null, null));
         $ex = new ConstraintViolationException($list, 'Error message');
-        DomainUtil::injectErrorMessage($res, $ex, true);
+        DomainUtil::injectErrorMessage($this->getTranslator(), $res, $ex, true);
 
         $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
         $this->assertCount(2, $res->getErrors());
@@ -283,5 +285,18 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(ResourceStatutes::ERROR, $resList->get(0)->getStatus());
         $this->assertSame(ResourceStatutes::CANCELED, $resList->get(1)->getStatus());
         $this->assertSame(ResourceStatutes::CANCELED, $resList->get(2)->getStatus());
+    }
+
+    /**
+     * @return Translator
+     */
+    protected function getTranslator()
+    {
+        $translator = new Translator('en');
+        $ref = new \ReflectionClass(ResourceInterface::class);
+        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $translator->addLoader('xml', new XliffFileLoader());
+
+        return $translator;
     }
 }

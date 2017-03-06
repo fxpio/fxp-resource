@@ -20,6 +20,7 @@ use Sonatra\Component\DefaultValue\ObjectRegistry;
 use Sonatra\Component\DefaultValue\ResolvedObjectTypeFactory;
 use Sonatra\Component\Resource\Domain\Domain;
 use Sonatra\Component\Resource\Domain\DomainInterface;
+use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar;
 use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
 use Sonatra\Component\Resource\Tests\Fixtures\Listener\SoftDeletableSubscriber;
@@ -28,6 +29,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -57,6 +61,11 @@ abstract class AbstractDomainTest extends \PHPUnit_Framework_TestCase
      * @var ValidatorInterface
      */
     protected $validator;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
 
     /**
      * @var FormFactoryInterface
@@ -96,6 +105,11 @@ abstract class AbstractDomainTest extends \PHPUnit_Framework_TestCase
         $this->formFactory = Forms::createFormFactoryBuilder()
             ->addExtension(new ValidatorExtension($this->validator))
             ->getFormFactory();
+
+        $this->translator = new Translator('en');
+        $ref = new \ReflectionClass(ResourceInterface::class);
+        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $this->translator->addLoader('xml', new XliffFileLoader());
     }
 
     protected function tearDown()
@@ -134,6 +148,7 @@ abstract class AbstractDomainTest extends \PHPUnit_Framework_TestCase
         $domain->setEventDispatcher($this->dispatcher);
         $domain->setObjectFactory($this->objectFactory);
         $domain->setValidator($this->validator);
+        $domain->setTranslator($this->translator);
 
         return $domain;
     }

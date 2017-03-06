@@ -75,7 +75,7 @@ class Domain extends BaseDomain
             $sdt = new \stdClass();
             $sdt->{DomainUtil::getIdentifierName($this->om, $this->getClass())} = $id;
             $resource = new ResourceItem($sdt);
-            DomainUtil::addResourceError($resource, sprintf('The object with the identifier "%s" does not exist', $id));
+            DomainUtil::addResourceError($resource, $this->translator->trans('domain.object_does_not_exist', array('{{ id }}' => $id), 'SonatraResource'));
             $errorResources[] = $resource;
         }
 
@@ -160,7 +160,7 @@ class Domain extends BaseDomain
                 $resource->setStatus(ResourceStatutes::CANCELED);
                 continue;
             } elseif ($autoCommit && $hasFlushError && $hasError) {
-                DomainUtil::addResourceError($resource, 'Caused by previous internal database error');
+                DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'SonatraResource'));
                 continue;
             }
 
@@ -194,7 +194,7 @@ class Domain extends BaseDomain
                 $this->om->persist($object);
                 $hasFlushError = $this->doAutoCommitFlushTransaction($resource, $autoCommit);
             } catch (\Exception $e) {
-                $hasFlushError = DomainUtil::injectErrorMessage($resource, $e, $this->debug);
+                $hasFlushError = DomainUtil::injectErrorMessage($this->translator, $resource, $e, $this->debug);
             }
         }
 
@@ -215,7 +215,7 @@ class Domain extends BaseDomain
             if ($object instanceof SoftDeletableInterface) {
                 $object->setDeletedAt(null);
             } else {
-                DomainUtil::addResourceError($resource, 'The resource type can not be undeleted');
+                DomainUtil::addResourceError($resource, $this->translator->trans('domain.resource_type_not_undeleted', array(), 'SonatraResource'));
             }
         }
     }
@@ -267,7 +267,7 @@ class Domain extends BaseDomain
             $resource->setStatus(ResourceStatutes::CANCELED);
             $continue = true;
         } elseif ($autoCommit && $hasFlushError && $hasError) {
-            DomainUtil::addResourceError($resource, 'Caused by previous internal database error');
+            DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'SonatraResource'));
             $continue = true;
         } elseif (null !== $idError = $this->getErrorIdentifier($resource->getRealData(), static::TYPE_DELETE)) {
             $hasError = true;
@@ -322,7 +322,7 @@ class Domain extends BaseDomain
         try {
             $this->om->remove($resource->getRealData());
         } catch (\Exception $e) {
-            DomainUtil::injectErrorMessage($resource, $e, $this->debug);
+            DomainUtil::injectErrorMessage($this->translator, $resource, $e, $this->debug);
         }
     }
 }
