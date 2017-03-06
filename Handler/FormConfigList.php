@@ -37,7 +37,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     {
         $this->limit = $limit;
 
-        return;
+        return $this;
     }
 
     /**
