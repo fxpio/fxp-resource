@@ -56,6 +56,11 @@
                 <source>form_handler.results_field_required</source>
                 <target>Le champs "records" est requis</target>
             </trans-unit>
+
+            <trans-unit id="12">
+                <source>converter.json.invalid_body</source>
+                <target>Le corps de la requête doit être un objet JSON</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

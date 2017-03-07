@@ -13,6 +13,9 @@ namespace Sonatra\Component\Resource\Tests\Converter;
 
 use Sonatra\Component\Resource\Converter\ConverterInterface;
 use Sonatra\Component\Resource\Converter\JsonConverter;
+use Sonatra\Component\Resource\ResourceInterface;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Tests case for json converter.
@@ -28,7 +31,12 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->converter = new JsonConverter();
+        $translator = new Translator('en');
+        $ref = new \ReflectionClass(ResourceInterface::class);
+        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $translator->addLoader('xml', new XliffFileLoader());
+
+        $this->converter = new JsonConverter($translator);
     }
 
     public function testBasic()
@@ -38,7 +46,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Sonatra\Component\Resource\Exception\InvalidConverterException
-     * @expectedExceptionMessage Body should be a JSON object
+     * @expectedExceptionMessage Request body should be a JSON object
      */
     public function testInvalidConversion()
     {

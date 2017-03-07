@@ -12,6 +12,7 @@
 namespace Sonatra\Component\Resource\Converter;
 
 use Sonatra\Component\Resource\Exception\InvalidJsonConverterException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * A request content converter interface.
@@ -21,6 +22,21 @@ use Sonatra\Component\Resource\Exception\InvalidJsonConverterException;
 class JsonConverter implements ConverterInterface
 {
     const NAME = 'json';
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * Constructor.
+     *
+     * @param TranslatorInterface $translator The translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * {@inheritdoc}
@@ -38,7 +54,7 @@ class JsonConverter implements ConverterInterface
         $content = json_decode($content, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new InvalidJsonConverterException();
+            throw new InvalidJsonConverterException($this->translator->trans('converter.json.invalid_body', array(), 'SonatraResource'));
         }
 
         return is_array($content) ? $content : array();

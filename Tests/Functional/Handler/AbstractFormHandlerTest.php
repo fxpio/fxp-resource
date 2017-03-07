@@ -41,8 +41,13 @@ abstract class AbstractFormHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFormHandler(Request $request = null, $limit = null)
     {
+        $translator = new Translator('en');
+        $ref = new \ReflectionClass(ResourceInterface::class);
+        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $translator->addLoader('xml', new XliffFileLoader());
+
         $converterRegistry = new ConverterRegistry(array(
-            new JsonConverter(),
+            new JsonConverter($translator),
         ));
 
         $validator = Validation::createValidatorBuilder()
@@ -54,11 +59,6 @@ abstract class AbstractFormHandlerTest extends \PHPUnit_Framework_TestCase
             ->getFormFactory();
 
         $requestStack = new RequestStack();
-
-        $translator = new Translator('en');
-        $ref = new \ReflectionClass(ResourceInterface::class);
-        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
-        $translator->addLoader('xml', new XliffFileLoader());
 
         if (null !== $request) {
             $requestStack->push($request);

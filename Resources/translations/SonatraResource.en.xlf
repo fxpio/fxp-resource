@@ -56,6 +56,11 @@
                 <source>form_handler.results_field_required</source>
                 <target>The "records" field is required</target>
             </trans-unit>
+
+            <trans-unit id="12">
+                <source>converter.json.invalid_body</source>
+                <target>Request body should be a JSON object</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
