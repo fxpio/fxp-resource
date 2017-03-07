@@ -182,7 +182,11 @@ class FormHandler implements FormHandlerInterface
         $dataList = $converter->convert((string) $this->request->getContent());
 
         if ($config instanceof FormConfigListInterface) {
-            $dataList = $config->findList($dataList);
+            try {
+                $dataList = $config->findList($dataList);
+            } catch (InvalidResourceException $e) {
+                throw new InvalidResourceException($this->translator->trans('form_handler.results_field_required', array(), 'SonatraResource'));
+            }
         } else {
             $dataList = array($dataList);
         }

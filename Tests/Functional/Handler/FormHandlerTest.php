@@ -98,7 +98,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
 
     /**
      * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The records field is required
+     * @expectedExceptionMessage The "records" field is required
      */
     public function testProcessFormsWithoutRecordsField()
     {

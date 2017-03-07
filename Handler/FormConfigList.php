@@ -72,7 +72,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     public function findList(array $data)
     {
         if (!isset($data['records'])) {
-            throw new InvalidResourceException('The records field is required');
+            throw new InvalidResourceException('The "records" field is required');
         }
 
         if (array_key_exists('transaction', $data)) {

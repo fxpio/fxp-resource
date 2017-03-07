@@ -88,7 +88,7 @@ class ClosureFormConfigListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The records field is required
+     * @expectedExceptionMessage The "records" field is required
      */
     public function testFindListWithoutRecords()
     {

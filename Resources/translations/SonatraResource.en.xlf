@@ -51,6 +51,11 @@
                 <source>form_handler.size_exceeds</source>
                 <target>The list of resource sent exceeds the permitted limit ({{ limit }})</target>
             </trans-unit>
+
+            <trans-unit id="11">
+                <source>form_handler.results_field_required</source>
+                <target>The "records" field is required</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
