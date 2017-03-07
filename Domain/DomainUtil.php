@@ -208,6 +208,10 @@ abstract class DomainUtil
     {
         $message = $translator->trans('domain.database_error', array(), 'SonatraResource');
 
+        if ($debug) {
+            $message .= ' ['.get_class($exception).']';
+        }
+
         if ($exception instanceof DriverException) {
             return static::extractDriverExceptionMessage($exception, $message, $debug);
         }

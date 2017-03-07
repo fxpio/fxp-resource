@@ -56,7 +56,7 @@ class DomainUtilTest extends \PHPUnit_Framework_TestCase
 
         $message = DomainUtil::getExceptionMessage($this->getTranslator(), $ex, true);
 
-        $this->assertSame('Database error: General error: 1364 Field \'foo\' doesn\'t have a default value', $message);
+        $this->assertSame('Database error [Doctrine\DBAL\Exception\DriverException]: General error: 1364 Field \'foo\' doesn\'t have a default value', $message);
     }
 
     public function testGetIdentifier()
