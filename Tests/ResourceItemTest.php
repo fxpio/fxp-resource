@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\ResourceItem;
 use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\Form\Test\FormInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\Form\Test\FormInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ResourceItemTest extends \PHPUnit_Framework_TestCase
+class ResourceItemTest extends TestCase
 {
     public function testDefaultGetterSetter()
     {

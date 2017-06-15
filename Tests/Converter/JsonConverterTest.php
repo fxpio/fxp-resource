@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Converter;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Converter\ConverterInterface;
 use Sonatra\Component\Resource\Converter\JsonConverter;
 use Sonatra\Component\Resource\ResourceInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class JsonConverterTest extends \PHPUnit_Framework_TestCase
+class JsonConverterTest extends TestCase
 {
     /**
      * @var ConverterInterface

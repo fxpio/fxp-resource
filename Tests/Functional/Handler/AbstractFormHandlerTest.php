@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Functional\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Converter\ConverterRegistry;
 use Sonatra\Component\Resource\Converter\JsonConverter;
 use Sonatra\Component\Resource\Handler\FormHandler;
@@ -29,7 +30,7 @@ use Symfony\Component\Validator\Validation;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractFormHandlerTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractFormHandlerTest extends TestCase
 {
     /**
      * Create form handler.

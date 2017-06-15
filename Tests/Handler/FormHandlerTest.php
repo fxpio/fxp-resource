@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Converter\ConverterInterface;
 use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
 use Sonatra\Component\Resource\Handler\FormConfigInterface;
@@ -31,7 +32,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class FormHandlerTest extends \PHPUnit_Framework_TestCase
+class FormHandlerTest extends TestCase
 {
     /**
      * @var ConverterRegistryInterface|\PHPUnit_Framework_MockObject_MockObject

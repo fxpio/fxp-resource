@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Handler\FormConfig;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class FormConfigTest extends \PHPUnit_Framework_TestCase
+class FormConfigTest extends TestCase
 {
     public function testWithStringType()
     {

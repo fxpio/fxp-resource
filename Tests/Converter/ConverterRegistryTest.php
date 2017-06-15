@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Converter;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Converter\ConverterRegistry;
 use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
 
@@ -19,7 +20,7 @@ use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ConverterRegistryTest extends \PHPUnit_Framework_TestCase
+class ConverterRegistryTest extends TestCase
 {
     /**
      * @var ConverterRegistryInterface

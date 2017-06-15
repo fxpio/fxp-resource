@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Domain\Domain;
 use Sonatra\Component\Resource\Domain\DomainFactory;
@@ -29,7 +30,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DomainFactoryTest extends \PHPUnit_Framework_TestCase
+class DomainFactoryTest extends TestCase
 {
     /**
      * @var DomainFactory
@@ -99,7 +100,7 @@ class DomainFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testAddResolveTargets()
     {
-        $this->factory->addResolveTargets(array('FooInterface' => 'Foo'));
+        $this->assertInstanceOf(DomainFactory::class, $this->factory->addResolveTargets(array('FooInterface' => 'Foo')));
     }
 
     public function testGetShortNames()

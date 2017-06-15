@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Event;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Sonatra\Component\Resource\Event\ResourceEvent;
 use Sonatra\Component\Resource\ResourceEvents;
@@ -19,7 +20,7 @@ use Sonatra\Component\Resource\ResourceListInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ResourceEventTest extends \PHPUnit_Framework_TestCase
+class ResourceEventTest extends TestCase
 {
     public function testGetter()
     {

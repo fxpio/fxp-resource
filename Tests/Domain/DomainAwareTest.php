@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Domain;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Domain\DomainAware;
 use Sonatra\Component\Resource\Domain\DomainManagerInterface;
 
@@ -19,7 +20,7 @@ use Sonatra\Component\Resource\Domain\DomainManagerInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DomainAwareTest extends \PHPUnit_Framework_TestCase
+class DomainAwareTest extends TestCase
 {
     public function testSetDomainManager()
     {
@@ -27,6 +28,6 @@ class DomainAwareTest extends \PHPUnit_Framework_TestCase
         $dm = $this->getMockBuilder(DomainManagerInterface::class)->getMock();
         $domain = new DomainAware(\stdClass::class);
 
-        $domain->setDomainManager($dm);
+        $this->assertInstanceOf(DomainAware::class, $domain->setDomainManager($dm));
     }
 }

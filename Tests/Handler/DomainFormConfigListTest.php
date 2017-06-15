@@ -12,6 +12,7 @@
 namespace Sonatra\Component\Resource\Tests\Handler;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\DefaultValue\Tests\Fixtures\Object\Foo;
 use Sonatra\Component\Resource\Domain\DomainInterface;
 use Sonatra\Component\Resource\Handler\DomainFormConfigList;
@@ -22,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DomainFormConfigListTest extends \PHPUnit_Framework_TestCase
+class DomainFormConfigListTest extends TestCase
 {
     /**
      * @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject

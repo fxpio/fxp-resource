@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\ResourceInterface;
 use Sonatra\Component\Resource\ResourceList;
 use Sonatra\Component\Resource\ResourceListStatutes;
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ResourceListTest extends \PHPUnit_Framework_TestCase
+class ResourceListTest extends TestCase
 {
     public function getData()
     {

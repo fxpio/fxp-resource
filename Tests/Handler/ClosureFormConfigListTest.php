@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Handler\ClosureFormConfigList;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 
@@ -19,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ClosureFormConfigListTest extends \PHPUnit_Framework_TestCase
+class ClosureFormConfigListTest extends TestCase
 {
     public function testBasic()
     {

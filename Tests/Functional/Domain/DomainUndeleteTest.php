@@ -274,11 +274,13 @@ class DomainUndeleteTest extends AbstractDomainTest
     public function testUndeleteAutoCommitNonExistentAndExistentObjects()
     {
         //TODO
+        $this->assertNull(null);
     }
 
     public function testDeleteAutoCommitErrorAndSuccessObjects()
     {
         //TODO
+        $this->assertNull(null);
     }
 
     /**

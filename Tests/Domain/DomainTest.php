@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Domain\Domain;
 
@@ -24,7 +25,7 @@ use Sonatra\Component\Resource\Domain\Domain;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DomainTest extends \PHPUnit_Framework_TestCase
+class DomainTest extends TestCase
 {
     public function getShortNames()
     {

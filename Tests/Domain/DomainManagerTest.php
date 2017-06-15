@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Domain;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Domain\DomainAwareInterface;
 use Sonatra\Component\Resource\Domain\DomainFactoryInterface;
 use Sonatra\Component\Resource\Domain\DomainInterface;
@@ -21,7 +22,7 @@ use Sonatra\Component\Resource\Domain\DomainManager;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DomainManagerTest extends \PHPUnit_Framework_TestCase
+class DomainManagerTest extends TestCase
 {
     /**
      * @var DomainFactoryInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -14,6 +14,7 @@ namespace Sonatra\Component\Resource\Tests\Domain;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Exception\DriverException;
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Domain\Domain;
 use Sonatra\Component\Resource\Domain\DomainUtil;
 use Sonatra\Component\Resource\Exception\ConstraintViolationException;
@@ -35,7 +36,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DomainUtilTest extends \PHPUnit_Framework_TestCase
+class DomainUtilTest extends TestCase
 {
     public function testExtractDriverExceptionMessage()
     {

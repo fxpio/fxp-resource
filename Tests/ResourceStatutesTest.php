@@ -11,12 +11,13 @@
 
 namespace Sonatra\Component\Resource\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\ResourceStatutes;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ResourceStatutesTest extends \PHPUnit_Framework_TestCase
+class ResourceStatutesTest extends TestCase
 {
     /**
      * @expectedException \Sonatra\Component\Resource\Exception\ClassNotInstantiableException

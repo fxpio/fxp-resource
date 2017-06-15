@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Component\Resource\Model\SoftDeletableInterface;
 use Sonatra\Component\Resource\ResourceListInterface;
 use Sonatra\Component\Resource\ResourceUtil;
@@ -21,7 +22,7 @@ use Symfony\Component\Form\FormInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ResourceUtilTest extends \PHPUnit_Framework_TestCase
+class ResourceUtilTest extends TestCase
 {
     public function getAllowForm()
     {
@@ -56,7 +57,9 @@ class ResourceUtilTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateObjectResource($allowForm)
     {
-        ResourceUtil::validateObjectResource(new \stdClass(), \stdClass::class, $allowForm);
+        $obj = new \stdClass();
+        ResourceUtil::validateObjectResource($obj, \stdClass::class, $allowForm);
+        $this->assertNotNull($obj);
     }
 
     /**
