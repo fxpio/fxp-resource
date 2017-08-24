@@ -16,6 +16,8 @@ use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
 use Sonatra\Component\Resource\Domain\Domain;
@@ -59,12 +61,20 @@ class DomainTest extends TestCase
         $om->expects($this->once())
             ->method('getClassMetadata')
             ->willReturn($meta);
+        $mockRepo = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
+        $qbMock = $this->getMockBuilder(QueryBuilder::class)->disableOriginalConstructor()->getMock();
+        $mockRepo->expects($this->once())
+            ->method('createQueryBuilder')
+            ->willReturn($qbMock);
+        $om->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($mockRepo));
         /* @var EntityManager $om */
         $domain->setObjectManager($om);
         $qb = $domain->createQueryBuilder('f');
 
         $this->assertSame($om, $domain->getObjectManager());
-        $this->assertInstanceOf('Doctrine\ORM\QueryBuilder', $qb);
+        $this->assertSame($qbMock, $qb);
     }
 
     /**

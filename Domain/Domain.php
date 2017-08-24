@@ -12,7 +12,6 @@
 namespace Sonatra\Component\Resource\Domain;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
 use Sonatra\Component\Resource\Event\ResourceEvent;
 use Sonatra\Component\Resource\Exception\BadMethodCallException;
 use Sonatra\Component\Resource\Model\SoftDeletableInterface;
@@ -34,13 +33,10 @@ class Domain extends BaseDomain
     /**
      * {@inheritdoc}
      */
-    public function createQueryBuilder($alias = 'o')
+    public function createQueryBuilder($alias = 'o', $indexBy = null)
     {
         if ($this->om instanceof EntityManager) {
-            $qb = new QueryBuilder($this->om);
-            $qb->select($alias)->from($this->getClass(), $alias);
-
-            return $qb;
+            return $this->getRepository()->createQueryBuilder($alias, $indexBy);
         }
 
         throw new BadMethodCallException('The "Domain::createQueryBuilder()" method can only be called for a domain with Doctrine ORM Entity Manager');
