@@ -33,7 +33,7 @@ abstract class DomainDoctrineUtil
      */
     public static function getManager(ManagerRegistry $or, $class)
     {
-        $manager = $or->getManagerForClass($class);
+        $manager = self::findManager($or, $class);
 
         if (null === $manager) {
             foreach ($or->getManagers() as $objectManager) {
@@ -88,6 +88,25 @@ abstract class DomainDoctrineUtil
 
         if ($meta instanceof OrmClassMetadata && $meta->isMappedSuperclass) {
             throw new InvalidArgumentException(sprintf('The "%s" class is not registered in doctrine', $class));
+        }
+
+        return $manager;
+    }
+
+    /**
+     * Find the doctrine object manager of the class.
+     *
+     * @param ManagerRegistry $or    The doctrine registry
+     * @param string          $class The class name or doctrine shortcut class name
+     *
+     * @return ObjectManager|null
+     */
+    private static function findManager(ManagerRegistry $or, $class)
+    {
+        try {
+            $manager = $or->getManagerForClass($class);
+        } catch (\ReflectionException $e) {
+            $manager = null;
         }
 
         return $manager;
