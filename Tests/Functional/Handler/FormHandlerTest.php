@@ -11,6 +11,7 @@
 
 namespace Sonatra\Component\Resource\Tests\Functional\Handler;
 
+use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
 use Sonatra\Component\Resource\Handler\FormConfig;
 use Sonatra\Component\Resource\Handler\FormConfigList;
 use Sonatra\Component\Resource\Handler\FormConfigListInterface;
@@ -204,12 +205,12 @@ class FormHandlerTest extends AbstractFormHandlerTest
     }
 
     /**
-     * @param array                                                 $objects
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $count
+     * @param array           $objects
+     * @param InvokedRecorder $count
      *
      * @return FormConfigListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createFormConfigList($objects, \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $count)
+    protected function createFormConfigList($objects, InvokedRecorder $count)
     {
         $config = $this->getMockBuilder(FormConfigList::class)
             ->setConstructorArgs(array(FooType::class, array(), Request::METHOD_POST, 'json'))
