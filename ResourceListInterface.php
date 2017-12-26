@@ -46,7 +46,7 @@ interface ResourceListInterface extends \Traversable, \Countable, \ArrayAccess
      *
      * @param ResourceListInterface $otherList The other resources
      */
-    public function addAll(ResourceListInterface $otherList);
+    public function addAll(self $otherList);
 
     /**
      * Get all resources.
