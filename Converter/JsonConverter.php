@@ -53,7 +53,7 @@ class JsonConverter implements ConverterInterface
     {
         $content = json_decode($content, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidJsonConverterException($this->translator->trans('converter.json.invalid_body', array(), 'SonatraResource'));
         }
 
