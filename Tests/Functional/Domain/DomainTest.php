@@ -1,27 +1,27 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Functional\Domain;
+namespace Fxp\Component\Resource\Tests\Functional\Domain;
 
-use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
 
 /**
  * Functional tests for Domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainTest extends AbstractDomainTest
 {
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidConfigurationException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidConfigurationException
      * @expectedExceptionMessageRegExp /The "([\w\\\/]+)" class is not managed by doctrine object manager/
      */
     public function testMappingException()

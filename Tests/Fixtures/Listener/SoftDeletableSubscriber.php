@@ -1,25 +1,25 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Fixtures\Listener;
+namespace Fxp\Component\Resource\Tests\Fixtures\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
-use Sonatra\Component\Resource\Model\SoftDeletableInterface;
+use Fxp\Component\Resource\Model\SoftDeletableInterface;
 
 /**
  * Doctrine ORM soft deletable subscriber.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SoftDeletableSubscriber implements EventSubscriber
 {

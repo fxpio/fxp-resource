@@ -1,20 +1,20 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Domain;
+namespace Fxp\Component\Resource\Domain;
 
-use Sonatra\Component\Resource\Exception\ConstraintViolationException;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceStatutes;
+use Fxp\Component\Resource\Exception\ConstraintViolationException;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceStatutes;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * A base class for resource domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class BaseDomain extends AbstractDomain
 {
@@ -203,13 +203,13 @@ abstract class BaseDomain extends AbstractDomain
         $idError = null;
 
         if (Domain::TYPE_CREATE === $type && null !== $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_create', array(), 'SonatraResource');
+            $idError = $this->translator->trans('domain.identifier.error_create', array(), 'FxpResource');
         } elseif (Domain::TYPE_UPDATE === $type && null === $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_update', array(), 'SonatraResource');
+            $idError = $this->translator->trans('domain.identifier.error_update', array(), 'FxpResource');
         } elseif (Domain::TYPE_DELETE === $type && null === $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_delete', array(), 'SonatraResource');
+            $idError = $this->translator->trans('domain.identifier.error_delete', array(), 'FxpResource');
         } elseif (Domain::TYPE_UNDELETE === $type && null === $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_undeleted', array(), 'SonatraResource');
+            $idError = $this->translator->trans('domain.identifier.error_undeleted', array(), 'FxpResource');
         }
 
         return $idError;

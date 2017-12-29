@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Functional\Handler;
+namespace Fxp\Component\Resource\Tests\Functional\Handler;
 
+use Fxp\Component\Resource\Converter\ConverterRegistry;
+use Fxp\Component\Resource\Converter\JsonConverter;
+use Fxp\Component\Resource\Handler\FormHandler;
+use Fxp\Component\Resource\Handler\FormHandlerInterface;
+use Fxp\Component\Resource\ResourceInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Converter\ConverterRegistry;
-use Sonatra\Component\Resource\Converter\JsonConverter;
-use Sonatra\Component\Resource\Handler\FormHandler;
-use Sonatra\Component\Resource\Handler\FormHandlerInterface;
-use Sonatra\Component\Resource\ResourceInterface;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Validation;
 /**
  * Abstract class for Functional tests for Form Handler.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractFormHandlerTest extends TestCase
 {
@@ -44,7 +44,7 @@ abstract class AbstractFormHandlerTest extends TestCase
     {
         $translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $translator->addLoader('xml', new XliffFileLoader());
 
         $converterRegistry = new ConverterRegistry(array(

@@ -1,25 +1,25 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Event;
+namespace Fxp\Component\Resource\Event;
 
-use Sonatra\Component\Resource\Domain\DomainInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\ResourceListInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * The resource event.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ResourceEvent extends Event
 {

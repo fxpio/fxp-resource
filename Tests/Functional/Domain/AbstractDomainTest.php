@@ -1,30 +1,30 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Functional\Domain;
+namespace Fxp\Component\Resource\Tests\Functional\Domain;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
+use Fxp\Component\DefaultValue\ObjectFactory;
+use Fxp\Component\DefaultValue\ObjectFactoryInterface;
+use Fxp\Component\DefaultValue\ObjectRegistry;
+use Fxp\Component\DefaultValue\ResolvedObjectTypeFactory;
+use Fxp\Component\Resource\Domain\Domain;
+use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\Tests\Fixtures\Entity\Bar;
+use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Fxp\Component\Resource\Tests\Fixtures\Listener\SoftDeletableSubscriber;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\DefaultValue\ObjectFactory;
-use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Component\DefaultValue\ObjectRegistry;
-use Sonatra\Component\DefaultValue\ResolvedObjectTypeFactory;
-use Sonatra\Component\Resource\Domain\Domain;
-use Sonatra\Component\Resource\Domain\DomainInterface;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar;
-use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
-use Sonatra\Component\Resource\Tests\Fixtures\Listener\SoftDeletableSubscriber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
@@ -39,7 +39,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Abstract class for Functional tests for Domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractDomainTest extends TestCase
 {
@@ -109,7 +109,7 @@ abstract class AbstractDomainTest extends TestCase
 
         $this->translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $this->translator->addLoader('xml', new XliffFileLoader());
     }
 

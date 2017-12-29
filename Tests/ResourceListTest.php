@@ -1,27 +1,27 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests;
+namespace Fxp\Component\Resource\Tests;
 
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceList;
+use Fxp\Component\Resource\ResourceListStatutes;
+use Fxp\Component\Resource\ResourceStatutes;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceList;
-use Sonatra\Component\Resource\ResourceListStatutes;
-use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * Tests case for resource list.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ResourceListTest extends TestCase
 {
@@ -56,7 +56,7 @@ class ResourceListTest extends TestCase
         $resources = array();
 
         foreach ($resourceStatutes as $rStatus) {
-            $resource = $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock();
+            $resource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
             $resource->expects($this->any())
                 ->method('getStatus')
                 ->will($this->returnValue($rStatus));
@@ -72,16 +72,16 @@ class ResourceListTest extends TestCase
     public function testGetResources()
     {
         $resources = array(
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
 
         $list = new ResourceList($resources);
         $this->assertSame($resources, $list->getResources());
 
         $resources2 = array(
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
 
         $list2 = new ResourceList($resources2);
@@ -111,7 +111,7 @@ class ResourceListTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\OutOfBoundsException
+     * @expectedException \Fxp\Component\Resource\Exception\OutOfBoundsException
      * @expectedExceptionMessage The offset "0" does not exist.
      */
     public function testGetOUtOfBoundsException()
@@ -123,13 +123,13 @@ class ResourceListTest extends TestCase
     public function testSet()
     {
         $resources = array(
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
         $list = new ResourceList($resources);
 
         /* @var ResourceInterface $new */
-        $new = $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock();
+        $new = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
         $this->assertNotSame($new, $list->get(0));
         $list->set(0, $new);
@@ -137,7 +137,7 @@ class ResourceListTest extends TestCase
         $this->assertSame($new, $list->get(0));
 
         /* @var ResourceInterface $new2 */
-        $new2 = $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock();
+        $new2 = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
         $this->assertNotSame($new2, $list->offsetGet(1));
         $list->offsetSet(1, $new2);
@@ -145,7 +145,7 @@ class ResourceListTest extends TestCase
         $this->assertSame($new2, $list->offsetGet(1));
 
         /* @var ResourceInterface $new3 */
-        $new3 = $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock();
+        $new3 = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
         $this->assertCount(2, $list);
 
@@ -157,8 +157,8 @@ class ResourceListTest extends TestCase
     public function testRemove()
     {
         $resources = array(
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
         $list = new ResourceList($resources);
 
@@ -176,8 +176,8 @@ class ResourceListTest extends TestCase
     public function testGetEmptyErrorsAndEmptyChildrenErrors()
     {
         $resources = array(
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
         $list = new ResourceList($resources);
 
@@ -189,8 +189,8 @@ class ResourceListTest extends TestCase
     public function testGetErrorsAndEmptyChildrenErrors()
     {
         $resources = array(
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
         $list = new ResourceList($resources);
 
@@ -206,7 +206,7 @@ class ResourceListTest extends TestCase
     public function testGetEmptyErrorsAndChildrenErrors()
     {
         /* @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $errorResource */
-        $errorResource = $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock();
+        $errorResource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
         $errorResource->expects($this->any())
             ->method('getStatus')
             ->will($this->returnValue(ResourceStatutes::ERROR));
@@ -216,7 +216,7 @@ class ResourceListTest extends TestCase
 
         $resources = array(
             $errorResource,
-            $this->getMockBuilder('Sonatra\Component\Resource\ResourceInterface')->getMock(),
+            $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
         );
         $list = new ResourceList($resources);
 

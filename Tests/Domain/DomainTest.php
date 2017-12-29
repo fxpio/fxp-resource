@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Domain;
+namespace Fxp\Component\Resource\Tests\Domain;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\MappingException;
@@ -18,14 +18,14 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Fxp\Component\DefaultValue\ObjectFactoryInterface;
+use Fxp\Component\Resource\Domain\Domain;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Component\Resource\Domain\Domain;
 
 /**
  * Tests case for Domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainTest extends TestCase
 {
@@ -78,7 +78,7 @@ class DomainTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\BadMethodCallException
+     * @expectedException \Fxp\Component\Resource\Exception\BadMethodCallException
      * @expectedExceptionMessage The "Domain::createQueryBuilder()" method can only be called for a domain with Doctrine ORM Entity Manager
      */
     public function testCreateQueryBuilderInvalidObjectManager()
@@ -88,7 +88,7 @@ class DomainTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidConfigurationException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidConfigurationException
      * @expectedExceptionMessageRegExp /The "([\w\\]+)" class is not managed by doctrine object manager/
      */
     public function testInvalidObjectManager()

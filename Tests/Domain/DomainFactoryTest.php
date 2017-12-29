@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Domain;
+namespace Fxp\Component\Resource\Tests\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
+use Fxp\Component\DefaultValue\ObjectFactoryInterface;
+use Fxp\Component\Resource\Domain\Domain;
+use Fxp\Component\Resource\Domain\DomainFactory;
+use Fxp\Component\Resource\Domain\DomainInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Component\Resource\Domain\Domain;
-use Sonatra\Component\Resource\Domain\DomainFactory;
-use Sonatra\Component\Resource\Domain\DomainInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Tests case for Domain Manager.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainFactoryTest extends TestCase
 {
@@ -176,7 +176,7 @@ class DomainFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The "stdClass" class is not registered in doctrine
      */
     public function testGetManagedClassWithNonManagedClass()
@@ -195,7 +195,7 @@ class DomainFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The "stdClass" class is not registered in doctrine
      */
     public function testGetManagedClassWithOrmMappedSuperClass()

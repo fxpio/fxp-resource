@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Domain;
+namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Component\Resource\Exception\InvalidConfigurationException;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
+use Fxp\Component\DefaultValue\ObjectFactoryInterface;
+use Fxp\Component\Resource\Exception\InvalidConfigurationException;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceListInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * A resource domain interface.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 interface DomainInterface
 {
@@ -124,7 +124,7 @@ interface DomainInterface
     /**
      * Get the full qualified event name.
      *
-     * @param string $name The event name defined in Sonatra\Component\Resource\ResourceEvents
+     * @param string $name The event name defined in Fxp\Component\Resource\ResourceEvents
      *
      * @return string
      */
@@ -133,7 +133,7 @@ interface DomainInterface
     /**
      * Generate a new resource instance with default values.
      *
-     * @param array $options The options of sonatra default value factory
+     * @param array $options The options of fxp default value factory
      *
      * @return object
      */

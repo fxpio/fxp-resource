@@ -1,32 +1,32 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Domain;
+namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\ORM\EntityManager;
-use Sonatra\Component\Resource\Event\ResourceEvent;
-use Sonatra\Component\Resource\Exception\BadMethodCallException;
-use Sonatra\Component\Resource\Model\SoftDeletableInterface;
-use Sonatra\Component\Resource\ResourceEvents;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceItem;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceStatutes;
-use Sonatra\Component\Resource\ResourceUtil;
+use Fxp\Component\Resource\Event\ResourceEvent;
+use Fxp\Component\Resource\Exception\BadMethodCallException;
+use Fxp\Component\Resource\Model\SoftDeletableInterface;
+use Fxp\Component\Resource\ResourceEvents;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceItem;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceStatutes;
+use Fxp\Component\Resource\ResourceUtil;
 use Symfony\Component\Validator\ConstraintViolation;
 
 /**
  * A resource domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class Domain extends BaseDomain
 {
@@ -71,7 +71,7 @@ class Domain extends BaseDomain
             $sdt = new \stdClass();
             $sdt->{DomainUtil::getIdentifierName($this->om, $this->getClass())} = $id;
             $resource = new ResourceItem($sdt);
-            DomainUtil::addResourceError($resource, $this->translator->trans('domain.object_does_not_exist', array('{{ id }}' => $id), 'SonatraResource'));
+            DomainUtil::addResourceError($resource, $this->translator->trans('domain.object_does_not_exist', array('{{ id }}' => $id), 'FxpResource'));
             $errorResources[] = $resource;
         }
 
@@ -156,7 +156,7 @@ class Domain extends BaseDomain
                 $resource->setStatus(ResourceStatutes::CANCELED);
                 continue;
             } elseif ($autoCommit && $hasFlushError && $hasError) {
-                DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'SonatraResource'));
+                DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'FxpResource'));
                 continue;
             }
 
@@ -211,7 +211,7 @@ class Domain extends BaseDomain
             if ($object instanceof SoftDeletableInterface) {
                 $object->setDeletedAt(null);
             } else {
-                DomainUtil::addResourceError($resource, $this->translator->trans('domain.resource_type_not_undeleted', array(), 'SonatraResource'));
+                DomainUtil::addResourceError($resource, $this->translator->trans('domain.resource_type_not_undeleted', array(), 'FxpResource'));
             }
         }
     }
@@ -263,7 +263,7 @@ class Domain extends BaseDomain
             $resource->setStatus(ResourceStatutes::CANCELED);
             $continue = true;
         } elseif ($autoCommit && $hasFlushError && $hasError) {
-            DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'SonatraResource'));
+            DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'FxpResource'));
             $continue = true;
         } elseif (null !== $idError = $this->getErrorIdentifier($resource->getRealData(), static::TYPE_DELETE)) {
             $hasError = true;

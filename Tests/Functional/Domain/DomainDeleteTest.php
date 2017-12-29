@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Functional\Domain;
+namespace Fxp\Component\Resource\Tests\Functional\Domain;
 
 use Doctrine\ORM\Events;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceStatutes;
-use Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar;
-use Sonatra\Component\Resource\Tests\Fixtures\Listener\ErrorListener;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceStatutes;
+use Fxp\Component\Resource\Tests\Fixtures\Entity\Bar;
+use Fxp\Component\Resource\Tests\Fixtures\Listener\ErrorListener;
 
 /**
  * Functional tests for delete methods of Domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainDeleteTest extends AbstractDomainTest
 {

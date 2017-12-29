@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Domain;
+namespace Fxp\Component\Resource\Tests\Domain;
 
+use Fxp\Component\Resource\Domain\DomainAwareInterface;
+use Fxp\Component\Resource\Domain\DomainFactoryInterface;
+use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\Domain\DomainManager;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Domain\DomainAwareInterface;
-use Sonatra\Component\Resource\Domain\DomainFactoryInterface;
-use Sonatra\Component\Resource\Domain\DomainInterface;
-use Sonatra\Component\Resource\Domain\DomainManager;
 
 /**
  * Tests case for Domain Manager.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainManagerTest extends TestCase
 {
@@ -90,7 +90,7 @@ class DomainManagerTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The resource domain for the class "Foo" already exist
      */
     public function testAddAlreadyExistingClass()

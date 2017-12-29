@@ -1,25 +1,25 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests;
+namespace Fxp\Component\Resource\Tests;
 
+use Fxp\Component\Resource\ResourceItem;
+use Fxp\Component\Resource\ResourceStatutes;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\ResourceItem;
-use Sonatra\Component\Resource\ResourceStatutes;
 use Symfony\Component\Form\Test\FormInterface;
 
 /**
  * Tests case for resource item.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ResourceItemTest extends TestCase
 {
@@ -40,7 +40,7 @@ class ResourceItemTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The data of resource is not a form instance, used the "getErrors()" method
      */
     public function testGetFormErrorsWithObjectData()
@@ -71,7 +71,7 @@ class ResourceItemTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
      * @expectedExceptionMessage Expected argument of type "object", "integer" given
      */
     public function testUnexpectedTypeException()
@@ -83,7 +83,7 @@ class ResourceItemTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
      * @expectedExceptionMessage Expected argument of type "object", "integer" given
      */
     public function testUnexpectedTypeExceptionWithForm()

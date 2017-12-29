@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource;
+namespace Fxp\Component\Resource;
 
-use Sonatra\Component\Resource\Exception\ClassNotInstantiableException;
+use Fxp\Component\Resource\Exception\ClassNotInstantiableException;
 
 /**
  * The action statutes for the resource domains.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 final class ResourceStatutes
 {
@@ -24,8 +24,8 @@ final class ResourceStatutes
      * The ResourceStatutes::PENDING status is used when an error is thrown on a
      * previous resource.
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const PENDING = 'pending';
 
@@ -33,8 +33,8 @@ final class ResourceStatutes
      * The ResourceStatutes::ERROR status is used when the action of the resource
      * domain wasn't completed successfully.
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const ERROR = 'error';
 
@@ -43,8 +43,8 @@ final class ResourceStatutes
      * domain is canceled because of an error in the list (only for complete list of
      * transactions).
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const CANCELED = 'canceled';
 
@@ -52,8 +52,8 @@ final class ResourceStatutes
      * The ResourceStatutes::CREATED status is used when the action of domain has
      * created the resource successfully.
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const CREATED = 'created';
 
@@ -61,8 +61,8 @@ final class ResourceStatutes
      * The ResourceStatutes::UPDATED status is used when the action of domain has
      * updated the resource successfully.
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const UPDATED = 'updated';
 
@@ -70,8 +70,8 @@ final class ResourceStatutes
      * The ResourceStatutes::DELETED status is used when the action of domain has
      * deleted the resource successfully.
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const DELETED = 'deleted';
 
@@ -79,8 +79,8 @@ final class ResourceStatutes
      * The ResourceStatutes::UNDELETED status is used when the action of domain has
      * undeleted the resource successfully.
      *
-     * This status is used in Sonatra\Component\Resource\Event\ResourceEvent
-     * and Sonatra\Component\Resource\Domain\DomainInterface instances.
+     * This status is used in Fxp\Component\Resource\Event\ResourceEvent
+     * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
     const UNDELETED = 'undeleted';
 

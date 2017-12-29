@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Converter;
+namespace Fxp\Component\Resource\Converter;
 
-use Sonatra\Component\Resource\Exception\InvalidArgumentException;
-use Sonatra\Component\Resource\Exception\UnexpectedTypeException;
+use Fxp\Component\Resource\Exception\InvalidArgumentException;
+use Fxp\Component\Resource\Exception\UnexpectedTypeException;
 
 /**
  * A request content converter manager interface.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ConverterRegistry implements ConverterRegistryInterface
 {
@@ -31,13 +31,13 @@ class ConverterRegistry implements ConverterRegistryInterface
      *
      * @param ConverterInterface[] $converters
      *
-     * @throws UnexpectedTypeException When the converter is not an instance of "Sonatra\Component\Resource\Converter\ConverterInterface"
+     * @throws UnexpectedTypeException When the converter is not an instance of "Fxp\Component\Resource\Converter\ConverterInterface"
      */
     public function __construct(array $converters)
     {
         foreach ($converters as $converter) {
             if (!$converter instanceof ConverterInterface) {
-                throw new UnexpectedTypeException($converter, 'Sonatra\Component\Resource\Converter\ConverterInterface');
+                throw new UnexpectedTypeException($converter, 'Fxp\Component\Resource\Converter\ConverterInterface');
             }
             $this->converters[strtolower($converter->getName())] = $converter;
         }

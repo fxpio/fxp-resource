@@ -3,13 +3,13 @@
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
-    <class name="Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo">
+    <class name="Fxp\Component\Resource\Tests\Fixtures\Entity\Foo">
         <property name="name">
             <constraint name="NotBlank" />
         </property>
     </class>
 
-    <class name="Sonatra\Component\Resource\Tests\Fixtures\Entity\Bar">
+    <class name="Fxp\Component\Resource\Tests\Fixtures\Entity\Bar">
         <property name="name">
             <constraint name="NotBlank" />
         </property>

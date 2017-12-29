@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Converter;
+namespace Fxp\Component\Resource\Tests\Converter;
 
+use Fxp\Component\Resource\Converter\ConverterRegistry;
+use Fxp\Component\Resource\Converter\ConverterRegistryInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Converter\ConverterRegistry;
-use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
 
 /**
  * Tests case for converter registry.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ConverterRegistryTest extends TestCase
 {
@@ -29,7 +29,7 @@ class ConverterRegistryTest extends TestCase
 
     protected function setUp()
     {
-        $converter = $this->getMockBuilder('Sonatra\Component\Resource\Converter\ConverterInterface')->getMock();
+        $converter = $this->getMockBuilder('Fxp\Component\Resource\Converter\ConverterInterface')->getMock();
         $converter->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('foo'));
@@ -40,8 +40,8 @@ class ConverterRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Sonatra\Component\Resource\Converter\ConverterInterface", "DateTime" given
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedExceptionMessage Expected argument of type "Fxp\Component\Resource\Converter\ConverterInterface", "DateTime" given
      */
     public function testUnexpectedTypeException()
     {
@@ -57,7 +57,7 @@ class ConverterRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "(\w+)", "(\w+)" given/
      */
     public function testGetInvalidType()
@@ -66,7 +66,7 @@ class ConverterRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessageRegExp /Could not load content converter "(\w+)"/
      */
     public function testGetNonExistentConverter()
@@ -78,6 +78,6 @@ class ConverterRegistryTest extends TestCase
     {
         $converter = $this->registry->get('foo');
 
-        $this->assertInstanceOf('Sonatra\Component\Resource\Converter\ConverterInterface', $converter);
+        $this->assertInstanceOf('Fxp\Component\Resource\Converter\ConverterInterface', $converter);
     }
 }

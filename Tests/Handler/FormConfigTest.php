@@ -1,25 +1,25 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Handler;
+namespace Fxp\Component\Resource\Tests\Handler;
 
+use Fxp\Component\Resource\Handler\FormConfig;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Handler\FormConfig;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests case for Form Config Handler.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class FormConfigTest extends TestCase
 {
@@ -56,7 +56,7 @@ class FormConfigTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The form type of domain form config must be an string of class name of form type
      */
     public function testSetInvalidType()

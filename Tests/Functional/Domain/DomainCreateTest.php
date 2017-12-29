@@ -1,32 +1,32 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Functional\Domain;
+namespace Fxp\Component\Resource\Tests\Functional\Domain;
 
 use Doctrine\ORM\Events;
-use Sonatra\Component\Resource\Domain\DomainInterface;
-use Sonatra\Component\Resource\Event\ResourceEvent;
-use Sonatra\Component\Resource\ResourceEvents;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceListStatutes;
-use Sonatra\Component\Resource\ResourceStatutes;
-use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
-use Sonatra\Component\Resource\Tests\Fixtures\Listener\ErrorListener;
+use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\Event\ResourceEvent;
+use Fxp\Component\Resource\ResourceEvents;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceListStatutes;
+use Fxp\Component\Resource\ResourceStatutes;
+use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Fxp\Component\Resource\Tests\Fixtures\Listener\ErrorListener;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Functional tests for create methods of Domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainCreateTest extends AbstractDomainTest
 {
@@ -356,8 +356,8 @@ class DomainCreateTest extends AbstractDomainTest
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo", "integer" given at the position "0"
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedExceptionMessage Expected argument of type "Fxp\Component\Resource\Tests\Fixtures\Entity\Foo", "integer" given at the position "0"
      */
     public function testInvalidObjectType()
     {

@@ -1,30 +1,30 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Domain;
+namespace Fxp\Component\Resource\Tests\Domain;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Exception\DriverException;
+use Fxp\Component\Resource\Domain\Domain;
+use Fxp\Component\Resource\Domain\DomainUtil;
+use Fxp\Component\Resource\Exception\ConstraintViolationException;
+use Fxp\Component\Resource\ResourceEvents;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceItem;
+use Fxp\Component\Resource\ResourceList;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceStatutes;
+use Fxp\Component\Resource\Tests\Fixtures\Exception\MockDriverException;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Domain\Domain;
-use Sonatra\Component\Resource\Domain\DomainUtil;
-use Sonatra\Component\Resource\Exception\ConstraintViolationException;
-use Sonatra\Component\Resource\ResourceEvents;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceItem;
-use Sonatra\Component\Resource\ResourceList;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceStatutes;
-use Sonatra\Component\Resource\Tests\Fixtures\Exception\MockDriverException;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -34,7 +34,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * Tests case for Domain util.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class DomainUtilTest extends TestCase
 {
@@ -295,7 +295,7 @@ class DomainUtilTest extends TestCase
     {
         $translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $translator->addLoader('xml', new XliffFileLoader());
 
         return $translator;

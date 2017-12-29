@@ -13,7 +13,7 @@
         >
 
     <testsuites>
-        <testsuite name="Sonatra Resource Test Suite">
+        <testsuite name="Fxp Resource Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>

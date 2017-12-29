@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource;
+namespace Fxp\Component\Resource;
 
-use Sonatra\Component\Resource\Exception\OutOfBoundsException;
+use Fxp\Component\Resource\Exception\OutOfBoundsException;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * Abstract Resource list.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractResourceList implements \IteratorAggregate, ResourceListInterface
 {

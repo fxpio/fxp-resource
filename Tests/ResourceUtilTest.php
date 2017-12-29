@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests;
+namespace Fxp\Component\Resource\Tests;
 
+use Fxp\Component\Resource\Model\SoftDeletableInterface;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceUtil;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Model\SoftDeletableInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceUtil;
 use Symfony\Component\Form\FormInterface;
 
 /**
  * Tests case for resource util.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ResourceUtilTest extends TestCase
 {
@@ -67,8 +67,8 @@ class ResourceUtilTest extends TestCase
      *
      * @param bool $allowForm The allow form value
      *
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Sonatra\Component\Resource\Model\SoftDeletableInterface", "stdClass" given
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedExceptionMessage Expected argument of type "Fxp\Component\Resource\Model\SoftDeletableInterface", "stdClass" given
      */
     public function testValidateObjectResourceWithInvalidClass($allowForm)
     {
@@ -87,7 +87,7 @@ class ResourceUtilTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\UnexpectedTypeException
+     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
      * @expectedExceptionMessageRegExp /Expected argument of type "stdClass", "([\w\_0-9]+)" given/
      */
     public function testValidateObjectResourceWithoutAllowedForm()

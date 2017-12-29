@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Domain;
+namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Sonatra\Component\DefaultValue\ObjectFactoryInterface;
-use Sonatra\Component\DoctrineExtensions\Util\SqlFilterUtil;
-use Sonatra\Component\Resource\Event\ResourceEvent;
-use Sonatra\Component\Resource\Exception\InvalidConfigurationException;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceList;
+use Fxp\Component\DefaultValue\ObjectFactoryInterface;
+use Fxp\Component\DoctrineExtensions\Util\SqlFilterUtil;
+use Fxp\Component\Resource\Event\ResourceEvent;
+use Fxp\Component\Resource\Exception\InvalidConfigurationException;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceList;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * A abstract class for resource domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractDomain implements DomainInterface
 {

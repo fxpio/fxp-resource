@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Converter;
+namespace Fxp\Component\Resource\Converter;
 
-use Sonatra\Component\Resource\Exception\InvalidJsonConverterException;
+use Fxp\Component\Resource\Exception\InvalidJsonConverterException;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * A request content converter interface.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class JsonConverter implements ConverterInterface
 {
@@ -54,7 +54,7 @@ class JsonConverter implements ConverterInterface
         $content = json_decode($content, true);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new InvalidJsonConverterException($this->translator->trans('converter.json.invalid_body', array(), 'SonatraResource'));
+            throw new InvalidJsonConverterException($this->translator->trans('converter.json.invalid_body', array(), 'FxpResource'));
         }
 
         return is_array($content) ? $content : array();

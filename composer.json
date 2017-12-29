@@ -1,14 +1,14 @@
 {
-    "name": "sonatra/resource",
+    "name": "fxp/resource",
     "type": "library",
     "description": "Resource management layer for doctrine",
     "keywords": ["resource", "doctrine", "batch", "manager", "validation"],
-    "homepage": "https://github.com/sonatra/sonatra-resource",
+    "homepage": "https://github.com/fxpio/fxp-resource",
     "license": "MIT",
     "authors": [
         {
             "name": "François Pluchino",
-            "email": "francois.pluchino@sonatra.com"
+            "email": "francois.pluchino@gmail.com"
         }
     ],
     "minimum-stability": "dev",
@@ -23,14 +23,14 @@
         "symfony/expression-language": "^3.4.0|^4.0.0",
         "symfony/translation": "^3.4.0|^4.0.0",
         "doctrine/orm": "^2.6.0",
-        "sonatra/doctrine-extensions": "^1.0.0",
-        "sonatra/default-value": "^1.0.0"
+        "fxp/doctrine-extensions": "^1.0.0",
+        "fxp/default-value": "^1.0.0"
     },
     "require-dev": {
         "symfony/config": "^3.4.0|^4.0.0"
     },
     "autoload": {
-        "psr-4": { "Sonatra\\Component\\Resource\\": "" },
+        "psr-4": { "Fxp\\Component\\Resource\\": "" },
         "exclude-from-classmap": [
             "/Tests/"
         ]

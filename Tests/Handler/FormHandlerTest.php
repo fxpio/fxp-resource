@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Handler;
+namespace Fxp\Component\Resource\Tests\Handler;
 
+use Fxp\Component\Resource\Converter\ConverterInterface;
+use Fxp\Component\Resource\Converter\ConverterRegistryInterface;
+use Fxp\Component\Resource\Handler\FormConfigInterface;
+use Fxp\Component\Resource\Handler\FormConfigListInterface;
+use Fxp\Component\Resource\Handler\FormHandler;
+use Fxp\Component\Resource\Handler\FormHandlerInterface;
+use Fxp\Component\Resource\ResourceInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Converter\ConverterInterface;
-use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
-use Sonatra\Component\Resource\Handler\FormConfigInterface;
-use Sonatra\Component\Resource\Handler\FormConfigListInterface;
-use Sonatra\Component\Resource\Handler\FormHandler;
-use Sonatra\Component\Resource\Handler\FormHandlerInterface;
-use Sonatra\Component\Resource\ResourceInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -30,7 +30,7 @@ use Symfony\Component\Translation\Translator;
 /**
  * Tests case for Form Config Handler.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class FormHandlerTest extends TestCase
 {
@@ -80,7 +80,7 @@ class FormHandlerTest extends TestCase
 
         $this->translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/SonatraResource.en.xlf'), 'en', 'SonatraResource');
+        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $this->translator->addLoader('xml', new XliffFileLoader());
 
         $this->formHandler = new FormHandler(
@@ -93,7 +93,7 @@ class FormHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The current request is required in request stack
      */
     public function testBuildFormHandlerWithoutCurrentRequest()
@@ -159,7 +159,7 @@ class FormHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessage The list of resource sent exceeds the permitted limit (1)
      */
     public function testProcessFormWithExceededPermittedLimit()
@@ -174,7 +174,7 @@ class FormHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessage The size of the request data list (0) is different that the object instance list (1)
      */
     public function testProcessFormWithDifferentSize()

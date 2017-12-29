@@ -1,33 +1,33 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Functional\Handler;
+namespace Fxp\Component\Resource\Tests\Functional\Handler;
 
+use Fxp\Component\Resource\Handler\FormConfig;
+use Fxp\Component\Resource\Handler\FormConfigList;
+use Fxp\Component\Resource\Handler\FormConfigListInterface;
+use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
+use Fxp\Component\Resource\Tests\Fixtures\Form\FooType;
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
-use Sonatra\Component\Resource\Handler\FormConfig;
-use Sonatra\Component\Resource\Handler\FormConfigList;
-use Sonatra\Component\Resource\Handler\FormConfigListInterface;
-use Sonatra\Component\Resource\Tests\Fixtures\Entity\Foo;
-use Sonatra\Component\Resource\Tests\Fixtures\Form\FooType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class for Functional tests for Form Handler.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class FormHandlerTest extends AbstractFormHandlerTest
 {
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidArgumentException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
      * @expectedExceptionMessage The current request is required in request stack
      */
     public function testEmptyCurrentRequestException()
@@ -98,7 +98,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessage The "records" field is required
      */
     public function testProcessFormsWithoutRecordsField()
@@ -131,7 +131,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
     }
 
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessage The size of the request data list (1) is different that the object instance list (2)
      */
     public function testProcessFormsWithDifferentSize()
@@ -175,7 +175,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
      * @param int|null $defaultLimit
      * @param int|null $methodLimit
      *
-     * @expectedException \Sonatra\Component\Resource\Exception\InvalidResourceException
+     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
      * @expectedExceptionMessageRegExp /The list of resource sent exceeds the permitted limit \(\d+\)/
      */
     public function testLimitMethod($size, $defaultLimit, $methodLimit)

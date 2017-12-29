@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Domain;
+namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\Exception\DriverException;
-use Sonatra\Component\Resource\Exception\ConstraintViolationException;
-use Sonatra\Component\Resource\ResourceEvents;
-use Sonatra\Component\Resource\ResourceInterface;
-use Sonatra\Component\Resource\ResourceListInterface;
-use Sonatra\Component\Resource\ResourceStatutes;
+use Fxp\Component\Resource\Exception\ConstraintViolationException;
+use Fxp\Component\Resource\ResourceEvents;
+use Fxp\Component\Resource\ResourceInterface;
+use Fxp\Component\Resource\ResourceListInterface;
+use Fxp\Component\Resource\ResourceStatutes;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * Util for domain.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class DomainUtil
 {
@@ -206,7 +206,7 @@ abstract class DomainUtil
      */
     public static function getExceptionMessage(TranslatorInterface $translator, \Exception $exception, $debug = false)
     {
-        $message = $translator->trans('domain.database_error', array(), 'SonatraResource');
+        $message = $translator->trans('domain.database_error', array(), 'FxpResource');
 
         if ($debug) {
             $message .= ' ['.get_class($exception).']';

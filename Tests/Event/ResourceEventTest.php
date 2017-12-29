@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests\Event;
+namespace Fxp\Component\Resource\Tests\Event;
 
+use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\Event\ResourceEvent;
+use Fxp\Component\Resource\ResourceEvents;
+use Fxp\Component\Resource\ResourceListInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\Domain\DomainInterface;
-use Sonatra\Component\Resource\Event\ResourceEvent;
-use Sonatra\Component\Resource\ResourceEvents;
-use Sonatra\Component\Resource\ResourceListInterface;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ResourceEventTest extends TestCase
 {

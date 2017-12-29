@@ -1,13 +1,13 @@
-Sonatra Resource
-================
+Fxp Resource
+============
 
-[![Latest Version](https://img.shields.io/packagist/v/sonatra/resource.svg)](https://packagist.org/packages/sonatra/resource)
-[![Build Status](https://img.shields.io/travis/sonatra/sonatra-resource/master.svg)](https://travis-ci.org/sonatra/sonatra-resource)
-[![Coverage Status](https://img.shields.io/coveralls/sonatra/sonatra-resource/master.svg)](https://coveralls.io/r/sonatra/sonatra-resource?branch=master)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/sonatra/sonatra-resource/master.svg)](https://scrutinizer-ci.com/g/sonatra/sonatra-resource?branch=master)
+[![Latest Version](https://img.shields.io/packagist/v/fxp/resource.svg)](https://packagist.org/packages/fxp/resource)
+[![Build Status](https://img.shields.io/travis/fxpio/fxp-resource/master.svg)](https://travis-ci.org/fxpio/fxp-resource)
+[![Coverage Status](https://img.shields.io/coveralls/fxpio/fxp-resource/master.svg)](https://coveralls.io/r/fxpio/fxp-resource?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/fxpio/fxp-resource/master.svg)](https://scrutinizer-ci.com/g/fxpio/fxp-resource?branch=master)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/4a011831-ccae-417c-9789-49476cdde93e.svg)](https://insight.sensiolabs.com/projects/4a011831-ccae-417c-9789-49476cdde93e)
 
-The Sonatra Resource is a resource management layer for doctrine. This library has been
+The Fxp Resource is a resource management layer for doctrine. This library has been
 designed to facilitate the creation of a Batch API for processing a list of resources<sup>1</sup>
 (ex. external data loader).
 
@@ -21,7 +21,7 @@ Features include:
 
 - Resource Domain Manager for get a resource domain for an doctrine resource
 - Resource Domain for each doctrine resource for easy management:
-  - generate new instance of resource with default value configured by Sonatra Default Value
+  - generate new instance of resource with default value configured by Fxp Default Value
   - create one resource with validation (for object or Form instance)
   - create a list of resources with validation for each resource (for object or Form instance)
   - update one resource with validation (for object or Form instance)
@@ -66,10 +66,10 @@ This library is under the MIT license. See the complete license in the library:
 About
 -----
 
-Sonatra Resource is a [sonatra](https://github.com/sonatra) initiative.
-See also the list of [contributors](https://github.com/sonatra/sonatra-resource/graphs/contributors).
+Fxp Resource is a [François Pluchino](https://github.com/francoispluchino) initiative.
+See also the list of [contributors](https://github.com/fxpio/fxp-resource/graphs/contributors).
 
 Reporting an issue or a feature request
 ---------------------------------------
 
-Issues and feature requests are tracked in the [Github issue tracker](https://github.com/sonatra/sonatra-resource/issues).
+Issues and feature requests are tracked in the [Github issue tracker](https://github.com/fxpio/fxp-resource/issues).

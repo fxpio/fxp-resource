@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Tests;
+namespace Fxp\Component\Resource\Tests;
 
+use Fxp\Component\Resource\ResourceStatutes;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Component\Resource\ResourceStatutes;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ResourceStatutesTest extends TestCase
 {
     /**
-     * @expectedException \Sonatra\Component\Resource\Exception\ClassNotInstantiableException
+     * @expectedException \Fxp\Component\Resource\Exception\ClassNotInstantiableException
      */
     public function testInstantiationOfClass()
     {

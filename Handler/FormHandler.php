@@ -1,19 +1,19 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Component\Resource\Handler;
+namespace Fxp\Component\Resource\Handler;
 
-use Sonatra\Component\Resource\Converter\ConverterRegistryInterface;
-use Sonatra\Component\Resource\Exception\InvalidArgumentException;
-use Sonatra\Component\Resource\Exception\InvalidResourceException;
+use Fxp\Component\Resource\Converter\ConverterRegistryInterface;
+use Fxp\Component\Resource\Exception\InvalidArgumentException;
+use Fxp\Component\Resource\Exception\InvalidResourceException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * A form handler.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class FormHandler implements FormHandlerInterface
 {
@@ -125,7 +125,7 @@ class FormHandler implements FormHandlerInterface
             $msg = $this->translator->trans('form_handler.different_size_request_list', array(
                 '{{ requestSize }}' => count($dataList),
                 '{{ objectSize }}' => count($objects),
-            ), 'SonatraResource');
+            ), 'FxpResource');
             throw new InvalidResourceException($msg);
         }
 
@@ -155,7 +155,7 @@ class FormHandler implements FormHandlerInterface
         if (null !== $limit && count($dataList) > $limit) {
             $msg = $this->translator->trans('form_handler.size_exceeds', array(
                 '{{ limit }}' => $limit,
-            ), 'SonatraResource');
+            ), 'FxpResource');
             throw new InvalidResourceException(sprintf($msg, $limit));
         }
 
@@ -185,7 +185,7 @@ class FormHandler implements FormHandlerInterface
             try {
                 $dataList = $config->findList($dataList);
             } catch (InvalidResourceException $e) {
-                throw new InvalidResourceException($this->translator->trans('form_handler.results_field_required', array(), 'SonatraResource'));
+                throw new InvalidResourceException($this->translator->trans('form_handler.results_field_required', array(), 'FxpResource'));
             }
         } else {
             $dataList = array($dataList);
