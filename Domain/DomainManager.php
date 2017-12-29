@@ -48,7 +48,7 @@ class DomainManager implements DomainManagerInterface
      */
     public function __construct(array $domains, DomainFactoryInterface $factory)
     {
-        $this->domains = array();
+        $this->domains = [];
         $this->shortNames = $factory->getShortNames();
         $this->factory = $factory;
 

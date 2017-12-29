@@ -46,7 +46,7 @@ interface DomainInterface
      *
      * @throws InvalidConfigurationException When this resource domain class is not managed by doctrine
      */
-    public function setObjectManager(ObjectManager $om, $disableFilters = array());
+    public function setObjectManager(ObjectManager $om, $disableFilters = []);
 
     /**
      * Get the doctrine object registry.
@@ -137,7 +137,7 @@ interface DomainInterface
      *
      * @return object
      */
-    public function newInstance(array $options = array());
+    public function newInstance(array $options = []);
 
     /**
      * Create a resource.

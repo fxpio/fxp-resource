@@ -34,16 +34,16 @@ class ClosureFormConfigListTest extends TestCase
     public function testConvertObjectsWithoutClosure()
     {
         $config = new ClosureFormConfigList(FormType::class);
-        $list = array('mock');
+        $list = ['mock'];
 
         $this->assertNotSame($list, $config->convertObjects($list));
-        $this->assertEquals(array(), $config->convertObjects($list));
+        $this->assertEquals([], $config->convertObjects($list));
     }
 
     public function testConvertObjectsWithClosure()
     {
         $config = new ClosureFormConfigList(FormType::class);
-        $list = array('mock');
+        $list = ['mock'];
 
         $config->setObjectConverter(function (array $list) {
             return $list;
@@ -64,9 +64,9 @@ class ClosureFormConfigListTest extends TestCase
     public function testFindList()
     {
         $config = new ClosureFormConfigList(FormType::class);
-        $data = array(
-            'records' => array(),
-        );
+        $data = [
+            'records' => [],
+        ];
 
         $list = $config->findList($data);
         $this->assertSame($data['records'], $list);
@@ -75,10 +75,10 @@ class ClosureFormConfigListTest extends TestCase
     public function testFindListWithTransactionalOption()
     {
         $config = new ClosureFormConfigList(FormType::class);
-        $data = array(
-            'records' => array(),
+        $data = [
+            'records' => [],
             'transaction' => false,
-        );
+        ];
 
         $this->assertTrue($config->isTransactional());
 
@@ -95,6 +95,6 @@ class ClosureFormConfigListTest extends TestCase
     {
         $config = new ClosureFormConfigList(FormType::class);
 
-        $config->findList(array());
+        $config->findList([]);
     }
 }

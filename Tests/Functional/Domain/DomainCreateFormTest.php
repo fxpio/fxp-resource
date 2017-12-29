@@ -34,11 +34,11 @@ class DomainCreateFormTest extends AbstractDomainTest
         $domain = $this->createDomain();
         /* @var Foo $foo */
         $foo = $domain->newInstance();
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'description' => 'test',
-        ));
+        ]);
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -78,11 +78,11 @@ class DomainCreateFormTest extends AbstractDomainTest
         $domain = $this->createDomain();
         /* @var Foo $foo */
         $foo = $domain->newInstance();
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'name' => 'Bar',
-        ));
+        ]);
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -123,12 +123,12 @@ class DomainCreateFormTest extends AbstractDomainTest
         $domain = $this->createDomain();
         /* @var Foo $foo */
         $foo = $domain->newInstance();
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'name' => 'Bar',
             'detail' => 'Detail',
-        ));
+        ]);
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -169,14 +169,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $form1 = $this->buildForm($foo1, array(
+        $form1 = $this->buildForm($foo1, [
             'description' => 'test',
-        ));
-        $form2 = $this->buildForm($foo2, array(
+        ]);
+        $form2 = $this->buildForm($foo2, [
             'description' => 'test',
-        ));
+        ]);
 
-        $this->runTestCreatesException($domain, array($form1, $form2), '/This value should not be blank./', true);
+        $this->runTestCreatesException($domain, [$form1, $form2], '/This value should not be blank./', true);
     }
 
     public function testCreatesWithErrorDatabase()
@@ -187,19 +187,19 @@ class DomainCreateFormTest extends AbstractDomainTest
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $form1 = $this->buildForm($foo1, array(
+        $form1 = $this->buildForm($foo1, [
             'name' => 'Bar',
-        ));
-        $form2 = $this->buildForm($foo2, array(
+        ]);
+        $form2 = $this->buildForm($foo2, [
             'name' => 'Bar',
-        ));
+        ]);
 
-        $this->runTestCreatesException($domain, array($form1, $form2), $this->getIntegrityViolationMessage(), false);
+        $this->runTestCreatesException($domain, [$form1, $form2], $this->getIntegrityViolationMessage(), false);
     }
 
     protected function runTestCreatesException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -253,14 +253,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $form1 = $this->buildForm($foo1, array());
-        $form2 = $this->buildForm($foo2, array(
+        $form1 = $this->buildForm($foo1, []);
+        $form2 = $this->buildForm($foo2, [
             'name' => 'Bar',
-        ));
+        ]);
 
-        $objects = array($form1, $form2);
+        $objects = [$form1, $form2];
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -300,20 +300,20 @@ class DomainCreateFormTest extends AbstractDomainTest
     {
         $domain = $this->createDomain();
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
         /* @var Foo $foo1 */
         $foo1 = $domain->newInstance();
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $form1 = $this->buildForm($foo1, array(
+        $form1 = $this->buildForm($foo1, [
             'name' => 'Bar',
-        ));
-        $form2 = $this->buildForm($foo2, array(
+        ]);
+        $form2 = $this->buildForm($foo2, [
             'name' => 'Bar',
-        ));
+        ]);
 
-        $forms = array($form1, $form2);
+        $forms = [$form1, $form2];
 
         $preEvent = false;
         $postEvent = false;
@@ -362,15 +362,15 @@ class DomainCreateFormTest extends AbstractDomainTest
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $form1 = $this->buildForm($foo1, array());
-        $form2 = $this->buildForm($foo2, array(
+        $form1 = $this->buildForm($foo1, []);
+        $form2 = $this->buildForm($foo2, [
             'name' => 'Bar',
             'detail' => 'Detail',
-        ));
+        ]);
 
-        $objects = array($form1, $form2);
+        $objects = [$form1, $form2];
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $this->assertCount(0, $domain->getRepository()->findAll());
         $resources = $domain->creates($objects, true);
@@ -398,18 +398,18 @@ class DomainCreateFormTest extends AbstractDomainTest
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $form1 = $this->buildForm($foo1, array(
+        $form1 = $this->buildForm($foo1, [
             'name' => 'Bar 1',
             'detail' => 'Detail 1',
-        ));
-        $form2 = $this->buildForm($foo2, array(
+        ]);
+        $form2 = $this->buildForm($foo2, [
             'name' => 'Bar 2',
             'detail' => 'Detail 2',
-        ));
+        ]);
 
-        $objects = array($form1, $form2);
+        $objects = [$form1, $form2];
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $this->assertCount(0, $domain->getRepository()->findAll());
         $resources = $domain->creates($objects, $autoCommit);
@@ -432,9 +432,9 @@ class DomainCreateFormTest extends AbstractDomainTest
         /* @var Foo $foo */
         $foo = $domain->newInstance();
 
-        $form = $this->formFactory->create(FooType::class, $foo, array());
+        $form = $this->formFactory->create(FooType::class, $foo, []);
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -466,10 +466,10 @@ class DomainCreateFormTest extends AbstractDomainTest
         $domain = $this->createDomain();
         $foo = $this->insertResource($domain);
         $foo->setDetail(null);
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'name' => 'New Bar',
             'detail' => 'New Detail',
-        ));
+        ]);
 
         $resource = $domain->create($form);
         $this->assertFalse($resource->isValid());
@@ -485,7 +485,7 @@ class DomainCreateFormTest extends AbstractDomainTest
      */
     protected function buildForm($object, array $data)
     {
-        $form = $this->formFactory->create(FooType::class, $object, array());
+        $form = $this->formFactory->create(FooType::class, $object, []);
         $form->submit($data, true);
 
         return $form;

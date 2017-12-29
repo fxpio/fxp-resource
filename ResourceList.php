@@ -44,7 +44,7 @@ class ResourceList extends AbstractResourceList
         }
 
         foreach ($this->resources as $i => $resource) {
-            if (in_array($resource->getStatus(), array(ResourceStatutes::ERROR, ResourceStatutes::PENDING))
+            if (in_array($resource->getStatus(), [ResourceStatutes::ERROR, ResourceStatutes::PENDING])
                     && !$resource->isValid()) {
                 return true;
             }

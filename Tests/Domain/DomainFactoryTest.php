@@ -95,19 +95,19 @@ class DomainFactoryTest extends TestCase
 
         $this->registry->expects($this->any())
             ->method('getManagers')
-            ->willReturn(array($this->objectManager));
+            ->willReturn([$this->objectManager]);
     }
 
     public function testAddResolveTargets()
     {
-        $this->assertInstanceOf(DomainFactory::class, $this->factory->addResolveTargets(array('FooInterface' => 'Foo')));
+        $this->assertInstanceOf(DomainFactory::class, $this->factory->addResolveTargets(['FooInterface' => 'Foo']));
     }
 
     public function testGetShortNames()
     {
-        $expected = array(
+        $expected = [
             'Foo' => 'Bar\Foo',
-        );
+        ];
 
         /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $metaFoo */
         $metaFoo = $this->getMockBuilder(ClassMetadata::class)->getMock();
@@ -117,7 +117,7 @@ class DomainFactoryTest extends TestCase
 
         $this->metaFactory->expects($this->once())
             ->method('getAllMetadata')
-            ->willReturn(array($metaFoo));
+            ->willReturn([$metaFoo]);
 
         $res = $this->factory->getShortNames();
 
@@ -133,9 +133,9 @@ class DomainFactoryTest extends TestCase
 
     public function testIsManagedClassWithResolveTarget()
     {
-        $this->factory->addResolveTargets(array(
+        $this->factory->addResolveTargets([
             's' => \stdClass::class,
-        ));
+        ]);
 
         $this->registry->expects($this->once())
             ->method('getManagerForClass')

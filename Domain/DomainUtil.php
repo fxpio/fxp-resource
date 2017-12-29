@@ -83,16 +83,16 @@ abstract class DomainUtil
      */
     public static function getEventNames($type)
     {
-        $names = array(ResourceEvents::PRE_UPSERTS, ResourceEvents::POST_UPSERTS);
+        $names = [ResourceEvents::PRE_UPSERTS, ResourceEvents::POST_UPSERTS];
 
         if (Domain::TYPE_CREATE === $type) {
-            $names = array(ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES);
+            $names = [ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES];
         } elseif (Domain::TYPE_UPDATE === $type) {
-            $names = array(ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES);
+            $names = [ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES];
         } elseif (Domain::TYPE_DELETE === $type) {
-            $names = array(ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES);
+            $names = [ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES];
         } elseif (Domain::TYPE_UNDELETE === $type) {
-            $names = array(ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES);
+            $names = [ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES];
         }
 
         return $names;
@@ -108,7 +108,7 @@ abstract class DomainUtil
      */
     public static function extractIdentifierInObjectList(array $identifiers, array &$objects)
     {
-        $searchIds = array();
+        $searchIds = [];
 
         foreach ($identifiers as $identifier) {
             if (is_object($identifier)) {
@@ -206,7 +206,7 @@ abstract class DomainUtil
      */
     public static function getExceptionMessage(TranslatorInterface $translator, \Exception $exception, $debug = false)
     {
-        $message = $translator->trans('domain.database_error', array(), 'FxpResource');
+        $message = $translator->trans('domain.database_error', [], 'FxpResource');
 
         if ($debug) {
             $message .= ' ['.get_class($exception).']';
@@ -230,7 +230,7 @@ abstract class DomainUtil
     public static function addResourceError(ResourceInterface $resource, $message)
     {
         $resource->setStatus(ResourceStatutes::ERROR);
-        $resource->getErrors()->add(new ConstraintViolation($message, $message, array(), $resource->getRealData(), null, null));
+        $resource->getErrors()->add(new ConstraintViolation($message, $message, [], $resource->getRealData(), null, null));
     }
 
     /**
@@ -264,7 +264,7 @@ abstract class DomainUtil
      */
     protected static function getMapErrors(ConstraintViolationListInterface $errors)
     {
-        $maps = array();
+        $maps = [];
         $size = $errors->count();
 
         for ($i = 0; $i < $size; ++$i) {

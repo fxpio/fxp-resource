@@ -41,7 +41,7 @@ class DomainFormConfigList extends FormConfigList
     /**
      * @var array
      */
-    protected $defaultValueOptions = array();
+    protected $defaultValueOptions = [];
 
     /**
      * @var bool
@@ -59,7 +59,7 @@ class DomainFormConfigList extends FormConfigList
      */
     public function __construct(DomainInterface $domain,
                                 $type,
-                                array $options = array(),
+                                array $options = [],
                                 $method = Request::METHOD_POST,
                                 $converter = 'json')
     {
@@ -107,13 +107,13 @@ class DomainFormConfigList extends FormConfigList
     {
         if ($this->creation) {
             $size = count($list);
-            $objects = array();
+            $objects = [];
 
             for ($i = 0; $i < $size; ++$i) {
                 $objects[] = $this->domain->newInstance($this->defaultValueOptions);
             }
         } else {
-            $ids = array();
+            $ids = [];
 
             foreach ($list as &$record) {
                 $ids[] = isset($record[$this->identifier]) ? $record[$this->identifier] : 0;
@@ -135,11 +135,11 @@ class DomainFormConfigList extends FormConfigList
      */
     protected function findObjects(array $ids)
     {
-        $foundObjects = $this->domain->getRepository()->findBy(array(
+        $foundObjects = $this->domain->getRepository()->findBy([
             $this->identifier => array_unique($ids),
-        ));
-        $mapFinds = array();
-        $objects = array();
+        ]);
+        $mapFinds = [];
+        $objects = [];
 
         foreach ($foundObjects as $foundObject) {
             $id = $this->propertyAccessor->getValue($foundObject, $this->identifier);

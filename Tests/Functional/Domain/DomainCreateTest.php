@@ -51,7 +51,7 @@ class DomainCreateTest extends AbstractDomainTest
 
     protected function runTestCreateException(DomainInterface $domain, $object, $errorMessage)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -91,7 +91,7 @@ class DomainCreateTest extends AbstractDomainTest
         $foo->setName('Bar');
         $foo->setDetail('Detail');
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -130,7 +130,7 @@ class DomainCreateTest extends AbstractDomainTest
         /* @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $this->runTestCreatesException($domain, array($foo1, $foo2), '/This value should not be blank./', true);
+        $this->runTestCreatesException($domain, [$foo1, $foo2], '/This value should not be blank./', true);
     }
 
     public function testCreatesWithErrorDatabase()
@@ -143,12 +143,12 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2 = $domain->newInstance();
         $foo2->setName('Bar');
 
-        $this->runTestCreatesException($domain, array($foo1, $foo2), $this->getIntegrityViolationMessage(), false);
+        $this->runTestCreatesException($domain, [$foo1, $foo2], $this->getIntegrityViolationMessage(), false);
     }
 
     protected function runTestCreatesException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -213,9 +213,9 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2->setName('Bar 2');
         $foo2->setDetail('Detail 2');
 
-        $objects = array($foo1, $foo2);
+        $objects = [$foo1, $foo2];
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $this->assertCount(0, $domain->getRepository()->findAll());
         $resources = $domain->creates($objects, $autoCommit);
@@ -239,9 +239,9 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2 = $domain->newInstance();
         $foo2->setName('Bar');
 
-        $objects = array($foo1, $foo2);
+        $objects = [$foo1, $foo2];
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $preEvent = false;
         $postEvent = false;
@@ -280,7 +280,7 @@ class DomainCreateTest extends AbstractDomainTest
     {
         $domain = $this->createDomain();
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
         /* @var Foo $foo1 */
         $foo1 = $domain->newInstance();
         $foo1->setName('Bar');
@@ -289,7 +289,7 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2->setName('Bar');
         $foo2->setName('Detail');
 
-        $objects = array($foo1, $foo2);
+        $objects = [$foo1, $foo2];
 
         $preEvent = false;
         $postEvent = false;
@@ -338,9 +338,9 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2->setName('Bar');
         $foo2->setDetail('Detail');
 
-        $objects = array($foo1, $foo2);
+        $objects = [$foo1, $foo2];
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $this->assertCount(0, $domain->getRepository()->findAll());
         $resources = $domain->creates($objects, true);
@@ -391,10 +391,10 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2->setName('Bar 2');
         $foo2->setDetail('Detail 2');
 
-        $objects = array($foo1, $foo2);
+        $objects = [$foo1, $foo2];
         $errorListener = new ErrorListener('created', true);
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $this->em->getEventManager()->addEventListener(Events::prePersist, $errorListener);
 
@@ -423,10 +423,10 @@ class DomainCreateTest extends AbstractDomainTest
         $foo2->setName('Bar 2');
         $foo2->setDetail('Detail 2');
 
-        $objects = array($foo1, $foo2);
+        $objects = [$foo1, $foo2];
         $errorListener = new ErrorListener('created', false);
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $this->em->getEventManager()->addEventListener(Events::prePersist, $errorListener);
 

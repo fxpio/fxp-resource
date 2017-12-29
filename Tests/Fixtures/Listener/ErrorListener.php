@@ -69,8 +69,8 @@ class ErrorListener
     {
         if ($this->useConstraint) {
             $message = 'The entity does not '.$this->action.' (violation exception)';
-            $violation = new ConstraintViolation($message, $message, array(), $entity, null, null);
-            $list = new ConstraintViolationList(array($violation));
+            $violation = new ConstraintViolation($message, $message, [], $entity, null, null);
+            $list = new ConstraintViolationList([$violation]);
 
             throw new ConstraintViolationException($list);
         }

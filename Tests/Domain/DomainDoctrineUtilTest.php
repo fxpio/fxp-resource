@@ -33,7 +33,7 @@ class DomainDoctrineUtilTest extends TestCase
 
         $registry->expects($this->once())
             ->method('getManagers')
-            ->willReturn(array());
+            ->willReturn([]);
 
         $this->assertNull(DomainDoctrineUtil::getManager($registry, 'InvalidClass'));
     }

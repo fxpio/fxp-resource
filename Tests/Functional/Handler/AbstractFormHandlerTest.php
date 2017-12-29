@@ -47,9 +47,9 @@ abstract class AbstractFormHandlerTest extends TestCase
         $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $translator->addLoader('xml', new XliffFileLoader());
 
-        $converterRegistry = new ConverterRegistry(array(
+        $converterRegistry = new ConverterRegistry([
             new JsonConverter($translator),
-        ));
+        ]);
 
         $validator = Validation::createValidatorBuilder()
             ->addXmlMapping(__DIR__.'/../../Fixtures/config/validation.xml')

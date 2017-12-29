@@ -31,10 +31,10 @@ class DomainTest extends TestCase
 {
     public function getShortNames()
     {
-        return array(
-            array(null,              'stdClass'),
-            array('CustomShortName', 'CustomShortName'),
-        );
+        return [
+            [null,              'stdClass'],
+            ['CustomShortName', 'CustomShortName'],
+        ];
     }
 
     /**
@@ -172,7 +172,7 @@ class DomainTest extends TestCase
 
         $of->expects($this->once())
             ->method('create')
-            ->with(\stdClass::class, null, array())
+            ->with(\stdClass::class, null, [])
             ->will($this->returnValue($instance));
 
         $val = $domain->newInstance();

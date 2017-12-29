@@ -29,28 +29,28 @@ class DomainUndeleteTest extends AbstractDomainTest
 
     public function getAutoCommits()
     {
-        return array(
-            array(false),
-            array(true),
-        );
+        return [
+            [false],
+            [true],
+        ];
     }
 
     public function getResourceTypes()
     {
-        return array(
-            array('object'),
-            array('identifier'),
-        );
+        return [
+            ['object'],
+            ['identifier'],
+        ];
     }
 
     public function getAutoCommitsAndResourceTypes()
     {
-        return array(
-            array(false, 'object'),
-            array(false, 'identifier'),
-            array(true,  'object'),
-            array(true,  'identifier'),
-        );
+        return [
+            [false, 'object'],
+            [false, 'identifier'],
+            [true,  'object'],
+            [true,  'identifier'],
+        ];
     }
 
     /**
@@ -124,9 +124,9 @@ class DomainUndeleteTest extends AbstractDomainTest
         $em->clear();
 
         if ('object' === $resourceType) {
-            $res = $domain->undeletes(array($objects[0], $objects[1]), $autoCommit);
+            $res = $domain->undeletes([$objects[0], $objects[1]], $autoCommit);
         } else {
-            $res = $domain->undeletes(array(1, 2), $autoCommit);
+            $res = $domain->undeletes([1, 2], $autoCommit);
         }
 
         $this->assertFalse($res->hasErrors());
@@ -148,7 +148,7 @@ class DomainUndeleteTest extends AbstractDomainTest
     public function testUndeleteNonExistentObject($resourceType)
     {
         $this->configureEntityManager();
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $this->createDomain($this->softClass);
         /* @var Bar $object */
@@ -181,15 +181,15 @@ class DomainUndeleteTest extends AbstractDomainTest
     public function testUndeleteNonExistentObjects($autoCommit, $resourceType)
     {
         $this->configureEntityManager();
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $this->createDomain($this->softClass);
         /* @var Bar $object */
-        $objects = array($domain->newInstance(), $domain->newInstance());
+        $objects = [$domain->newInstance(), $domain->newInstance()];
 
         $val = 'object' === $resourceType
             ? $objects
-            : array(1, 2);
+            : [1, 2];
 
         $res = $domain->undeletes($val, $autoCommit);
 
@@ -256,7 +256,7 @@ class DomainUndeleteTest extends AbstractDomainTest
 
         $em->clear();
 
-        $res = $domain->undeletes(array(0, $objects[0], 2), $autoCommit);
+        $res = $domain->undeletes([0, $objects[0], 2], $autoCommit);
         $this->assertTrue($res->hasErrors());
         $this->assertSame(ResourceListStatutes::MIXED, $res->getStatus());
 
@@ -290,7 +290,7 @@ class DomainUndeleteTest extends AbstractDomainTest
      */
     public function testUndeleteNonSoftDeletableObject($resourceType)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $this->createDomain();
         /* @var Foo $object */
@@ -324,15 +324,15 @@ class DomainUndeleteTest extends AbstractDomainTest
      */
     public function testUndeleteNonSoftDeletableObjects($autoCommit, $resourceType)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $this->createDomain();
         /* @var Foo[] $objects */
-        $objects = array($domain->newInstance(), $domain->newInstance());
+        $objects = [$domain->newInstance(), $domain->newInstance()];
 
         $val = 'object' === $resourceType
             ? $objects
-            : array(1, 2);
+            : [1, 2];
 
         $this->assertCount(0, $domain->getRepository()->findAll());
 

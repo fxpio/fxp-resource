@@ -30,10 +30,10 @@ class DomainUpsertTest extends AbstractDomainTest
 {
     public function getUpsertType()
     {
-        return array(
-            array(false),
-            array(true),
-        );
+        return [
+            [false],
+            [true],
+        ];
     }
 
     /**
@@ -49,7 +49,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $foo = $this->insertResource($domain);
             $foo->setName(null);
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo */
             $foo = $domain->newInstance();
         }
@@ -70,7 +70,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $foo = $this->insertResource($domain);
             $foo->setDetail(null);
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo */
             $foo = $domain->newInstance();
             $foo->setName('Bar');
@@ -124,7 +124,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $foo = $this->insertResource($domain);
             $foo->setName('Foo');
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo */
             $foo = $domain->newInstance();
             $foo->setName('Bar');
@@ -178,12 +178,12 @@ class DomainUpsertTest extends AbstractDomainTest
                 $object->setName(null);
             }
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
-            $objects = array($foo1, $foo2);
+            $objects = [$foo1, $foo2];
         }
 
         $this->runTestUpsertsException($domain, $objects, '/This value should not be blank./', true, $isUpdate);
@@ -205,14 +205,14 @@ class DomainUpsertTest extends AbstractDomainTest
                 $object->setDetail(null);
             }
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             $foo1->setName('Bar');
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
             $foo2->setName('Bar');
-            $objects = array($foo1, $foo2);
+            $objects = [$foo1, $foo2];
         }
 
         $this->runTestUpsertsException($domain, $objects, $this->getIntegrityViolationMessage(), false, $isUpdate);
@@ -286,14 +286,14 @@ class DomainUpsertTest extends AbstractDomainTest
             $objects[0]->setName(null);
             $objects[1]->setDetail(null);
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
             $foo2->setName('Bar');
 
-            $objects = array($foo1, $foo2);
+            $objects = [$foo1, $foo2];
         }
 
         $preEvent = false;
@@ -345,7 +345,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $objects[0]->setDescription('test 1');
             $objects[1]->setDescription('test 2');
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             $foo1->setName('Bar');
@@ -354,7 +354,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $foo2->setName('Bar');
             $foo2->setName('Detail');
 
-            $objects = array($foo1, $foo2);
+            $objects = [$foo1, $foo2];
         }
 
         $preEvent = false;
@@ -409,7 +409,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $objects[0]->setName(null);
             $objects[1]->setDetail('New Detail 2');
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
@@ -417,7 +417,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $foo2->setName('Bar');
             $foo2->setDetail('Detail');
 
-            $objects = array($foo1, $foo2);
+            $objects = [$foo1, $foo2];
         }
 
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
@@ -456,7 +456,7 @@ class DomainUpsertTest extends AbstractDomainTest
                 $object->setDetail('New Detail '.($i + 1));
             }
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             $foo1->setName('Bar 1');
@@ -466,7 +466,7 @@ class DomainUpsertTest extends AbstractDomainTest
             $foo2->setName('Bar 2');
             $foo2->setDetail('Detail 2');
 
-            $objects = array($foo1, $foo2);
+            $objects = [$foo1, $foo2];
         }
 
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
@@ -504,7 +504,7 @@ class DomainUpsertTest extends AbstractDomainTest
      */
     public function testErrorIdentifier($isUpdate)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $this->createDomain();
 

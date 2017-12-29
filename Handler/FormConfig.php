@@ -55,7 +55,7 @@ class FormConfig implements FormConfigInterface
      * @param string $converter The data converter for request content
      */
     public function __construct($type,
-                                array $options = array(),
+                                array $options = [],
                                 $method = Request::METHOD_POST,
                                 $converter = 'json')
     {
@@ -94,7 +94,7 @@ class FormConfig implements FormConfigInterface
             $this->setMethod($options['method']);
         }
 
-        $this->options = array_merge($options, array('method' => $this->getMethod()));
+        $this->options = array_merge($options, ['method' => $this->getMethod()]);
     }
 
     /**

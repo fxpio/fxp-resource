@@ -146,7 +146,7 @@ abstract class BaseDomain extends AbstractDomain
         } else {
             $message = DomainUtil::getExceptionMessage($this->translator, $e, $this->debug);
 
-            $violations->add(new ConstraintViolation($message, $message, array(), $object, null, null));
+            $violations->add(new ConstraintViolation($message, $message, [], $object, null, null));
         }
     }
 
@@ -177,7 +177,7 @@ abstract class BaseDomain extends AbstractDomain
 
         if ($data instanceof FormInterface) {
             if (!$data->isSubmitted()) {
-                $data->submit(array());
+                $data->submit([]);
             }
         } else {
             $errors = $this->validator->validate($data);
@@ -185,7 +185,7 @@ abstract class BaseDomain extends AbstractDomain
         }
 
         if (null !== $idError) {
-            $resource->getErrors()->add(new ConstraintViolation($idError, $idError, array(), $resource->getRealData(), null, null));
+            $resource->getErrors()->add(new ConstraintViolation($idError, $idError, [], $resource->getRealData(), null, null));
         }
     }
 
@@ -203,13 +203,13 @@ abstract class BaseDomain extends AbstractDomain
         $idError = null;
 
         if (Domain::TYPE_CREATE === $type && null !== $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_create', array(), 'FxpResource');
+            $idError = $this->translator->trans('domain.identifier.error_create', [], 'FxpResource');
         } elseif (Domain::TYPE_UPDATE === $type && null === $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_update', array(), 'FxpResource');
+            $idError = $this->translator->trans('domain.identifier.error_update', [], 'FxpResource');
         } elseif (Domain::TYPE_DELETE === $type && null === $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_delete', array(), 'FxpResource');
+            $idError = $this->translator->trans('domain.identifier.error_delete', [], 'FxpResource');
         } elseif (Domain::TYPE_UNDELETE === $type && null === $idValue) {
-            $idError = $this->translator->trans('domain.identifier.error_undeleted', array(), 'FxpResource');
+            $idError = $this->translator->trans('domain.identifier.error_undeleted', [], 'FxpResource');
         }
 
         return $idError;

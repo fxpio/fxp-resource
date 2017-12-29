@@ -49,9 +49,9 @@ class SoftDeletableSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             Events::onFlush,
-        );
+        ];
     }
 
     /**
@@ -82,9 +82,9 @@ class SoftDeletableSubscriber implements EventSubscriber
 
                 $em->persist($object);
                 $uow->propertyChanged($object, 'deletedAt', $oldValue, $date);
-                $uow->scheduleExtraUpdate($object, array(
-                    'deletedAt' => array($date, $date),
-                ));
+                $uow->scheduleExtraUpdate($object, [
+                    'deletedAt' => [$date, $date],
+                ]);
             }
         }
     }

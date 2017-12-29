@@ -37,11 +37,11 @@ class FormHandlerTest extends AbstractFormHandlerTest
 
     public function testProcessForm()
     {
-        $data = array(
+        $data = [
             'name' => 'Bar',
             'detail' => 'Detail',
-        );
-        $request = Request::create('test', Request::METHOD_POST, array(), array(), array(), array(), json_encode($data));
+        ];
+        $request = Request::create('test', Request::METHOD_POST, [], [], [], [], json_encode($data));
         $handler = $this->createFormHandler($request);
 
         $object = new Foo();
@@ -57,31 +57,31 @@ class FormHandlerTest extends AbstractFormHandlerTest
 
     public function testProcessForms()
     {
-        $data = array(
+        $data = [
             'transaction' => true,
-            'records' => array(
-                array(
+            'records' => [
+                [
                     'name' => 'Bar 1',
                     'detail' => 'Detail 1',
-                ),
-                array(
+                ],
+                [
                     'name' => 'Bar 2',
                     'detail' => 'Detail 2',
-                ),
-                array(
+                ],
+                [
                     'name' => 'Bar 3',
                     'detail' => 'Detail 3',
-                ),
-            ),
-        );
-        $request = Request::create('test', Request::METHOD_POST, array(), array(), array(), array(), json_encode($data));
+                ],
+            ],
+        ];
+        $request = Request::create('test', Request::METHOD_POST, [], [], [], [], json_encode($data));
         $handler = $this->createFormHandler($request);
 
-        $objects = array(
+        $objects = [
             new Foo(),
             new Foo(),
             new Foo(),
-        );
+        ];
         $config = $this->createFormConfigList($objects, $this->once());
 
         $forms = $handler->processForms($config);
@@ -103,28 +103,28 @@ class FormHandlerTest extends AbstractFormHandlerTest
      */
     public function testProcessFormsWithoutRecordsField()
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'name' => 'Bar 1',
                 'detail' => 'Detail 1',
-            ),
-            array(
+            ],
+            [
                 'name' => 'Bar 2',
                 'detail' => 'Detail 2',
-            ),
-            array(
+            ],
+            [
                 'name' => 'Bar 3',
                 'detail' => 'Detail 3',
-            ),
-        );
-        $request = Request::create('test', Request::METHOD_POST, array(), array(), array(), array(), json_encode($data));
+            ],
+        ];
+        $request = Request::create('test', Request::METHOD_POST, [], [], [], [], json_encode($data));
         $handler = $this->createFormHandler($request);
 
-        $objects = array(
+        $objects = [
             new Foo(),
             new Foo(),
             new Foo(),
-        );
+        ];
         $config = $this->createFormConfigList($objects, $this->never());
 
         $handler->processForms($config);
@@ -136,22 +136,22 @@ class FormHandlerTest extends AbstractFormHandlerTest
      */
     public function testProcessFormsWithDifferentSize()
     {
-        $data = array(
+        $data = [
             'transaction' => true,
-            'records' => array(
-                array(
+            'records' => [
+                [
                     'name' => 'Bar 1',
                     'detail' => 'Detail 1',
-                ),
-            ),
-        );
-        $request = Request::create('test', Request::METHOD_POST, array(), array(), array(), array(), json_encode($data));
+                ],
+            ],
+        ];
+        $request = Request::create('test', Request::METHOD_POST, [], [], [], [], json_encode($data));
         $handler = $this->createFormHandler($request);
 
-        $objects = array(
+        $objects = [
             new Foo(),
             new Foo(),
-        );
+        ];
         $config = $this->createFormConfigList($objects, $this->once());
 
         $handler->processForms($config);
@@ -159,13 +159,13 @@ class FormHandlerTest extends AbstractFormHandlerTest
 
     public function getLimits()
     {
-        return array(
-            array(10, null, 5,    5),
-            array(10, 5,    null, 5),
+        return [
+            [10, null, 5,    5],
+            [10, 5,    null, 5],
 
-            array(10, null, 0,    1),
-            array(10, 0,    null, 1),
-        );
+            [10, null, 0,    1],
+            [10, 0,    null, 1],
+        ];
     }
 
     /**
@@ -180,22 +180,22 @@ class FormHandlerTest extends AbstractFormHandlerTest
      */
     public function testLimitMethod($size, $defaultLimit, $methodLimit)
     {
-        $data = array();
-        $objects = array();
+        $data = [];
+        $objects = [];
 
         for ($i = 0; $i < $size; ++$i) {
-            $data[] = array(
+            $data[] = [
                 'name' => 'Bar '.($i + 1),
                 'detail' => 'Detail '.($i + 1),
-            );
+            ];
             $objects[] = new Foo();
         }
-        $data = array(
+        $data = [
             'transaction' => true,
             'records' => $data,
-        );
+        ];
 
-        $request = Request::create('test', Request::METHOD_POST, array(), array(), array(), array(), json_encode($data));
+        $request = Request::create('test', Request::METHOD_POST, [], [], [], [], json_encode($data));
         $handler = $this->createFormHandler($request, $defaultLimit);
 
         $config = $this->createFormConfigList($objects, $this->any());
@@ -213,7 +213,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
     protected function createFormConfigList($objects, InvokedRecorder $count)
     {
         $config = $this->getMockBuilder(FormConfigList::class)
-            ->setConstructorArgs(array(FooType::class, array(), Request::METHOD_POST, 'json'))
+            ->setConstructorArgs([FooType::class, [], Request::METHOD_POST, 'json'])
             ->getMockForAbstractClass();
         $config->expects($count)
             ->method('convertObjects')

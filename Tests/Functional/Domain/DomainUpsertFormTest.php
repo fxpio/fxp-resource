@@ -31,10 +31,10 @@ class DomainUpsertFormTest extends AbstractDomainTest
 {
     public function getUpsertType()
     {
-        return array(
-            array(false),
-            array(true),
-        );
+        return [
+            [false],
+            [true],
+        ];
     }
 
     /**
@@ -50,15 +50,15 @@ class DomainUpsertFormTest extends AbstractDomainTest
             $foo = $this->insertResource($domain);
             $foo->setName(null);
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo */
             $foo = $domain->newInstance();
         }
 
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'name' => null,
             'description' => 'test',
-        ));
+        ]);
 
         $preEvent = false;
         $postEvent = false;
@@ -106,15 +106,15 @@ class DomainUpsertFormTest extends AbstractDomainTest
             $foo = $this->insertResource($domain);
             $foo->setDetail(null);
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo */
             $foo = $domain->newInstance();
             $foo->setName('Bar');
         }
 
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'description' => 'test',
-        ));
+        ]);
 
         $preEvent = false;
         $postEvent = false;
@@ -163,16 +163,16 @@ class DomainUpsertFormTest extends AbstractDomainTest
             $foo = $this->insertResource($domain);
             $foo->setDetail(null);
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo */
             $foo = $domain->newInstance();
             $foo->setName('Bar');
         }
 
-        $form = $this->buildForm($foo, array(
+        $form = $this->buildForm($foo, [
             'name' => 'New Bar',
             'detail' => 'New Detail',
-        ));
+        ]);
 
         $preEvent = false;
         $postEvent = false;
@@ -218,31 +218,31 @@ class DomainUpsertFormTest extends AbstractDomainTest
         if ($isUpdate) {
             $objects = $this->insertResources($domain, 2);
 
-            $forms = array(
-                $this->buildForm($objects[0], array(
+            $forms = [
+                $this->buildForm($objects[0], [
                     'name' => null,
                     'description' => 'test 1',
-                )),
-                $this->buildForm($objects[1], array(
+                ]),
+                $this->buildForm($objects[1], [
                     'name' => null,
                     'description' => 'test 2',
-                )),
-            );
+                ]),
+            ];
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
-            $form1 = $this->buildForm($foo1, array(
+            $form1 = $this->buildForm($foo1, [
                 'name' => null,
                 'description' => 'test',
-            ));
-            $form2 = $this->buildForm($foo2, array(
+            ]);
+            $form2 = $this->buildForm($foo2, [
                 'description' => 'test',
-            ));
-            $forms = array($form1, $form2);
+            ]);
+            $forms = [$form1, $form2];
         }
 
         $this->runTestUpsertsException($domain, $forms, '/This value should not be blank./', true, $isUpdate);
@@ -260,30 +260,30 @@ class DomainUpsertFormTest extends AbstractDomainTest
         if ($isUpdate) {
             $objects = $this->insertResources($domain, 2);
 
-            $forms = array(
-                $this->buildForm($objects[0], array(
+            $forms = [
+                $this->buildForm($objects[0], [
                     'detail' => null,
                     'description' => 'test 1',
-                )),
-                $this->buildForm($objects[1], array(
+                ]),
+                $this->buildForm($objects[1], [
                     'detail' => null,
                     'description' => 'test 2',
-                )),
-            );
+                ]),
+            ];
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
-            $form1 = $this->buildForm($foo1, array(
+            $form1 = $this->buildForm($foo1, [
                 'name' => 'Bar',
-            ));
-            $form2 = $this->buildForm($foo2, array(
+            ]);
+            $form2 = $this->buildForm($foo2, [
                 'name' => 'Bar',
-            ));
-            $forms = array($form1, $form2);
+            ]);
+            $forms = [$form1, $form2];
         }
 
         $this->runTestUpsertsException($domain, $forms, $this->getIntegrityViolationMessage(), false, $isUpdate);
@@ -352,31 +352,31 @@ class DomainUpsertFormTest extends AbstractDomainTest
         if ($isUpdate) {
             $objects = $this->insertResources($domain, 2);
 
-            $forms = array(
-                $this->buildForm($objects[0], array(
+            $forms = [
+                $this->buildForm($objects[0], [
                     'name' => null,
                     'description' => 'test 1',
-                )),
-                $this->buildForm($objects[1], array(
+                ]),
+                $this->buildForm($objects[1], [
                     'detail' => null,
                     'description' => 'test 2',
-                )),
-            );
+                ]),
+            ];
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
-            $form1 = $this->buildForm($foo1, array(
+            $form1 = $this->buildForm($foo1, [
                 'name' => null,
-            ));
-            $form2 = $this->buildForm($foo2, array(
+            ]);
+            $form2 = $this->buildForm($foo2, [
                 'name' => 'Bar',
-            ));
+            ]);
 
-            $forms = array($form1, $form2);
+            $forms = [$form1, $form2];
         }
 
         $preEvent = false;
@@ -425,30 +425,30 @@ class DomainUpsertFormTest extends AbstractDomainTest
         if ($isUpdate) {
             $objects = $this->insertResources($domain, 2);
 
-            $forms = array(
-                $this->buildForm($objects[0], array(
+            $forms = [
+                $this->buildForm($objects[0], [
                     'detail' => null,
                     'description' => 'test 1',
-                )),
-                $this->buildForm($objects[1], array(
+                ]),
+                $this->buildForm($objects[1], [
                     'description' => 'test 2',
-                )),
-            );
+                ]),
+            ];
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
-            $form1 = $this->buildForm($foo1, array(
+            $form1 = $this->buildForm($foo1, [
                 'name' => 'Bar',
-            ));
-            $form2 = $this->buildForm($foo2, array(
+            ]);
+            $form2 = $this->buildForm($foo2, [
                 'name' => 'Bar',
-            ));
+            ]);
 
-            $forms = array($form1, $form2);
+            $forms = [$form1, $form2];
         }
 
         $preEvent = false;
@@ -502,32 +502,32 @@ class DomainUpsertFormTest extends AbstractDomainTest
         if ($isUpdate) {
             $objects = $this->insertResources($domain, 2);
 
-            $forms = array(
-                $this->buildForm($objects[0], array(
+            $forms = [
+                $this->buildForm($objects[0], [
                     'name' => null,
                     'description' => 'test 1',
-                )),
-                $this->buildForm($objects[1], array(
+                ]),
+                $this->buildForm($objects[1], [
                     'name' => 'New Bar 2',
                     'description' => 'test 2',
-                )),
-            );
+                ]),
+            ];
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
-            $form1 = $this->buildForm($foo1, array(
+            $form1 = $this->buildForm($foo1, [
                 'name' => null,
-            ));
-            $form2 = $this->buildForm($foo2, array(
+            ]);
+            $form2 = $this->buildForm($foo2, [
                 'name' => 'Bar',
                 'detail' => 'Detail',
-            ));
+            ]);
 
-            $forms = array($form1, $form2);
+            $forms = [$form1, $form2];
         }
 
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
@@ -561,33 +561,33 @@ class DomainUpsertFormTest extends AbstractDomainTest
         if ($isUpdate) {
             $objects = $this->insertResources($domain, 2);
 
-            $forms = array(
-                $this->buildForm($objects[0], array(
+            $forms = [
+                $this->buildForm($objects[0], [
                     'name' => 'New Bar 1',
                     'detail' => 'New Detail 1',
-                )),
-                $this->buildForm($objects[1], array(
+                ]),
+                $this->buildForm($objects[1], [
                     'name' => 'New Bar 2',
                     'detail' => 'New Detail 2',
-                )),
-            );
+                ]),
+            ];
         } else {
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
             /* @var Foo $foo1 */
             $foo1 = $domain->newInstance();
             /* @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
-            $form1 = $this->buildForm($foo1, array(
+            $form1 = $this->buildForm($foo1, [
                 'name' => 'Bar 1',
                 'detail' => 'Detail 1',
-            ));
-            $form2 = $this->buildForm($foo2, array(
+            ]);
+            $form2 = $this->buildForm($foo2, [
                 'name' => 'Bar 2',
                 'detail' => 'Detail 2',
-            ));
+            ]);
 
-            $forms = array($form1, $form2);
+            $forms = [$form1, $form2];
         }
 
         $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
@@ -618,16 +618,16 @@ class DomainUpsertFormTest extends AbstractDomainTest
 
         if ($isUpdate) {
             $object = $this->insertResource($domain);
-            $form = $this->buildForm($object, array(
+            $form = $this->buildForm($object, [
                 'name' => null,
                 'detail' => 'New Detail 1',
-            ));
+            ]);
         } else {
             /* @var Foo $foo */
             $foo = $domain->newInstance();
-            $form = $this->formFactory->create(FooType::class, $foo, array());
+            $form = $this->formFactory->create(FooType::class, $foo, []);
 
-            $this->loadFixtures(array());
+            $this->loadFixtures([]);
         }
 
         $preEvent = false;
@@ -662,24 +662,24 @@ class DomainUpsertFormTest extends AbstractDomainTest
      */
     public function testErrorIdentifier($isUpdate)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $this->createDomain();
 
         if ($isUpdate) {
             /* @var Foo $object */
             $object = $domain->newInstance();
-            $form = $this->buildForm($object, array(
+            $form = $this->buildForm($object, [
                 'name' => 'Bar',
                 'detail' => 'Detail',
-            ));
+            ]);
         } else {
             $object = $this->insertResource($domain);
             $object->setDetail(null);
-            $form = $this->buildForm($object, array(
+            $form = $this->buildForm($object, [
                 'name' => 'New Bar',
                 'detail' => 'New Detail',
-            ));
+            ]);
         }
 
         $resource = $domain->upsert($form);
@@ -694,7 +694,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      */
     protected function buildForm($object, array $data)
     {
-        $form = $this->formFactory->create(FooType::class, $object, array());
+        $form = $this->formFactory->create(FooType::class, $object, []);
         $form->submit($data, false);
 
         return $form;

@@ -65,13 +65,13 @@ class Domain extends BaseDomain
     public function undeletes(array $identifiers, $autoCommit = false)
     {
         list($objects, $missingIds) = $this->convertIdentifierToObjects($identifiers);
-        $errorResources = array();
+        $errorResources = [];
 
         foreach ($missingIds as $id) {
             $sdt = new \stdClass();
             $sdt->{DomainUtil::getIdentifierName($this->om, $this->getClass())} = $id;
             $resource = new ResourceItem($sdt);
-            DomainUtil::addResourceError($resource, $this->translator->trans('domain.object_does_not_exist', array('{{ id }}' => $id), 'FxpResource'));
+            DomainUtil::addResourceError($resource, $this->translator->trans('domain.object_does_not_exist', ['{{ id }}' => $id], 'FxpResource'));
             $errorResources[] = $resource;
         }
 
@@ -88,13 +88,13 @@ class Domain extends BaseDomain
     protected function convertIdentifierToObjects(array $identifiers)
     {
         $idName = DomainUtil::getIdentifierName($this->om, $this->getClass());
-        $objects = array();
-        $missingIds = array();
+        $objects = [];
+        $missingIds = [];
         $searchIds = DomainUtil::extractIdentifierInObjectList($identifiers, $objects);
 
         if (count($searchIds) > 0) {
             $previousFilters = $this->disableFilters();
-            $searchObjects = $this->getRepository()->findBy(array($idName => $searchIds));
+            $searchObjects = $this->getRepository()->findBy([$idName => $searchIds]);
             $this->enableFilters($previousFilters);
             $objects = array_merge($objects, $searchObjects);
 
@@ -111,13 +111,13 @@ class Domain extends BaseDomain
             }
         }
 
-        return array($objects, $missingIds);
+        return [$objects, $missingIds];
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function persist(array $resources, $autoCommit, $type, array $errorResources = array())
+    protected function persist(array $resources, $autoCommit, $type, array $errorResources = [])
     {
         list($preEvent, $postEvent) = DomainUtil::getEventNames($type);
         $list = ResourceUtil::convertObjectsToResourceList(array_values($resources), $this->getClass());
@@ -156,7 +156,7 @@ class Domain extends BaseDomain
                 $resource->setStatus(ResourceStatutes::CANCELED);
                 continue;
             } elseif ($autoCommit && $hasFlushError && $hasError) {
-                DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'FxpResource'));
+                DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', [], 'FxpResource'));
                 continue;
             }
 
@@ -194,7 +194,7 @@ class Domain extends BaseDomain
             }
         }
 
-        return array($successStatus, $hasFlushError);
+        return [$successStatus, $hasFlushError];
     }
 
     /**
@@ -211,7 +211,7 @@ class Domain extends BaseDomain
             if ($object instanceof SoftDeletableInterface) {
                 $object->setDeletedAt(null);
             } else {
-                DomainUtil::addResourceError($resource, $this->translator->trans('domain.resource_type_not_undeleted', array(), 'FxpResource'));
+                DomainUtil::addResourceError($resource, $this->translator->trans('domain.resource_type_not_undeleted', [], 'FxpResource'));
             }
         }
     }
@@ -263,16 +263,16 @@ class Domain extends BaseDomain
             $resource->setStatus(ResourceStatutes::CANCELED);
             $continue = true;
         } elseif ($autoCommit && $hasFlushError && $hasError) {
-            DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', array(), 'FxpResource'));
+            DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', [], 'FxpResource'));
             $continue = true;
         } elseif (null !== $idError = $this->getErrorIdentifier($resource->getRealData(), static::TYPE_DELETE)) {
             $hasError = true;
             $resource->setStatus(ResourceStatutes::ERROR);
-            $resource->getErrors()->add(new ConstraintViolation($idError, $idError, array(), $resource->getRealData(), null, null));
+            $resource->getErrors()->add(new ConstraintViolation($idError, $idError, [], $resource->getRealData(), null, null));
             $continue = true;
         }
 
-        return array($continue, $hasError);
+        return [$continue, $hasError];
     }
 
     /**

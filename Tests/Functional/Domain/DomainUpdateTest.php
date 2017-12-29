@@ -344,7 +344,7 @@ class DomainUpdateTest extends AbstractDomainTest
         $object->setName('Bar');
         $object->setDetail('Detail');
 
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $resource = $domain->update($object);
         $this->assertFalse($resource->isValid());

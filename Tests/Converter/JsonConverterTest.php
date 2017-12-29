@@ -58,6 +58,6 @@ class JsonConverterTest extends TestCase
     {
         $content = $this->converter->convert('{"foo": "bar"}');
 
-        $this->assertEquals(array('foo' => 'bar'), $content);
+        $this->assertEquals(['foo' => 'bar'], $content);
     }
 }

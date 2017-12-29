@@ -29,7 +29,7 @@ class FormConfigTest extends TestCase
         $config = new FormConfig($type);
         $this->assertSame('json', $config->getConverter());
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
-        $this->assertEquals(array('method' => Request::METHOD_POST), $config->getOptions());
+        $this->assertEquals(['method' => Request::METHOD_POST], $config->getOptions());
         $this->assertSame($type, $config->getType());
         $this->assertTrue($config->getSubmitClearMissing());
     }
@@ -37,10 +37,10 @@ class FormConfigTest extends TestCase
     public function testWithStringTypeAndPatchMethod()
     {
         $type = FormType::class;
-        $config = new FormConfig($type, array(), Request::METHOD_PATCH);
+        $config = new FormConfig($type, [], Request::METHOD_PATCH);
         $this->assertSame('json', $config->getConverter());
         $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
-        $this->assertEquals(array('method' => Request::METHOD_PATCH), $config->getOptions());
+        $this->assertEquals(['method' => Request::METHOD_PATCH], $config->getOptions());
         $this->assertSame($type, $config->getType());
         $this->assertFalse($config->getSubmitClearMissing());
     }
@@ -70,19 +70,19 @@ class FormConfigTest extends TestCase
         $config = new FormConfig(FormType::class);
 
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'method' => Request::METHOD_POST,
-        ), $config->getOptions());
+        ], $config->getOptions());
 
-        $config->setOptions(array(
+        $config->setOptions([
             'method' => Request::METHOD_PATCH,
             'required' => true,
-        ));
+        ]);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'method' => Request::METHOD_PATCH,
             'required' => true,
-        ), $config->getOptions());
+        ], $config->getOptions());
         $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
     }
 
@@ -91,55 +91,55 @@ class FormConfigTest extends TestCase
         $config = new FormConfig(FormType::class);
 
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'method' => Request::METHOD_POST,
-        ), $config->getOptions());
+        ], $config->getOptions());
         $this->assertSame(Request::METHOD_POST, $config->getMethod());
 
         $config->setMethod(Request::METHOD_PATCH);
 
         $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'method' => Request::METHOD_PATCH,
-        ), $config->getOptions());
+        ], $config->getOptions());
     }
 
     public function getRequestMethod()
     {
-        return array(
-            array(null, Request::METHOD_HEAD,    true),
-            array(null, Request::METHOD_GET,     true),
-            array(null, Request::METHOD_POST,    true),
-            array(null, Request::METHOD_PUT,     true),
-            array(null, Request::METHOD_PATCH,   false),
-            array(null, Request::METHOD_DELETE,  true),
-            array(null, Request::METHOD_PURGE,   true),
-            array(null, Request::METHOD_OPTIONS, true),
-            array(null, Request::METHOD_TRACE,   true),
-            array(null, Request::METHOD_CONNECT, true),
+        return [
+            [null, Request::METHOD_HEAD,    true],
+            [null, Request::METHOD_GET,     true],
+            [null, Request::METHOD_POST,    true],
+            [null, Request::METHOD_PUT,     true],
+            [null, Request::METHOD_PATCH,   false],
+            [null, Request::METHOD_DELETE,  true],
+            [null, Request::METHOD_PURGE,   true],
+            [null, Request::METHOD_OPTIONS, true],
+            [null, Request::METHOD_TRACE,   true],
+            [null, Request::METHOD_CONNECT, true],
 
-            array(true, Request::METHOD_HEAD,    true),
-            array(true, Request::METHOD_GET,     true),
-            array(true, Request::METHOD_POST,    true),
-            array(true, Request::METHOD_PUT,     true),
-            array(true, Request::METHOD_PATCH,   true),
-            array(true, Request::METHOD_DELETE,  true),
-            array(true, Request::METHOD_PURGE,   true),
-            array(true, Request::METHOD_OPTIONS, true),
-            array(true, Request::METHOD_TRACE,   true),
-            array(true, Request::METHOD_CONNECT, true),
+            [true, Request::METHOD_HEAD,    true],
+            [true, Request::METHOD_GET,     true],
+            [true, Request::METHOD_POST,    true],
+            [true, Request::METHOD_PUT,     true],
+            [true, Request::METHOD_PATCH,   true],
+            [true, Request::METHOD_DELETE,  true],
+            [true, Request::METHOD_PURGE,   true],
+            [true, Request::METHOD_OPTIONS, true],
+            [true, Request::METHOD_TRACE,   true],
+            [true, Request::METHOD_CONNECT, true],
 
-            array(false, Request::METHOD_HEAD,    false),
-            array(false, Request::METHOD_GET,     false),
-            array(false, Request::METHOD_POST,    false),
-            array(false, Request::METHOD_PUT,     false),
-            array(false, Request::METHOD_PATCH,   false),
-            array(false, Request::METHOD_DELETE,  false),
-            array(false, Request::METHOD_PURGE,   false),
-            array(false, Request::METHOD_OPTIONS, false),
-            array(false, Request::METHOD_TRACE,   false),
-            array(false, Request::METHOD_CONNECT, false),
-        );
+            [false, Request::METHOD_HEAD,    false],
+            [false, Request::METHOD_GET,     false],
+            [false, Request::METHOD_POST,    false],
+            [false, Request::METHOD_PUT,     false],
+            [false, Request::METHOD_PATCH,   false],
+            [false, Request::METHOD_DELETE,  false],
+            [false, Request::METHOD_PURGE,   false],
+            [false, Request::METHOD_OPTIONS, false],
+            [false, Request::METHOD_TRACE,   false],
+            [false, Request::METHOD_CONNECT, false],
+        ];
     }
 
     /**

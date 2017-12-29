@@ -85,7 +85,7 @@ class FormHandler implements FormHandlerInterface
      */
     public function processForm(FormConfigInterface $config, $object)
     {
-        $forms = $this->process($config, array($object));
+        $forms = $this->process($config, [$object]);
 
         return $forms[0];
     }
@@ -93,7 +93,7 @@ class FormHandler implements FormHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function processForms(FormConfigListInterface $config, array $objects = array())
+    public function processForms(FormConfigListInterface $config, array $objects = [])
     {
         return $this->process($config, $objects);
     }
@@ -119,13 +119,13 @@ class FormHandler implements FormHandlerInterface
     private function process(FormConfigInterface $config, array $objects)
     {
         list($dataList, $objects) = $this->getDataListObjects($config, $objects);
-        $forms = array();
+        $forms = [];
 
         if (count($objects) !== count($dataList)) {
-            $msg = $this->translator->trans('form_handler.different_size_request_list', array(
+            $msg = $this->translator->trans('form_handler.different_size_request_list', [
                 '{{ requestSize }}' => count($dataList),
                 '{{ objectSize }}' => count($objects),
-            ), 'FxpResource');
+            ], 'FxpResource');
             throw new InvalidResourceException($msg);
         }
 
@@ -153,9 +153,9 @@ class FormHandler implements FormHandlerInterface
         $dataList = $this->getDataList($config);
 
         if (null !== $limit && count($dataList) > $limit) {
-            $msg = $this->translator->trans('form_handler.size_exceeds', array(
+            $msg = $this->translator->trans('form_handler.size_exceeds', [
                 '{{ limit }}' => $limit,
-            ), 'FxpResource');
+            ], 'FxpResource');
             throw new InvalidResourceException(sprintf($msg, $limit));
         }
 
@@ -166,7 +166,7 @@ class FormHandler implements FormHandlerInterface
         $dataList = array_values($dataList);
         $objects = array_values($objects);
 
-        return array($dataList, $objects);
+        return [$dataList, $objects];
     }
 
     /**
@@ -185,10 +185,10 @@ class FormHandler implements FormHandlerInterface
             try {
                 $dataList = $config->findList($dataList);
             } catch (InvalidResourceException $e) {
-                throw new InvalidResourceException($this->translator->trans('form_handler.results_field_required', array(), 'FxpResource'));
+                throw new InvalidResourceException($this->translator->trans('form_handler.results_field_required', [], 'FxpResource'));
             }
         } else {
-            $dataList = array($dataList);
+            $dataList = [$dataList];
         }
 
         return $dataList;

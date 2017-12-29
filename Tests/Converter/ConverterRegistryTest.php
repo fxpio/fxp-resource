@@ -34,9 +34,9 @@ class ConverterRegistryTest extends TestCase
             ->method('getName')
             ->will($this->returnValue('foo'));
 
-        $this->registry = new ConverterRegistry(array(
+        $this->registry = new ConverterRegistry([
             $converter,
-        ));
+        ]);
     }
 
     /**
@@ -45,9 +45,9 @@ class ConverterRegistryTest extends TestCase
      */
     public function testUnexpectedTypeException()
     {
-        new ConverterRegistry(array(
+        new ConverterRegistry([
             new \DateTime(),
-        ));
+        ]);
     }
 
     public function testHas()

@@ -26,10 +26,10 @@ class ResourceUtilTest extends TestCase
 {
     public function getAllowForm()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true],
+            [false],
+        ];
     }
 
     /**
@@ -39,11 +39,11 @@ class ResourceUtilTest extends TestCase
      */
     public function testConvertObjectsToResourceList($allowForm)
     {
-        $objects = array(
+        $objects = [
             new \stdClass(),
             new \stdClass(),
             new \stdClass(),
-        );
+        ];
         $list = ResourceUtil::convertObjectsToResourceList($objects, \stdClass::class, $allowForm);
 
         $this->assertInstanceOf(ResourceListInterface::class, $list);

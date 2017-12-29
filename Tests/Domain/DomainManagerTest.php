@@ -58,11 +58,11 @@ class DomainManagerTest extends TestCase
 
         $this->factory->expects($this->atLeastOnce())
             ->method('getShortNames')
-            ->willReturn(array(
+            ->willReturn([
                 'std' => \stdClass::class,
-            ));
+            ]);
 
-        $this->manager = new DomainManager(array($this->domain), $this->factory);
+        $this->manager = new DomainManager([$this->domain], $this->factory);
     }
 
     public function testHas()
@@ -130,20 +130,20 @@ class DomainManagerTest extends TestCase
             ->with(\stdClass::class)
             ->willReturn($domain);
 
-        $expected = array(
+        $expected = [
             'Foo' => $this->domain,
             \stdClass::class => $domain,
-        );
+        ];
 
         $this->assertSame($expected, $this->manager->all());
     }
 
     public function testGetShortNames()
     {
-        $expected = array(
+        $expected = [
             'std' => \stdClass::class,
             'ShortFoo' => 'Foo',
-        );
+        ];
 
         $this->assertSame($expected, $this->manager->getShortNames());
     }

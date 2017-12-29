@@ -105,7 +105,7 @@ abstract class AbstractDomain implements DomainInterface
         $this->class = $class;
         $this->shortName = $shortName;
         $this->debug = false;
-        $this->disableFilters = array();
+        $this->disableFilters = [];
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function setObjectManager(ObjectManager $om, $disableFilters = array())
+    public function setObjectManager(ObjectManager $om, $disableFilters = [])
     {
         $this->om = $om;
 
@@ -235,7 +235,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function newInstance(array $options = array())
+    public function newInstance(array $options = [])
     {
         return $this->of->create($this->getClass(), null, $options);
     }
@@ -245,7 +245,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function create($resource)
     {
-        return DomainUtil::oneAction($this->creates(array($resource), true));
+        return DomainUtil::oneAction($this->creates([$resource], true));
     }
 
     /**
@@ -261,7 +261,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function update($resource)
     {
-        return DomainUtil::oneAction($this->updates(array($resource), true));
+        return DomainUtil::oneAction($this->updates([$resource], true));
     }
 
     /**
@@ -277,7 +277,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function upsert($resource)
     {
-        return DomainUtil::oneAction($this->upserts(array($resource), true));
+        return DomainUtil::oneAction($this->upserts([$resource], true));
     }
 
     /**
@@ -293,7 +293,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function delete($resource, $soft = true)
     {
-        return DomainUtil::oneAction($this->deletes(array($resource), $soft, true));
+        return DomainUtil::oneAction($this->deletes([$resource], $soft, true));
     }
 
     /**
@@ -301,7 +301,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function undelete($identifier)
     {
-        return DomainUtil::oneAction($this->undeletes(array($identifier), true));
+        return DomainUtil::oneAction($this->undeletes([$identifier], true));
     }
 
     /**
@@ -335,7 +335,7 @@ abstract class AbstractDomain implements DomainInterface
      *
      * @param array $previousValues the previous values of filters
      */
-    protected function enableFilters(array $previousValues = array())
+    protected function enableFilters(array $previousValues = [])
     {
         SqlFilterUtil::enableFilters($this->om, $previousValues);
     }
@@ -353,5 +353,5 @@ abstract class AbstractDomain implements DomainInterface
      *
      * @return ResourceList
      */
-    abstract protected function persist(array $resources, $autoCommit, $type, array $errorResources = array());
+    abstract protected function persist(array $resources, $autoCommit, $type, array $errorResources = []);
 }

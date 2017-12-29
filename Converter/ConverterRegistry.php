@@ -24,7 +24,7 @@ class ConverterRegistry implements ConverterRegistryInterface
     /**
      * @var ConverterInterface[]
      */
-    protected $converters = array();
+    protected $converters = [];
 
     /**
      * Constructor.

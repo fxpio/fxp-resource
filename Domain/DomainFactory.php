@@ -84,7 +84,7 @@ class DomainFactory implements DomainFactoryInterface
                                 ObjectFactoryInterface $of,
                                 ValidatorInterface $validator,
                                 TranslatorInterface $translator,
-                                array $undeleteDisableFilters = array(),
+                                array $undeleteDisableFilters = [],
                                 $debug = false)
     {
         $this->or = $or;
@@ -94,7 +94,7 @@ class DomainFactory implements DomainFactoryInterface
         $this->translator = $translator;
         $this->undeleteDisableFilters = $undeleteDisableFilters;
         $this->debug = $debug;
-        $this->resolveTargets = array();
+        $this->resolveTargets = [];
     }
 
     /**
@@ -112,7 +112,7 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function getShortNames()
     {
-        $names = array();
+        $names = [];
 
         foreach ($this->or->getManagers() as $manager) {
             /* @var ClassMetadata|OrmClassMetadata $meta */

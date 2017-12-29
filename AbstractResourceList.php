@@ -49,10 +49,10 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
      * @param ResourceInterface[]              $resources The list of resource
      * @param ConstraintViolationListInterface $errors    The list of errors
      */
-    public function __construct(array $resources = array(),
+    public function __construct(array $resources = [],
                                 ConstraintViolationListInterface $errors = null)
     {
-        $this->resources = array();
+        $this->resources = [];
         $this->errors = null !== $errors ? $errors : new ConstraintViolationList();
 
         foreach ($resources as $resource) {

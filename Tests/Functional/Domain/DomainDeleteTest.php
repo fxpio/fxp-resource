@@ -59,12 +59,12 @@ class DomainDeleteTest extends AbstractDomainTest
 
     public function getSoftDelete()
     {
-        return array(
-            array(false, true),
-            array(true,  true),
-            array(false, false),
-            array(true,  false),
-        );
+        return [
+            [false, true],
+            [true,  true],
+            [false, false],
+            [true,  false],
+        ];
     }
 
     /**
@@ -176,7 +176,7 @@ class DomainDeleteTest extends AbstractDomainTest
      */
     public function testDeleteNonExistentObject($withSoftObject, $softDelete)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $object = $domain->newInstance();
@@ -198,10 +198,10 @@ class DomainDeleteTest extends AbstractDomainTest
      */
     public function testDeleteNonExistentObjects($withSoftObject, $softDelete)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
-        $objects = array($domain->newInstance(), $domain->newInstance());
+        $objects = [$domain->newInstance(), $domain->newInstance()];
 
         $this->assertCount(0, $domain->getRepository()->findAll());
 
@@ -225,10 +225,10 @@ class DomainDeleteTest extends AbstractDomainTest
      */
     public function testDeleteAutoCommitNonExistentObjects($withSoftObject, $softDelete)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
-        $objects = array($domain->newInstance(), $domain->newInstance());
+        $objects = [$domain->newInstance(), $domain->newInstance()];
 
         $this->assertCount(0, $domain->getRepository()->findAll());
 
@@ -326,10 +326,10 @@ class DomainDeleteTest extends AbstractDomainTest
 
     public function getAutoCommits()
     {
-        return array(
-            array(false),
-            array(true),
-        );
+        return [
+            [false],
+            [true],
+        ];
     }
 
     /**

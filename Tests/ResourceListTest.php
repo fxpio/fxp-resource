@@ -27,22 +27,22 @@ class ResourceListTest extends TestCase
 {
     public function getData()
     {
-        return array(
-            array(ResourceListStatutes::SUCCESSFULLY, array()),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::CREATED, ResourceStatutes::CREATED)),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::UPDATED, ResourceStatutes::UPDATED)),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::DELETED, ResourceStatutes::DELETED)),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::UNDELETED, ResourceStatutes::UNDELETED)),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::CREATED, ResourceStatutes::UPDATED)),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::DELETED, ResourceStatutes::UNDELETED)),
-            array(ResourceListStatutes::SUCCESSFULLY, array(ResourceStatutes::CREATED, ResourceStatutes::UPDATED, ResourceStatutes::DELETED, ResourceStatutes::UNDELETED)),
-            array(ResourceListStatutes::CANCEL, array(ResourceStatutes::CANCELED, ResourceStatutes::CANCELED)),
-            array(ResourceListStatutes::ERROR, array(ResourceStatutes::ERROR, ResourceStatutes::ERROR)),
-            array(ResourceListStatutes::PENDING, array(ResourceStatutes::PENDING, ResourceStatutes::PENDING)),
-            array(ResourceListStatutes::MIXED, array(ResourceStatutes::CREATED, ResourceStatutes::PENDING)),
-            array(ResourceListStatutes::MIXED, array(ResourceStatutes::CREATED, ResourceStatutes::CANCELED)),
-            array(ResourceListStatutes::MIXED, array(ResourceStatutes::CREATED, ResourceStatutes::ERROR)),
-        );
+        return [
+            [ResourceListStatutes::SUCCESSFULLY, []],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::CREATED, ResourceStatutes::CREATED]],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::UPDATED, ResourceStatutes::UPDATED]],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::DELETED, ResourceStatutes::DELETED]],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::UNDELETED, ResourceStatutes::UNDELETED]],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::CREATED, ResourceStatutes::UPDATED]],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::DELETED, ResourceStatutes::UNDELETED]],
+            [ResourceListStatutes::SUCCESSFULLY, [ResourceStatutes::CREATED, ResourceStatutes::UPDATED, ResourceStatutes::DELETED, ResourceStatutes::UNDELETED]],
+            [ResourceListStatutes::CANCEL, [ResourceStatutes::CANCELED, ResourceStatutes::CANCELED]],
+            [ResourceListStatutes::ERROR, [ResourceStatutes::ERROR, ResourceStatutes::ERROR]],
+            [ResourceListStatutes::PENDING, [ResourceStatutes::PENDING, ResourceStatutes::PENDING]],
+            [ResourceListStatutes::MIXED, [ResourceStatutes::CREATED, ResourceStatutes::PENDING]],
+            [ResourceListStatutes::MIXED, [ResourceStatutes::CREATED, ResourceStatutes::CANCELED]],
+            [ResourceListStatutes::MIXED, [ResourceStatutes::CREATED, ResourceStatutes::ERROR]],
+        ];
     }
 
     /**
@@ -53,7 +53,7 @@ class ResourceListTest extends TestCase
      */
     public function testStatus($valid, array $resourceStatutes)
     {
-        $resources = array();
+        $resources = [];
 
         foreach ($resourceStatutes as $rStatus) {
             $resource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
@@ -71,18 +71,18 @@ class ResourceListTest extends TestCase
 
     public function testGetResources()
     {
-        $resources = array(
+        $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
 
         $list = new ResourceList($resources);
         $this->assertSame($resources, $list->getResources());
 
-        $resources2 = array(
+        $resources2 = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
 
         $list2 = new ResourceList($resources2);
         $this->assertSame($resources, $list->getResources());
@@ -116,16 +116,16 @@ class ResourceListTest extends TestCase
      */
     public function testGetOUtOfBoundsException()
     {
-        $list = new ResourceList(array());
+        $list = new ResourceList([]);
         $list->get(0);
     }
 
     public function testSet()
     {
-        $resources = array(
+        $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
         $list = new ResourceList($resources);
 
         /* @var ResourceInterface $new */
@@ -156,10 +156,10 @@ class ResourceListTest extends TestCase
 
     public function testRemove()
     {
-        $resources = array(
+        $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
         $list = new ResourceList($resources);
 
         $this->assertCount(2, $list);
@@ -175,10 +175,10 @@ class ResourceListTest extends TestCase
 
     public function testGetEmptyErrorsAndEmptyChildrenErrors()
     {
-        $resources = array(
+        $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
         $list = new ResourceList($resources);
 
         $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
@@ -188,10 +188,10 @@ class ResourceListTest extends TestCase
 
     public function testGetErrorsAndEmptyChildrenErrors()
     {
-        $resources = array(
+        $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
         $list = new ResourceList($resources);
 
         $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
@@ -214,10 +214,10 @@ class ResourceListTest extends TestCase
             ->method('isValid')
             ->will($this->returnValue(false));
 
-        $resources = array(
+        $resources = [
             $errorResource,
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
-        );
+        ];
         $list = new ResourceList($resources);
 
         $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());

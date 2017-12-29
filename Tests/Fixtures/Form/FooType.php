@@ -28,9 +28,9 @@ class FooType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', TextType::class, array('required' => true));
-        $builder->add('description', TextType::class, array('required' => false));
-        $builder->add('detail', TextType::class, array('required' => false));
+        $builder->add('name', TextType::class, ['required' => true]);
+        $builder->add('description', TextType::class, ['required' => false]);
+        $builder->add('detail', TextType::class, ['required' => false]);
     }
 
     /**
@@ -38,9 +38,9 @@ class FooType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'csrf_protection' => false,
-        ));
+        ]);
     }
 
     /**

@@ -45,7 +45,7 @@ class DomainFormConfigListTest extends TestCase
     {
         $this->assertTrue($this->config->isTransactional());
         $this->config->setTransactional(false);
-        $this->config->setDefaultValueOptions(array());
+        $this->config->setDefaultValueOptions([]);
         $this->config->setCreation(false);
         $this->config->setIdentifier('bar');
         $this->assertFalse($this->config->isTransactional());
@@ -53,24 +53,24 @@ class DomainFormConfigListTest extends TestCase
 
     public function testConvertObjectsCreation()
     {
-        $defaultValue = array('foo' => 'bar');
+        $defaultValue = ['foo' => 'bar'];
         $this->config->setCreation(true);
         $this->config->setDefaultValueOptions($defaultValue);
-        $list = array(
-            array(
+        $list = [
+            [
                 'foo' => 'baz',
                 'bar' => 'foo',
-            ),
-            array(
+            ],
+            [
                 'baz' => 'foo',
                 'bar' => '42',
-            ),
-        );
+            ],
+        ];
 
-        $instances = array(
+        $instances = [
             new Foo(),
             new Foo(),
-        );
+        ];
 
         $this->domain->expects($this->at(0))
             ->method('newInstance')
@@ -89,23 +89,23 @@ class DomainFormConfigListTest extends TestCase
 
     public function testConvertObjectsUpdate()
     {
-        $defaultValue = array('foo' => 'bar');
+        $defaultValue = ['foo' => 'bar'];
         $this->config->setCreation(false);
         $this->config->setIdentifier('bar');
         $this->config->setDefaultValueOptions($defaultValue);
-        $list = array(
-            array(
+        $list = [
+            [
                 'bar' => 'test1',
-            ),
-            array(
+            ],
+            [
                 'bar' => 'test2',
-            ),
-            array(
+            ],
+            [
                 'test' => 'quill',
-            ),
-        );
+            ],
+        ];
 
-        $instances = array();
+        $instances = [];
         $instances[0] = new Foo();
         $instances[1] = new Foo();
         $new = new Foo();

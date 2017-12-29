@@ -80,13 +80,13 @@ abstract class AbstractDomainTest extends TestCase
 
     protected function setUp()
     {
-        $config = Setup::createXMLMetadataConfiguration(array(
+        $config = Setup::createXMLMetadataConfiguration([
             __DIR__.'/../../Fixtures/config/doctrine',
-        ), true);
-        $connectionOptions = array(
+        ], true);
+        $connectionOptions = [
             'driver' => 'pdo_sqlite',
             'memory' => true,
-        );
+        ];
 
         $this->em = EntityManager::create($connectionOptions, $config);
 
@@ -96,7 +96,7 @@ abstract class AbstractDomainTest extends TestCase
         $this->dispatcher = new EventDispatcher();
 
         $resolvedTypeFactory = new ResolvedObjectTypeFactory();
-        $objectRegistry = new ObjectRegistry(array(), $resolvedTypeFactory);
+        $objectRegistry = new ObjectRegistry([], $resolvedTypeFactory);
         $this->objectFactory = new ObjectFactory($objectRegistry, $resolvedTypeFactory);
 
         $this->validator = Validation::createValidatorBuilder()
@@ -145,7 +145,7 @@ abstract class AbstractDomainTest extends TestCase
     {
         $domain = new Domain($class);
         $domain->setDebug(true);
-        $domain->setObjectManager($this->em, array('soft_deletable'));
+        $domain->setObjectManager($this->em, ['soft_deletable']);
         $domain->setEventDispatcher($this->dispatcher);
         $domain->setObjectFactory($this->objectFactory);
         $domain->setValidator($this->validator);
@@ -176,9 +176,9 @@ abstract class AbstractDomainTest extends TestCase
      */
     protected function insertResources(DomainInterface $domain, $size)
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
-        $objects = array();
+        $objects = [];
 
         for ($i = 0; $i < $size; ++$i) {
             /* @var Foo|Bar $object */

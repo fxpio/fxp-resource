@@ -38,7 +38,7 @@ interface FormHandlerInterface
      *
      * @return FormInterface[]
      */
-    public function processForms(FormConfigListInterface $config, array $objects = array());
+    public function processForms(FormConfigListInterface $config, array $objects = []);
 
     /**
      * Get the default limit. If the value is null, then there is not limit of quantity of rows.

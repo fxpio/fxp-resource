@@ -44,6 +44,6 @@ class ClosureFormConfigList extends FormConfigList
             return $converter($list);
         }
 
-        return array();
+        return [];
     }
 }

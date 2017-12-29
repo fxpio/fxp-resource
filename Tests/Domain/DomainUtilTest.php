@@ -65,9 +65,9 @@ class DomainUtilTest extends TestCase
         $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $meta->expects($this->once())
             ->method('getIdentifier')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 'id',
-            )));
+            ]));
 
         /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
@@ -89,9 +89,9 @@ class DomainUtilTest extends TestCase
         $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $meta->expects($this->once())
             ->method('getIdentifier')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 'id',
-            )));
+            ]));
 
         /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
@@ -108,35 +108,35 @@ class DomainUtilTest extends TestCase
     public function testGetEventNameCreate()
     {
         $names = DomainUtil::getEventNames(Domain::TYPE_CREATE);
-        $validNames = array(ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES);
+        $validNames = [ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES];
         $this->assertSame($validNames, $names);
     }
 
     public function testGetEventNameUpdate()
     {
         $names = DomainUtil::getEventNames(Domain::TYPE_UPDATE);
-        $validNames = array(ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES);
+        $validNames = [ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES];
         $this->assertSame($validNames, $names);
     }
 
     public function testGetEventNameUpsert()
     {
         $names = DomainUtil::getEventNames(Domain::TYPE_UPSERT);
-        $validNames = array(ResourceEvents::PRE_UPSERTS, ResourceEvents::POST_UPSERTS);
+        $validNames = [ResourceEvents::PRE_UPSERTS, ResourceEvents::POST_UPSERTS];
         $this->assertSame($validNames, $names);
     }
 
     public function testGetEventNameDelete()
     {
         $names = DomainUtil::getEventNames(Domain::TYPE_DELETE);
-        $validNames = array(ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES);
+        $validNames = [ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES];
         $this->assertSame($validNames, $names);
     }
 
     public function testGetEventNameUndelete()
     {
         $names = DomainUtil::getEventNames(Domain::TYPE_UNDELETE);
-        $validNames = array(ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES);
+        $validNames = [ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES];
         $this->assertSame($validNames, $names);
     }
 
@@ -157,12 +157,12 @@ class DomainUtilTest extends TestCase
 
     public function testExtractIdentifierInObjectList()
     {
-        $identifiers = array(
+        $identifiers = [
             new \stdClass(),
             5,
             new \stdClass(),
-        );
-        $objects = array();
+        ];
+        $objects = [];
         $searchIds = DomainUtil::extractIdentifierInObjectList($identifiers, $objects);
 
         $this->assertCount(2, $objects);
@@ -204,8 +204,8 @@ class DomainUtilTest extends TestCase
         $this->assertCount(0, $res->getErrors());
 
         $list = new ConstraintViolationList();
-        $list->add(new ConstraintViolation('Violation message', 'Violation message', array(), $res->getRealData(), null, null));
-        $list->add(new ConstraintViolation('Violation message 2', 'Violation message 2', array(), $res->getRealData(), null, null));
+        $list->add(new ConstraintViolation('Violation message', 'Violation message', [], $res->getRealData(), null, null));
+        $list->add(new ConstraintViolation('Violation message 2', 'Violation message 2', [], $res->getRealData(), null, null));
         $ex = new ConstraintViolationException($list, 'Error message');
         DomainUtil::injectErrorMessage($this->getTranslator(), $res, $ex, true);
 
@@ -250,8 +250,8 @@ class DomainUtilTest extends TestCase
         $resources->add(new ResourceItem(new \stdClass()));
         $resources->add(new ResourceItem(new \stdClass()));
 
-        $errors->add(new ConstraintViolation('Violation message global', 'Violation message global', array(), null, null, null));
-        $errors->add(new ConstraintViolation('Violation message resource 1', 'Violation message resource 1', array(), $resources->get(1)->getRealData(), null, null));
+        $errors->add(new ConstraintViolation('Violation message global', 'Violation message global', [], null, null, null));
+        $errors->add(new ConstraintViolation('Violation message resource 1', 'Violation message resource 1', [], $resources->get(1)->getRealData(), null, null));
 
         $this->assertCount(0, $resources->getErrors());
         $this->assertCount(0, $resources->get(0)->getErrors());

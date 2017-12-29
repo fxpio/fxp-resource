@@ -120,7 +120,7 @@ class FormHandlerTest extends TestCase
     public function testProcessForm()
     {
         $object = new \stdClass();
-        $config = $this->configureProcessForms(array($object), FormConfigInterface::class, '{}');
+        $config = $this->configureProcessForms([$object], FormConfigInterface::class, '{}');
 
         $form = $this->formHandler->processForm($config, $object);
         $this->assertInstanceOf(FormInterface::class, $form);
@@ -128,9 +128,9 @@ class FormHandlerTest extends TestCase
 
     public function testProcessForms()
     {
-        $objects = array(
+        $objects = [
             new \stdClass(),
-        );
+        ];
         $config = $this->configureProcessForms($objects, FormConfigListInterface::class, '{records: [{}]}');
 
         $forms = $this->formHandler->processForms($config, $objects);
@@ -142,16 +142,16 @@ class FormHandlerTest extends TestCase
 
     public function testProcessFormWithCreationOfNewObject()
     {
-        $objects = array(
+        $objects = [
             new \stdClass(),
-        );
+        ];
         $config = $this->configureProcessForms($objects, FormConfigListInterface::class, '{records: [{}]}');
         $config->expects($this->once())
             ->method('convertObjects')
             ->with($objects)
             ->will($this->returnValue($objects));
 
-        $forms = $this->formHandler->processForms($config, array());
+        $forms = $this->formHandler->processForms($config, []);
 
         $this->assertInternalType('array', $forms);
         $this->assertCount(1, $forms);
@@ -164,10 +164,10 @@ class FormHandlerTest extends TestCase
      */
     public function testProcessFormWithExceededPermittedLimit()
     {
-        $objects = array(
+        $objects = [
             new \stdClass(),
             new \stdClass(),
-        );
+        ];
         $config = $this->configureProcessForms($objects, FormConfigListInterface::class, '{records: [{}]}', 1);
 
         $this->formHandler->processForms($config, $objects);
@@ -179,10 +179,10 @@ class FormHandlerTest extends TestCase
      */
     public function testProcessFormWithDifferentSize()
     {
-        $objects = array(
+        $objects = [
             new \stdClass(),
-        );
-        $config = $this->configureProcessForms(array(), FormConfigListInterface::class, '{records: [{}]}');
+        ];
+        $config = $this->configureProcessForms([], FormConfigListInterface::class, '{records: [{}]}');
         $this->formHandler->processForms($config, $objects);
     }
 
@@ -223,9 +223,9 @@ class FormHandlerTest extends TestCase
             ->will($this->returnValue($requestContent));
 
         if (FormConfigListInterface::class === $configClass) {
-            $dataList = array(
+            $dataList = [
                 'records' => $objects,
-            );
+            ];
         } else {
             $dataList = $objects[0];
         }
@@ -253,7 +253,7 @@ class FormHandlerTest extends TestCase
 
             $config->expects($this->once())
                 ->method('getOptions')
-                ->will($this->returnValue(array()));
+                ->will($this->returnValue([]));
 
             $form = $this->getMockBuilder(FormInterface::class)->getMock();
             $form->expects($this->any())
