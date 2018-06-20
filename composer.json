@@ -15,19 +15,19 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1.0",
-        "symfony/dependency-injection": "^3.4.0|^4.0.0",
-        "symfony/event-dispatcher": "^3.4.0|^4.0.0",
-        "symfony/validator": "^3.4.0|^4.0.0",
-        "symfony/form": "^3.4.0|^4.0.0",
-        "symfony/http-foundation": "^3.4.0|^4.0.0",
-        "symfony/expression-language": "^3.4.0|^4.0.0",
-        "symfony/translation": "^3.4.0|^4.0.0",
+        "symfony/dependency-injection": "^4.1.0",
+        "symfony/event-dispatcher": "^4.1.0",
+        "symfony/validator": "^4.1.0",
+        "symfony/form": "^4.1.0",
+        "symfony/http-foundation": "^4.1.0",
+        "symfony/expression-language": "^4.1.0",
+        "symfony/translation": "^4.1.0",
         "doctrine/orm": "^2.6.0",
         "fxp/doctrine-extensions": "^1.0.0",
         "fxp/default-value": "^1.0.0"
     },
     "require-dev": {
-        "symfony/config": "^3.4.0|^4.0.0"
+        "symfony/config": "^4.1.0"
     },
     "autoload": {
         "psr-4": { "Fxp\\Component\\Resource\\": "" },
