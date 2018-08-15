@@ -196,7 +196,7 @@ abstract class AbstractDomainTest extends TestCase
 
     protected function getIntegrityViolationMessage()
     {
-        if (PHP_VERSION_ID >= 50500 && !defined('HHVM_VERSION')) {
+        if (\PHP_VERSION_ID >= 50500 && !defined('HHVM_VERSION')) {
             return '/Integrity constraint violation: (\d+) NOT NULL constraint failed: foo.detail/';
         }
 
