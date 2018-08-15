@@ -22,11 +22,14 @@
         "symfony/http-foundation": "^4.1.0",
         "symfony/expression-language": "^4.1.0",
         "symfony/translation": "^4.1.0",
+        "doctrine/persistence": "^1.0.0",
         "doctrine/orm": "^2.6.0",
+        "fxp/doctrine-extra": "^1.0.0",
         "fxp/doctrine-extensions": "^1.0.0",
         "fxp/default-value": "^1.0.0"
     },
     "require-dev": {
+        "doctrine/event-manager": "^1.0.0",
         "symfony/config": "^4.1.0"
     },
     "autoload": {

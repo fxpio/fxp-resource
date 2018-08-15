@@ -12,8 +12,8 @@
 namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\Exception\DriverException;
+use Fxp\Component\DoctrineExtra\Util\ClassUtils;
 use Fxp\Component\Resource\Exception\ConstraintViolationException;
 use Fxp\Component\Resource\ResourceEvents;
 use Fxp\Component\Resource\ResourceInterface;
