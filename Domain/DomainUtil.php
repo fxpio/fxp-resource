@@ -226,11 +226,12 @@ abstract class DomainUtil
      *
      * @param ResourceInterface $resource The resource
      * @param string            $message  The error message
+     * @param \Exception|null   $e        The exception
      */
-    public static function addResourceError(ResourceInterface $resource, $message)
+    public static function addResourceError(ResourceInterface $resource, $message, \Exception $e = null)
     {
         $resource->setStatus(ResourceStatutes::ERROR);
-        $resource->getErrors()->add(new ConstraintViolation($message, $message, [], $resource->getRealData(), null, null));
+        $resource->getErrors()->add(new ConstraintViolation($message, $message, [], $resource->getRealData(), null, null, null, null, null, $e));
     }
 
     /**
@@ -249,7 +250,7 @@ abstract class DomainUtil
             $resource->setStatus(ResourceStatutes::ERROR);
             $resource->getErrors()->addAll($e->getConstraintViolations());
         } else {
-            static::addResourceError($resource, static::getExceptionMessage($translator, $e, $debug));
+            static::addResourceError($resource, static::getExceptionMessage($translator, $e, $debug), $e);
         }
 
         return true;
