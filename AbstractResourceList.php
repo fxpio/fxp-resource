@@ -152,7 +152,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
      */
     public function count()
     {
-        return count($this->resources);
+        return \count($this->resources);
     }
 
     /**

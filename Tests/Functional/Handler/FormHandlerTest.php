@@ -50,7 +50,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
         $form = $handler->processForm($config, $object);
 
         $this->assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
-        $this->assertInstanceOf(get_class($object), $form->getData());
+        $this->assertInstanceOf(\get_class($object), $form->getData());
         $this->assertSame($object, $form->getData());
         $this->assertTrue($form->isSubmitted());
     }
@@ -86,12 +86,12 @@ class FormHandlerTest extends AbstractFormHandlerTest
 
         $forms = $handler->processForms($config);
 
-        $this->assertSame(count($data['records']), count($forms));
-        $this->assertTrue(count($forms) > 0);
+        $this->assertSame(\count($data['records']), \count($forms));
+        $this->assertTrue(\count($forms) > 0);
 
         foreach ($forms as $i => $form) {
             $this->assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
-            $this->assertInstanceOf(get_class($objects[$i]), $form->getData());
+            $this->assertInstanceOf(\get_class($objects[$i]), $form->getData());
             $this->assertSame($objects[$i], $form->getData());
             $this->assertTrue($form->isSubmitted());
         }

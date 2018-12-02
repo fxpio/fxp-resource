@@ -111,7 +111,7 @@ abstract class DomainUtil
         $searchIds = [];
 
         foreach ($identifiers as $identifier) {
-            if (is_object($identifier)) {
+            if (\is_object($identifier)) {
                 $objects[] = $identifier;
                 continue;
             }
@@ -209,7 +209,7 @@ abstract class DomainUtil
         $message = $translator->trans('domain.database_error', [], 'FxpResource');
 
         if ($debug) {
-            $message .= ' ['.get_class($exception).']';
+            $message .= ' ['.\get_class($exception).']';
         }
 
         if ($exception instanceof DriverException) {
@@ -271,7 +271,7 @@ abstract class DomainUtil
         for ($i = 0; $i < $size; ++$i) {
             $root = $errors->get($i)->getRoot();
 
-            if (is_object($root)) {
+            if (\is_object($root)) {
                 $maps[spl_object_hash($errors->get($i)->getRoot())] = $errors->get($i);
             } else {
                 $maps[] = $errors->get($i);

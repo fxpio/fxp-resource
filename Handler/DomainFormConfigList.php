@@ -106,7 +106,7 @@ class DomainFormConfigList extends FormConfigList
     public function convertObjects(array &$list)
     {
         if ($this->creation) {
-            $size = count($list);
+            $size = \count($list);
             $objects = [];
 
             for ($i = 0; $i < $size; ++$i) {

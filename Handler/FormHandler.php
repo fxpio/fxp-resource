@@ -121,10 +121,10 @@ class FormHandler implements FormHandlerInterface
         list($dataList, $objects) = $this->getDataListObjects($config, $objects);
         $forms = [];
 
-        if (count($objects) !== count($dataList)) {
+        if (\count($objects) !== \count($dataList)) {
             $msg = $this->translator->trans('form_handler.different_size_request_list', [
-                '{{ requestSize }}' => count($dataList),
-                '{{ objectSize }}' => count($objects),
+                '{{ requestSize }}' => \count($dataList),
+                '{{ objectSize }}' => \count($objects),
             ], 'FxpResource');
             throw new InvalidResourceException($msg);
         }
@@ -152,14 +152,14 @@ class FormHandler implements FormHandlerInterface
         $limit = $this->getLimit($config instanceof FormConfigListInterface ? $config->getLimit() : null);
         $dataList = $this->getDataList($config);
 
-        if (null !== $limit && count($dataList) > $limit) {
+        if (null !== $limit && \count($dataList) > $limit) {
             $msg = $this->translator->trans('form_handler.size_exceeds', [
                 '{{ limit }}' => $limit,
             ], 'FxpResource');
             throw new InvalidResourceException(sprintf($msg, $limit));
         }
 
-        if (0 === count($objects) && $config instanceof FormConfigListInterface) {
+        if (0 === \count($objects) && $config instanceof FormConfigListInterface) {
             $objects = $config->convertObjects($dataList);
         }
 

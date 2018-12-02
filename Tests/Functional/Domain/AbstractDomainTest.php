@@ -109,7 +109,7 @@ abstract class AbstractDomainTest extends TestCase
 
         $this->translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
+        $this->translator->addResource('xml', realpath(\dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $this->translator->addLoader('xml', new XliffFileLoader());
     }
 
@@ -196,7 +196,7 @@ abstract class AbstractDomainTest extends TestCase
 
     protected function getIntegrityViolationMessage()
     {
-        if (\PHP_VERSION_ID >= 50500 && !defined('HHVM_VERSION')) {
+        if (\PHP_VERSION_ID >= 50500 && !\defined('HHVM_VERSION')) {
             return '/Integrity constraint violation: (\d+) NOT NULL constraint failed: foo.detail/';
         }
 

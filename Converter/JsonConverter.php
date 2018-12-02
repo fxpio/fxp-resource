@@ -57,6 +57,6 @@ class JsonConverter implements ConverterInterface
             throw new InvalidJsonConverterException($this->translator->trans('converter.json.invalid_body', [], 'FxpResource'));
         }
 
-        return is_array($content) ? $content : [];
+        return \is_array($content) ? $content : [];
     }
 }

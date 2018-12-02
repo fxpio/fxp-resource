@@ -63,7 +63,7 @@ abstract class ResourceUtil
             $object = $object->getData();
         }
 
-        if (!is_object($object) || !$object instanceof $requireClass) {
+        if (!\is_object($object) || !$object instanceof $requireClass) {
             throw new UnexpectedTypeException($object, $requireClass, $i);
         }
     }

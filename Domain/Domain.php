@@ -92,13 +92,13 @@ class Domain extends BaseDomain
         $missingIds = [];
         $searchIds = DomainUtil::extractIdentifierInObjectList($identifiers, $objects);
 
-        if (count($searchIds) > 0) {
+        if (\count($searchIds) > 0) {
             $previousFilters = $this->disableFilters();
             $searchObjects = $this->getRepository()->findBy([$idName => $searchIds]);
             $this->enableFilters($previousFilters);
             $objects = array_merge($objects, $searchObjects);
 
-            if (count($searchIds) !== count($searchObjects)) {
+            if (\count($searchIds) !== \count($searchObjects)) {
                 $missingIds = $searchIds;
 
                 foreach ($objects as $object) {

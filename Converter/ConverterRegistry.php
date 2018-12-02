@@ -48,7 +48,7 @@ class ConverterRegistry implements ConverterRegistryInterface
      */
     public function get($name)
     {
-        if (!is_string($name)) {
+        if (!\is_string($name)) {
             throw new UnexpectedTypeException($name, 'string');
         }
 

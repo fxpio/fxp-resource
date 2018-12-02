@@ -295,7 +295,7 @@ class DomainUtilTest extends TestCase
     {
         $translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
+        $translator->addResource('xml', realpath(\dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $translator->addLoader('xml', new XliffFileLoader());
 
         return $translator;

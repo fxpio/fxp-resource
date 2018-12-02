@@ -80,7 +80,7 @@ class FormHandlerTest extends TestCase
 
         $this->translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
-        $this->translator->addResource('xml', realpath(dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
+        $this->translator->addResource('xml', realpath(\dirname($ref->getFileName()).'/Resources/translations/FxpResource.en.xlf'), 'en', 'FxpResource');
         $this->translator->addLoader('xml', new XliffFileLoader());
 
         $this->formHandler = new FormHandler(
@@ -242,7 +242,7 @@ class FormHandlerTest extends TestCase
                 ->will($this->returnValue($dataList['records']));
         }
 
-        if (count($objects) > 0 && null === $limit) {
+        if (\count($objects) > 0 && null === $limit) {
             $config->expects($this->once())
                 ->method('getType')
                 ->will($this->returnValue(FormType::class));

@@ -141,7 +141,7 @@ class ResourceItem implements ResourceInterface
             $data = $data->getData();
         }
 
-        if (!is_object($data)) {
+        if (!\is_object($data)) {
             throw new UnexpectedTypeException($data, 'object');
         }
     }

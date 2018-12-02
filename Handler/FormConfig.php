@@ -70,7 +70,7 @@ class FormConfig implements FormConfigInterface
      */
     public function setType($type)
     {
-        if (!is_string($type)) {
+        if (!\is_string($type)) {
             throw new InvalidArgumentException('The form type of domain form config must be an string of class name of form type');
         }
 
