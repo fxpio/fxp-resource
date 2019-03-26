@@ -15,10 +15,10 @@ use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Fxp\Component\DefaultValue\ObjectFactoryInterface;
 use Fxp\Component\DoctrineExtensions\Util\SqlFilterUtil;
 use Fxp\Component\Resource\Event\ResourceEvent;
 use Fxp\Component\Resource\Exception\InvalidConfigurationException;
+use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceList;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -237,7 +237,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     public function newInstance(array $options = [])
     {
-        return $this->of->create($this->getClass(), null, $options);
+        return $this->of->create($this->getClass(), $options);
     }
 
     /**

@@ -18,8 +18,8 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Fxp\Component\DefaultValue\ObjectFactoryInterface;
 use Fxp\Component\Resource\Domain\Domain;
+use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -172,7 +172,7 @@ class DomainTest extends TestCase
 
         $of->expects($this->once())
             ->method('create')
-            ->with(\stdClass::class, null, [])
+            ->with(\stdClass::class, [])
             ->will($this->returnValue($instance));
 
         $val = $domain->newInstance();

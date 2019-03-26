@@ -15,8 +15,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Fxp\Component\DefaultValue\ObjectFactoryInterface;
 use Fxp\Component\Resource\Exception\InvalidConfigurationException;
+use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceListInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -63,7 +63,7 @@ interface DomainInterface
     public function setEventDispatcher(EventDispatcherInterface $ed);
 
     /**
-     * Set the default value object factory.
+     * Set the object factory.
      *
      * @param ObjectFactoryInterface $of
      */

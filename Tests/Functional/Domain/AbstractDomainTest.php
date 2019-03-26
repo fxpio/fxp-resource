@@ -15,11 +15,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use Fxp\Component\DefaultValue\ObjectFactory;
-use Fxp\Component\DefaultValue\ObjectFactoryInterface;
 use Fxp\Component\DefaultValue\ObjectRegistry;
 use Fxp\Component\DefaultValue\ResolvedObjectTypeFactory;
 use Fxp\Component\Resource\Domain\Domain;
 use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\Object\DefaultValueObjectFactory;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\Tests\Fixtures\Entity\Bar;
 use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
@@ -54,7 +54,7 @@ abstract class AbstractDomainTest extends TestCase
     protected $dispatcher;
 
     /**
-     * @var ObjectFactoryInterface
+     * @var DefaultValueObjectFactory
      */
     protected $objectFactory;
 
@@ -97,7 +97,8 @@ abstract class AbstractDomainTest extends TestCase
 
         $resolvedTypeFactory = new ResolvedObjectTypeFactory();
         $objectRegistry = new ObjectRegistry([], $resolvedTypeFactory);
-        $this->objectFactory = new ObjectFactory($objectRegistry, $resolvedTypeFactory);
+        $dvof = new ObjectFactory($objectRegistry, $resolvedTypeFactory);
+        $this->objectFactory = new DefaultValueObjectFactory($dvof);
 
         $this->validator = Validation::createValidatorBuilder()
             ->addXmlMapping(__DIR__.'/../../Fixtures/config/validation.xml')

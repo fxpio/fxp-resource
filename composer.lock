@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26ea218988e810215834f2f6850486bb",
+    "content-hash": "bb099d715b0359ebe1d6b3e36ace3c9e",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -871,63 +871,6 @@
                 "reflection"
             ],
             "time": "2018-06-14T14:45:07+00:00"
-        },
-        {
-            "name": "fxp/default-value",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fxpio/fxp-default-value.git",
-                "reference": "9d37a9d18e1117373ac8921b6f1fbfbb6877f25a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-default-value/zipball/9d37a9d18e1117373ac8921b6f1fbfbb6877f25a",
-                "reference": "9d37a9d18e1117373ac8921b6f1fbfbb6877f25a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.0",
-                "symfony/options-resolver": "^4.2.0",
-                "symfony/property-access": "^4.2.0"
-            },
-            "require-dev": {
-                "symfony/dependency-injection": "^4.2.0",
-                "symfony/security": "^4.2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fxp\\Component\\DefaultValue\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Pluchino",
-                    "email": "francois.pluchino@gmail.com"
-                }
-            ],
-            "description": "Creates or injects the default values ​​with a advanced configuration in the object",
-            "homepage": "https://github.com/fxpio/fxp-default-value",
-            "keywords": [
-                "default value",
-                "document",
-                "entity",
-                "object"
-            ],
-            "time": "2018-12-02T19:48:11+00:00"
         },
         {
             "name": "fxp/doctrine-extensions",
@@ -2434,6 +2377,63 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "fxp/default-value",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fxpio/fxp-default-value.git",
+                "reference": "9d37a9d18e1117373ac8921b6f1fbfbb6877f25a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fxpio/fxp-default-value/zipball/9d37a9d18e1117373ac8921b6f1fbfbb6877f25a",
+                "reference": "9d37a9d18e1117373ac8921b6f1fbfbb6877f25a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.0",
+                "symfony/options-resolver": "^4.2.0",
+                "symfony/property-access": "^4.2.0"
+            },
+            "require-dev": {
+                "symfony/dependency-injection": "^4.2.0",
+                "symfony/security": "^4.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fxp\\Component\\DefaultValue\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Pluchino",
+                    "email": "francois.pluchino@gmail.com"
+                }
+            ],
+            "description": "Creates or injects the default values ​​with a advanced configuration in the object",
+            "homepage": "https://github.com/fxpio/fxp-default-value",
+            "keywords": [
+                "default value",
+                "document",
+                "entity",
+                "object"
+            ],
+            "time": "2018-12-02T19:48:11+00:00"
+        },
         {
             "name": "symfony/config",
             "version": "v4.2.4",
