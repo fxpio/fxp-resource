@@ -18,8 +18,8 @@ use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Fxp\Component\DefaultValue\ObjectFactoryInterface;
 use Fxp\Component\Resource\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Resource domain factory.

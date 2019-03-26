@@ -22,8 +22,8 @@ use Fxp\Component\Resource\Domain\DomainFactory;
 use Fxp\Component\Resource\Domain\DomainInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Tests case for Domain Manager.

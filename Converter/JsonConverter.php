@@ -12,7 +12,7 @@
 namespace Fxp\Component\Resource\Converter;
 
 use Fxp\Component\Resource\Exception\InvalidJsonConverterException;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A request content converter interface.

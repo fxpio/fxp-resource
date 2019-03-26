@@ -23,8 +23,8 @@ use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceList;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A abstract class for resource domain.
