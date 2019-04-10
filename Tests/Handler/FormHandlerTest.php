@@ -18,6 +18,7 @@ use Fxp\Component\Resource\Handler\FormConfigListInterface;
 use Fxp\Component\Resource\Handler\FormHandler;
 use Fxp\Component\Resource\Handler\FormHandlerInterface;
 use Fxp\Component\Resource\ResourceInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -35,17 +36,17 @@ use Symfony\Component\Translation\Translator;
 class FormHandlerTest extends TestCase
 {
     /**
-     * @var ConverterRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterRegistryInterface|MockObject
      */
     protected $converterRegistry;
 
     /**
-     * @var FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactoryInterface|MockObject
      */
     protected $formFactory;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     protected $request;
 
@@ -67,7 +68,7 @@ class FormHandlerTest extends TestCase
     protected function setUp()
     {
         $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
-        /* @var RequestStack|\PHPUnit_Framework_MockObject_MockObject $requestStack */
+        /* @var RequestStack|MockObject $requestStack */
         $requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
         $requestStack->expects($this->any())
             ->method('getCurrentRequest')
@@ -98,7 +99,7 @@ class FormHandlerTest extends TestCase
      */
     public function testBuildFormHandlerWithoutCurrentRequest()
     {
-        /* @var RequestStack|\PHPUnit_Framework_MockObject_MockObject $requestStack */
+        /* @var RequestStack|MockObject $requestStack */
         $requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
         $requestStack->expects($this->once())
             ->method('getCurrentRequest');
@@ -194,11 +195,11 @@ class FormHandlerTest extends TestCase
      * @param string   $requestContent The content of request
      * @param int|null $limit          The config limit
      *
-     * @return FormConfigInterface|FormConfigListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FormConfigInterface|FormConfigListInterface|MockObject
      */
     protected function configureProcessForms(array $objects, $configClass, $requestContent, $limit = null)
     {
-        /* @var FormConfigInterface|FormConfigListInterface|\PHPUnit_Framework_MockObject_MockObject $config */
+        /* @var FormConfigInterface|FormConfigListInterface|MockObject $config */
         $config = $this->getMockBuilder($configClass)->getMock();
 
         if (FormConfigListInterface::class === $configClass) {
@@ -207,7 +208,7 @@ class FormHandlerTest extends TestCase
                 ->will($this->returnValue($limit));
         }
 
-        /* @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject $converter */
+        /* @var ConverterInterface|MockObject $converter */
         $converter = $this->getMockBuilder(ConverterInterface::class)->getMock();
 
         $config->expects($this->once())

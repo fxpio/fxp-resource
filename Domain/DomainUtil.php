@@ -14,8 +14,17 @@ namespace Fxp\Component\Resource\Domain;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Exception\DriverException;
 use Fxp\Component\DoctrineExtra\Util\ClassUtils;
+use Fxp\Component\Resource\Event\PostCreatesEvent;
+use Fxp\Component\Resource\Event\PostDeletesEvent;
+use Fxp\Component\Resource\Event\PostUndeletesEvent;
+use Fxp\Component\Resource\Event\PostUpdatesEvent;
+use Fxp\Component\Resource\Event\PostUpsertsEvent;
+use Fxp\Component\Resource\Event\PreCreatesEvent;
+use Fxp\Component\Resource\Event\PreDeletesEvent;
+use Fxp\Component\Resource\Event\PreUndeletesEvent;
+use Fxp\Component\Resource\Event\PreUpdatesEvent;
+use Fxp\Component\Resource\Event\PreUpsertsEvent;
 use Fxp\Component\Resource\Exception\ConstraintViolationException;
-use Fxp\Component\Resource\ResourceEvents;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceListInterface;
 use Fxp\Component\Resource\ResourceStatutes;
@@ -81,18 +90,18 @@ abstract class DomainUtil
      *
      * @return array The list of pre event name and post event name
      */
-    public static function getEventNames($type)
+    public static function getEventClasses($type)
     {
-        $names = [ResourceEvents::PRE_UPSERTS, ResourceEvents::POST_UPSERTS];
+        $names = [PreUpsertsEvent::class, PostUpsertsEvent::class];
 
         if (Domain::TYPE_CREATE === $type) {
-            $names = [ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES];
+            $names = [PreCreatesEvent::class, PostCreatesEvent::class];
         } elseif (Domain::TYPE_UPDATE === $type) {
-            $names = [ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES];
+            $names = [PreUpdatesEvent::class, PostUpdatesEvent::class];
         } elseif (Domain::TYPE_DELETE === $type) {
-            $names = [ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES];
+            $names = [PreDeletesEvent::class, PostDeletesEvent::class];
         } elseif (Domain::TYPE_UNDELETE === $type) {
-            $names = [ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES];
+            $names = [PreUndeletesEvent::class, PostUndeletesEvent::class];
         }
 
         return $names;
@@ -119,26 +128,6 @@ abstract class DomainUtil
         }
 
         return $searchIds;
-    }
-
-    /**
-     * Generate the short name of domain with the class name.
-     *
-     * @param string $class
-     *
-     * @return string
-     */
-    public static function generateShortName($class)
-    {
-        $pos = strrpos($class, '\\');
-        $pos = false !== $pos ? $pos + 1 : 0;
-        $name = substr($class, $pos);
-
-        if (false !== $pos = strrpos($name, 'Interface')) {
-            $name = substr($name, 0, $pos);
-        }
-
-        return $name;
     }
 
     /**

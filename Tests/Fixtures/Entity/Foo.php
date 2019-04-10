@@ -71,7 +71,7 @@ class Foo
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getDescription()
     {

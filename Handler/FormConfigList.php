@@ -75,7 +75,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
             throw new InvalidResourceException('The "records" field is required');
         }
 
-        if (array_key_exists('transaction', $data)) {
+        if (\array_key_exists('transaction', $data)) {
             $this->setTransactional($data['transaction']);
         }
 

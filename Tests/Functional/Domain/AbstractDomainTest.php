@@ -144,15 +144,15 @@ abstract class AbstractDomainTest extends TestCase
      */
     protected function createDomain($class = Foo::class)
     {
-        $domain = new Domain($class);
-        $domain->setDebug(true);
-        $domain->setObjectManager($this->em, ['soft_deletable']);
-        $domain->setEventDispatcher($this->dispatcher);
-        $domain->setObjectFactory($this->objectFactory);
-        $domain->setValidator($this->validator);
-        $domain->setTranslator($this->translator);
-
-        return $domain;
+        return new Domain($class,
+            $this->em,
+            $this->objectFactory,
+            $this->dispatcher,
+            $this->validator,
+            $this->translator,
+            ['soft_deletable'],
+            true
+        );
     }
 
     /**

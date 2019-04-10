@@ -16,14 +16,24 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Exception\DriverException;
 use Fxp\Component\Resource\Domain\Domain;
 use Fxp\Component\Resource\Domain\DomainUtil;
+use Fxp\Component\Resource\Event\PostCreatesEvent;
+use Fxp\Component\Resource\Event\PostDeletesEvent;
+use Fxp\Component\Resource\Event\PostUndeletesEvent;
+use Fxp\Component\Resource\Event\PostUpdatesEvent;
+use Fxp\Component\Resource\Event\PostUpsertsEvent;
+use Fxp\Component\Resource\Event\PreCreatesEvent;
+use Fxp\Component\Resource\Event\PreDeletesEvent;
+use Fxp\Component\Resource\Event\PreUndeletesEvent;
+use Fxp\Component\Resource\Event\PreUpdatesEvent;
+use Fxp\Component\Resource\Event\PreUpsertsEvent;
 use Fxp\Component\Resource\Exception\ConstraintViolationException;
-use Fxp\Component\Resource\ResourceEvents;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceItem;
 use Fxp\Component\Resource\ResourceList;
 use Fxp\Component\Resource\ResourceListInterface;
 use Fxp\Component\Resource\ResourceStatutes;
 use Fxp\Component\Resource\Tests\Fixtures\Exception\MockDriverException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
@@ -40,7 +50,7 @@ class DomainUtilTest extends TestCase
 {
     public function testExtractDriverExceptionMessage()
     {
-        /* @var DriverException|\PHPUnit_Framework_MockObject_MockObject $ex */
+        /* @var DriverException|MockObject $ex */
         $ex = $this->getMockBuilder(DriverException::class)->disableOriginalConstructor()->getMock();
 
         $message = DomainUtil::getExceptionMessage($this->getTranslator(), $ex, false);
@@ -69,7 +79,7 @@ class DomainUtilTest extends TestCase
                 'id',
             ]));
 
-        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
+        /* @var ObjectManager|MockObject $om */
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
         $om->expects($this->once())
             ->method('getClassMetadata')
@@ -93,7 +103,7 @@ class DomainUtilTest extends TestCase
                 'id',
             ]));
 
-        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
+        /* @var ObjectManager|MockObject $om */
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
         $om->expects($this->once())
             ->method('getClassMetadata')
@@ -105,38 +115,38 @@ class DomainUtilTest extends TestCase
         $this->assertSame('id', $identifierName);
     }
 
-    public function testGetEventNameCreate()
+    public function testGetEventClassCreate()
     {
-        $names = DomainUtil::getEventNames(Domain::TYPE_CREATE);
-        $validNames = [ResourceEvents::PRE_CREATES, ResourceEvents::POST_CREATES];
+        $classes = DomainUtil::getEventClasses(Domain::TYPE_CREATE);
+        $validClasses = [PreCreatesEvent::class, PostCreatesEvent::class];
+        $this->assertSame($validClasses, $classes);
+    }
+
+    public function testGetEventClassUpdate()
+    {
+        $names = DomainUtil::getEventClasses(Domain::TYPE_UPDATE);
+        $validNames = [PreUpdatesEvent::class, PostUpdatesEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testGetEventNameUpdate()
+    public function testGetEventClassUpsert()
     {
-        $names = DomainUtil::getEventNames(Domain::TYPE_UPDATE);
-        $validNames = [ResourceEvents::PRE_UPDATES, ResourceEvents::POST_UPDATES];
+        $names = DomainUtil::getEventClasses(Domain::TYPE_UPSERT);
+        $validNames = [PreUpsertsEvent::class, PostUpsertsEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testGetEventNameUpsert()
+    public function testGetEventClassDelete()
     {
-        $names = DomainUtil::getEventNames(Domain::TYPE_UPSERT);
-        $validNames = [ResourceEvents::PRE_UPSERTS, ResourceEvents::POST_UPSERTS];
+        $names = DomainUtil::getEventClasses(Domain::TYPE_DELETE);
+        $validNames = [PreDeletesEvent::class, PostDeletesEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testGetEventNameDelete()
+    public function testGetEventClassUndelete()
     {
-        $names = DomainUtil::getEventNames(Domain::TYPE_DELETE);
-        $validNames = [ResourceEvents::PRE_DELETES, ResourceEvents::POST_DELETES];
-        $this->assertSame($validNames, $names);
-    }
-
-    public function testGetEventNameUndelete()
-    {
-        $names = DomainUtil::getEventNames(Domain::TYPE_UNDELETE);
-        $validNames = [ResourceEvents::PRE_UNDELETES, ResourceEvents::POST_UNDELETES];
+        $names = DomainUtil::getEventClasses(Domain::TYPE_UNDELETE);
+        $validNames = [PreUndeletesEvent::class, PostUndeletesEvent::class];
         $this->assertSame($validNames, $names);
     }
 
@@ -146,7 +156,7 @@ class DomainUtilTest extends TestCase
         $errors->expects($this->once())
             ->method('add');
 
-        /* @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $resource */
+        /* @var ResourceInterface|MockObject $resource */
         $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getErrors')
@@ -171,14 +181,6 @@ class DomainUtilTest extends TestCase
 
         $this->assertCount(1, $searchIds);
         $this->assertSame(5, $searchIds[0]);
-    }
-
-    public function testGenerateShortName()
-    {
-        $this->assertSame('MockDriverException', DomainUtil::generateShortName(MockDriverException::class));
-        $this->assertSame('stdClass', DomainUtil::generateShortName(\stdClass::class));
-        $this->assertSame('Foo', DomainUtil::generateShortName('FooInterface'));
-        $this->assertSame('Bar', DomainUtil::generateShortName('Foo\BarInterface'));
     }
 
     public function testInjectErrorMessage()
@@ -219,7 +221,7 @@ class DomainUtilTest extends TestCase
         $errors->expects($this->once())
             ->method('addAll');
 
-        /* @var ResourceListInterface|\PHPUnit_Framework_MockObject_MockObject $resource */
+        /* @var ResourceListInterface|MockObject $resource */
         $resource = $this->getMockBuilder(ResourceListInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getErrors')
@@ -227,7 +229,7 @@ class DomainUtilTest extends TestCase
 
         $listErrors = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
 
-        /* @var ResourceListInterface|\PHPUnit_Framework_MockObject_MockObject $resourceList */
+        /* @var ResourceListInterface|MockObject $resourceList */
         $resourceList = $this->getMockBuilder(ResourceListInterface::class)->getMock();
         $resourceList->expects($this->once())
             ->method('getErrors')

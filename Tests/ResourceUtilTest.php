@@ -14,6 +14,7 @@ namespace Fxp\Component\Resource\Tests;
 use Fxp\Component\Resource\Model\SoftDeletableInterface;
 use Fxp\Component\Resource\ResourceListInterface;
 use Fxp\Component\Resource\ResourceUtil;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 
@@ -77,7 +78,7 @@ class ResourceUtilTest extends TestCase
 
     public function testValidateObjectResourceWithForm()
     {
-        /* @var FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /* @var FormInterface|MockObject */
         $form = $this->getMockBuilder(FormInterface::class)->getMock();
         $form->expects($this->once())
             ->method('getData')
@@ -92,7 +93,7 @@ class ResourceUtilTest extends TestCase
      */
     public function testValidateObjectResourceWithoutAllowedForm()
     {
-        /* @var FormInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /* @var FormInterface|MockObject */
         $form = $this->getMockBuilder(FormInterface::class)->getMock();
         $form->expects($this->never())
             ->method('getData');

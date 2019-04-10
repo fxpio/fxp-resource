@@ -11,9 +11,7 @@
 
 namespace Fxp\Component\Resource\Event;
 
-use Fxp\Component\Resource\Domain\DomainInterface;
 use Fxp\Component\Resource\ResourceListInterface;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -21,12 +19,12 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class ResourceEvent extends Event
+abstract class ResourceEvent extends Event
 {
     /**
-     * @var DomainInterface
+     * @var string
      */
-    private $domain;
+    private $class;
 
     /**
      * @var ResourceListInterface
@@ -36,23 +34,23 @@ class ResourceEvent extends Event
     /**
      * Constructor.
      *
-     * @param DomainInterface       $domain    The resource domain for this resources
+     * @param string                $class     The class name of resources
      * @param ResourceListInterface $resources The list of resource instances
      */
-    public function __construct(DomainInterface $domain, ResourceListInterface $resources)
+    public function __construct($class, ResourceListInterface $resources)
     {
-        $this->domain = $domain;
+        $this->class = $class;
         $this->resources = $resources;
     }
 
     /**
-     * Get the resource domain for this resources.
+     * Get the class name of resources.
      *
-     * @return DomainInterface
+     * @return string
      */
-    public function getDomain()
+    public function getClass()
     {
-        return $this->domain;
+        return $this->class;
     }
 
     /**
@@ -66,29 +64,14 @@ class ResourceEvent extends Event
     }
 
     /**
-     * Build the name of resource event.
+     * Check if the the event resource is the specified class.
      *
-     * @param string $name      The name of event
-     * @param string $shortName The short name of resource
+     * @param string $class The class name
      *
-     * @return string
+     * @return bool
      */
-    public static function build($name, $shortName)
+    public function is($class)
     {
-        return static::formatEventPrefix($shortName).$name;
-    }
-
-    /**
-     * Format the prefix of event.
-     *
-     * @param string $shortName The short name of resource
-     *
-     * @return string
-     */
-    public static function formatEventPrefix($shortName)
-    {
-        $name = Container::underscore($shortName);
-
-        return str_replace(['\\', '/', ' '], '_', $name);
+        return is_a($this->class, $class, true) || \in_array($class, class_implements($class), true);
     }
 }

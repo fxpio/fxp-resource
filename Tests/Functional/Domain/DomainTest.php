@@ -38,14 +38,6 @@ class DomainTest extends AbstractDomainTest
         $this->assertInstanceOf('Doctrine\Common\Persistence\ObjectRepository', $domain->getRepository());
     }
 
-    public function testGetEventPrefix()
-    {
-        $domain = $this->createDomain();
-
-        $valid = 'foo';
-        $this->assertSame($valid, $domain->getEventPrefix());
-    }
-
     public function testNewInstance()
     {
         $domain = $this->createDomain(Foo::class);

@@ -13,6 +13,7 @@ namespace Fxp\Component\Resource\Tests\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Fxp\Component\Resource\Domain\DomainDoctrineUtil;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,7 +25,7 @@ class DomainDoctrineUtilTest extends TestCase
 {
     public function testGetManagerWithInvalidClass()
     {
-        /* @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject $registry */
+        /* @var ManagerRegistry|MockObject $registry */
         $registry = $this->getMockBuilder(ManagerRegistry::class)->getMock();
 
         $registry->expects($this->once())

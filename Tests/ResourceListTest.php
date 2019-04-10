@@ -15,6 +15,7 @@ use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceList;
 use Fxp\Component\Resource\ResourceListStatutes;
 use Fxp\Component\Resource\ResourceStatutes;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
@@ -205,7 +206,7 @@ class ResourceListTest extends TestCase
 
     public function testGetEmptyErrorsAndChildrenErrors()
     {
-        /* @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $errorResource */
+        /* @var ResourceInterface|MockObject $errorResource */
         $errorResource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
         $errorResource->expects($this->any())
             ->method('getStatus')

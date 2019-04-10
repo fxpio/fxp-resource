@@ -134,6 +134,8 @@ abstract class BaseDomain extends AbstractDomain
      * @param \Exception                       $e          The exception on flush transaction
      * @param ConstraintViolationListInterface $violations The constraint violation list
      * @param object|null                      $object     The resource for auto commit or null for flush at the end
+     *
+     * @throws
      */
     protected function flushTransactionException(\Exception $e, ConstraintViolationListInterface $violations, $object = null)
     {
@@ -152,6 +154,8 @@ abstract class BaseDomain extends AbstractDomain
 
     /**
      * Cancel transaction.
+     *
+     * @throws
      */
     protected function cancelTransaction()
     {

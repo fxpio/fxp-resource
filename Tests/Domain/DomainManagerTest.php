@@ -11,10 +11,10 @@
 
 namespace Fxp\Component\Resource\Tests\Domain;
 
-use Fxp\Component\Resource\Domain\DomainAwareInterface;
 use Fxp\Component\Resource\Domain\DomainFactoryInterface;
 use Fxp\Component\Resource\Domain\DomainInterface;
 use Fxp\Component\Resource\Domain\DomainManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,12 +25,12 @@ use PHPUnit\Framework\TestCase;
 class DomainManagerTest extends TestCase
 {
     /**
-     * @var DomainFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainFactoryInterface|MockObject
      */
     protected $factory;
 
     /**
-     * @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainInterface|MockObject
      */
     protected $domain;
 
@@ -48,137 +48,41 @@ class DomainManagerTest extends TestCase
             ->method('getClass')
             ->will($this->returnValue('Foo'));
 
-        $this->domain->expects($this->any())
-            ->method('getShortName')
-            ->will($this->returnValue('ShortFoo'));
-
-        $this->factory->expects($this->atLeastOnce())
-            ->method('injectDependencies')
-            ->willReturn($this->domain);
-
-        $this->factory->expects($this->atLeastOnce())
-            ->method('getShortNames')
-            ->willReturn([
-                'std' => \stdClass::class,
-            ]);
-
-        $this->manager = new DomainManager([$this->domain], $this->factory);
+        $this->manager = new DomainManager($this->factory);
     }
 
     public function testHas()
     {
-        $this->factory->expects($this->at(0))
+        $this->factory->expects($this->any())
             ->method('isManagedClass')
-            ->with('Bar')
-            ->willReturn(false);
+            ->willReturnCallback(static function ($value) {
+                return 'Foo' === $value;
+            });
 
         $this->assertTrue($this->manager->has('Foo'));
-        $this->assertTrue($this->manager->has('ShortFoo'));
         $this->assertFalse($this->manager->has('Bar'));
-    }
-
-    public function testAddDomainAware()
-    {
-        /* @var DomainAwareInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder(DomainAwareInterface::class)->getMock();
-
-        $domain->expects($this->once())
-            ->method('setDomainManager')
-            ->with($this->manager);
-
-        $this->manager->add($domain);
-    }
-
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The resource domain for the class "Foo" already exist
-     */
-    public function testAddAlreadyExistingClass()
-    {
-        /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
-        $domain->expects($this->once())
-            ->method('getClass')
-            ->willReturn('Foo');
-
-        $this->manager->add($domain);
-    }
-
-    public function testRemove()
-    {
-        $this->assertTrue($this->manager->has('Foo'));
-
-        $this->factory->expects($this->once())
-            ->method('getManagedClass')
-            ->with('Foo')
-            ->willReturn('Foo');
-
-        $this->manager->remove('Foo');
-
-        $this->assertFalse($this->manager->has('Foo'));
-    }
-
-    public function testAll()
-    {
-        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
-        $domain->expects($this->once())
-            ->method('getClass')
-            ->willReturn(\stdClass::class);
-
-        $this->factory->expects($this->once())
-            ->method('create')
-            ->with(\stdClass::class)
-            ->willReturn($domain);
-
-        $expected = [
-            'Foo' => $this->domain,
-            \stdClass::class => $domain,
-        ];
-
-        $this->assertSame($expected, $this->manager->all());
-    }
-
-    public function testGetShortNames()
-    {
-        $expected = [
-            'std' => \stdClass::class,
-            'ShortFoo' => 'Foo',
-        ];
-
-        $this->assertSame($expected, $this->manager->getShortNames());
     }
 
     public function testGet()
     {
-        $this->assertTrue($this->manager->has('Foo'));
+        $this->factory->expects($this->once())
+            ->method('isManagedClass')
+            ->with('FooInterface')
+            ->willReturn(true);
+
+        $this->assertTrue($this->manager->has('FooInterface'));
 
         $this->factory->expects($this->once())
             ->method('getManagedClass')
-            ->with('Foo')
+            ->with('FooInterface')
             ->willReturn('Foo');
-
-        $this->assertSame($this->domain, $this->manager->get('Foo'));
-    }
-
-    public function testGetWithoutExistingDomain()
-    {
-        $this->assertFalse($this->manager->has(\stdClass::class));
-
-        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
-        $domain->expects($this->once())
-            ->method('getClass')
-            ->willReturn(\stdClass::class);
-
-        $this->factory->expects($this->once())
-            ->method('getManagedClass')
-            ->with(\stdClass::class)
-            ->willReturn(\stdClass::class);
 
         $this->factory->expects($this->once())
             ->method('create')
-            ->with(\stdClass::class)
-            ->willReturn($domain);
+            ->with('Foo')
+            ->willReturn($this->domain);
 
-        $this->assertSame($domain, $this->manager->get(\stdClass::class));
+        $this->assertSame($this->domain, $this->manager->get('FooInterface'));
+        $this->assertTrue($this->manager->has('Foo'));
     }
 }

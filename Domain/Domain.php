@@ -11,11 +11,11 @@
 
 namespace Fxp\Component\Resource\Domain;
 
-use Doctrine\ORM\EntityManager;
-use Fxp\Component\Resource\Event\ResourceEvent;
+use Doctrine\ORM\EntityManagerInterface;
+use Fxp\Component\Resource\Event\PostDeletesEvent;
+use Fxp\Component\Resource\Event\PreDeletesEvent;
 use Fxp\Component\Resource\Exception\BadMethodCallException;
 use Fxp\Component\Resource\Model\SoftDeletableInterface;
-use Fxp\Component\Resource\ResourceEvents;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceItem;
 use Fxp\Component\Resource\ResourceListInterface;
@@ -35,7 +35,7 @@ class Domain extends BaseDomain
      */
     public function createQueryBuilder($alias = 'o', $indexBy = null)
     {
-        if ($this->om instanceof EntityManager) {
+        if ($this->om instanceof EntityManagerInterface) {
             return $this->getRepository()->createQueryBuilder($alias, $indexBy);
         }
 
@@ -49,12 +49,12 @@ class Domain extends BaseDomain
     {
         $list = ResourceUtil::convertObjectsToResourceList(array_values($resources), $this->getClass(), false);
 
-        $this->dispatchEvent(ResourceEvents::PRE_DELETES, new ResourceEvent($this, $list));
+        $this->dispatchEvent(new PreDeletesEvent($this->getClass(), $list));
         $this->beginTransaction($autoCommit);
         $hasError = $this->doDeleteList($list, $autoCommit, $soft);
         $this->doFlushFinalTransaction($list, $autoCommit, $hasError);
 
-        $this->dispatchEvent(ResourceEvents::POST_DELETES, new ResourceEvent($this, $list));
+        $this->dispatchEvent(new PostDeletesEvent($this->getClass(), $list));
 
         return $list;
     }
@@ -119,19 +119,19 @@ class Domain extends BaseDomain
      */
     protected function persist(array $resources, $autoCommit, $type, array $errorResources = [])
     {
-        list($preEvent, $postEvent) = DomainUtil::getEventNames($type);
+        list($preEventClass, $postEventClass) = DomainUtil::getEventClasses($type);
         $list = ResourceUtil::convertObjectsToResourceList(array_values($resources), $this->getClass());
 
         foreach ($errorResources as $errorResource) {
             $list->add($errorResource);
         }
 
-        $this->dispatchEvent($preEvent, new ResourceEvent($this, $list));
+        $this->dispatchEvent(new $preEventClass($this->getClass(), $list));
         $this->beginTransaction($autoCommit);
         $hasError = $this->doPersistList($list, $autoCommit, $type);
         $this->doFlushFinalTransaction($list, $autoCommit, $hasError);
 
-        $this->dispatchEvent($postEvent, new ResourceEvent($this, $list));
+        $this->dispatchEvent(new $postEventClass($this->getClass(), $list));
 
         return $list;
     }
@@ -154,14 +154,12 @@ class Domain extends BaseDomain
         foreach ($resources as $i => $resource) {
             if (!$autoCommit && $hasError) {
                 $resource->setStatus(ResourceStatutes::CANCELED);
-                continue;
             } elseif ($autoCommit && $hasFlushError && $hasError) {
                 DomainUtil::addResourceError($resource, $this->translator->trans('domain.database_previous_error', [], 'FxpResource'));
-                continue;
+            } else {
+                list($successStatus, $hasFlushError) = $this->doPersistResource($resource, $autoCommit, $type);
+                $hasError = $this->finalizeResourceStatus($resource, $successStatus, $hasError);
             }
-
-            list($successStatus, $hasFlushError) = $this->doPersistResource($resource, $autoCommit, $type);
-            $hasError = $this->finalizeResourceStatus($resource, $successStatus, $hasError);
         }
 
         return $hasError;
@@ -209,7 +207,7 @@ class Domain extends BaseDomain
             $object = $resource->getRealData();
 
             if ($object instanceof SoftDeletableInterface) {
-                $object->setDeletedAt(null);
+                $object->setDeletedAt();
             } else {
                 DomainUtil::addResourceError($resource, $this->translator->trans('domain.resource_type_not_undeleted', [], 'FxpResource'));
             }
@@ -282,6 +280,8 @@ class Domain extends BaseDomain
      * @param bool              $soft     The soft deletable
      *
      * @return bool Check if the resource is skipped or deleted
+     *
+     * @throws
      */
     protected function doDeleteResource(ResourceInterface $resource, $soft)
     {

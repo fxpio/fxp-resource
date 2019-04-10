@@ -30,13 +30,6 @@ interface DomainFactoryInterface
     public function addResolveTargets(array $resolveTargets);
 
     /**
-     * Get the map of short names and class names.
-     *
-     * @return array
-     */
-    public function getShortNames();
-
-    /**
      * Check if the class is managed by doctrine.
      *
      * @param string $class The class name
@@ -59,21 +52,11 @@ interface DomainFactoryInterface
     /**
      * Create a resource domain.
      *
-     * @param string      $class     The class name
-     * @param string|null $shortName The short name
+     * @param string $class The class name
      *
      * @return DomainInterface
      *
      * @throws InvalidArgumentException When the class is not registered in doctrine
      */
-    public function create($class, $shortName = null);
-
-    /**
-     * * Inject the dependencies of domain.
-     *
-     * @param DomainInterface $domain The resource domain
-     *
-     * @return DomainInterface
-     */
-    public function injectDependencies(DomainInterface $domain);
+    public function create($class);
 }

@@ -11,16 +11,23 @@
 
 namespace Fxp\Component\Resource\Tests\Domain;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Fxp\Component\Resource\Domain\Domain;
+use Fxp\Component\Resource\Domain\DomainFactory;
 use Fxp\Component\Resource\Object\ObjectFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Tests case for Domain.
@@ -29,51 +36,96 @@ use PHPUnit\Framework\TestCase;
  */
 class DomainTest extends TestCase
 {
-    public function getShortNames()
-    {
-        return [
-            [null,              'stdClass'],
-            ['CustomShortName', 'CustomShortName'],
-        ];
-    }
+    /**
+     * @var DomainFactory
+     */
+    protected $factory;
 
     /**
-     * @dataProvider getShortNames
-     *
-     * @param string|null $shortName      The short name of domain
-     * @param string      $validShortName The valid short name of domain
+     * @var ObjectManager|MockObject
      */
-    public function testShortName($shortName, $validShortName)
-    {
-        $domain = new Domain(\stdClass::class, $shortName);
+    protected $objectManager;
 
-        $this->assertSame($validShortName, $domain->getShortName());
+    /**
+     * @var ClassMetadataFactory|MockObject
+     */
+    protected $metaFactory;
+
+    /**
+     * @var ManagerRegistry|MockObject
+     */
+    protected $registry;
+
+    /**
+     * @var EventDispatcherInterface|MockObject
+     */
+    protected $eventDispatcher;
+
+    /**
+     * @var ObjectFactoryInterface|MockObject
+     */
+    protected $objectFactory;
+
+    /**
+     * @var ValidatorInterface|MockObject
+     */
+    protected $validator;
+
+    /**
+     * @var TranslatorInterface|MockObject
+     */
+    protected $translator;
+
+    /**
+     * @var Domain
+     */
+    protected $domain;
+
+    protected function setUp()
+    {
+        $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $this->objectFactory = $this->getMockBuilder(ObjectFactoryInterface::class)->getMock();
+        $this->validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
+        $this->translator = $this->getMockBuilder(TranslatorInterface::class)->getMock();
+        $this->objectManager = $this->createMockObjectManager();
+        $this->metaFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $this->registry = $this->getMockBuilder(ManagerRegistry::class)->getMock();
+
+        $this->domain = new Domain(\stdClass::class,
+            $this->objectManager,
+            $this->objectFactory,
+            $this->eventDispatcher,
+            $this->validator,
+            $this->translator
+        );
+    }
+
+    protected function tearDown()
+    {
+        $this->eventDispatcher = null;
+        $this->objectFactory = null;
+        $this->validator = null;
+        $this->translator = null;
+        $this->objectManager = null;
+        $this->metaFactory = null;
+        $this->registry = null;
+        $this->domain = null;
     }
 
     public function testCreateQueryBuilder()
     {
-        $domain = new Domain(\stdClass::class);
-        $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
-        $meta->expects($this->once())
-            ->method('getName')
-            ->willReturn(\stdClass::class);
-        $om = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $om->expects($this->once())
-            ->method('getClassMetadata')
-            ->willReturn($meta);
         $mockRepo = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $qbMock = $this->getMockBuilder(QueryBuilder::class)->disableOriginalConstructor()->getMock();
         $mockRepo->expects($this->once())
             ->method('createQueryBuilder')
             ->willReturn($qbMock);
-        $om->expects($this->once())
+        $this->objectManager->expects($this->once())
             ->method('getRepository')
-            ->will($this->returnValue($mockRepo));
-        /* @var EntityManager $om */
-        $domain->setObjectManager($om);
-        $qb = $domain->createQueryBuilder('f');
+            ->willReturn($mockRepo);
 
-        $this->assertSame($om, $domain->getObjectManager());
+        $qb = $this->domain->createQueryBuilder('f');
+
+        $this->assertSame($this->objectManager, $this->domain->getObjectManager());
         $this->assertSame($qbMock, $qb);
     }
 
@@ -83,8 +135,17 @@ class DomainTest extends TestCase
      */
     public function testCreateQueryBuilderInvalidObjectManager()
     {
-        $domain = new Domain(\stdClass::class);
-        $domain->createQueryBuilder();
+        $this->objectManager = $this->createMockObjectManager(ObjectManager::class);
+
+        $this->domain = new Domain(\stdClass::class,
+            $this->objectManager,
+            $this->objectFactory,
+            $this->eventDispatcher,
+            $this->validator,
+            $this->translator
+        );
+
+        $this->domain->createQueryBuilder();
     }
 
     /**
@@ -93,90 +154,93 @@ class DomainTest extends TestCase
      */
     public function testInvalidObjectManager()
     {
-        $domain = new Domain(\stdClass::class);
-        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
-        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
-        $om->expects($this->once())
+        $objectManager = $this->createMockObjectManager(ObjectManager::class);
+        $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willThrowException(new MappingException());
 
-        $domain->setObjectManager($om);
+        new Domain(\stdClass::class,
+            $objectManager,
+            $this->objectFactory,
+            $this->eventDispatcher,
+            $this->validator,
+            $this->translator
+        );
     }
 
     public function testGetRepository()
     {
-        $domain = new Domain(\stdClass::class);
-        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
-        $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
-        $meta->expects($this->once())
-            ->method('getName')
-            ->willReturn(\stdClass::class);
-        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
-        $om->expects($this->once())
-            ->method('getClassMetadata')
-            ->willReturn($meta);
-
-        $domain->setObjectManager($om);
-
         $mockRepo = $this->getMockBuilder(ObjectRepository::class)->getMock();
 
-        $om->expects($this->once())
+        $this->objectManager->expects($this->once())
             ->method('getRepository')
             ->with(\stdClass::class)
-            ->will($this->returnValue($mockRepo));
+            ->willReturn($mockRepo);
 
-        $repo = $domain->getRepository();
+        $repo = $this->domain->getRepository();
 
         $this->assertSame($mockRepo, $repo);
     }
 
     public function testGetClassMetadata()
     {
-        $domain = new Domain(\stdClass::class);
-        /* @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject $om */
         $mockMeta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $mockMeta->expects($this->once())
             ->method('getName')
             ->willReturn(\stdClass::class);
-        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
-        $om->expects($this->atLeast(2))
-            ->method('getClassMetadata')
-            ->with(\stdClass::class)
-            ->willReturn($mockMeta);
 
-        $domain->setObjectManager($om);
+        $objectManager = $this->createMockObjectManager(ObjectManager::class, $mockMeta);
+        $domain = new Domain(\stdClass::class,
+            $objectManager,
+            $this->objectFactory,
+            $this->eventDispatcher,
+            $this->validator,
+            $this->translator
+        );
 
         $meta = $domain->getClassMetadata();
 
         $this->assertSame($mockMeta, $meta);
     }
 
-    public function testGetEventPrefix()
-    {
-        $domain = new Domain(\stdClass::class);
-
-        $this->assertSame('std_class', $domain->getEventPrefix());
-    }
-
     public function testNewInstance()
     {
-        $domain = new Domain(\stdClass::class);
-
-        /* @var ObjectFactoryInterface|\PHPUnit_Framework_MockObject_MockObject $of */
-        $of = $this->getMockBuilder(ObjectFactoryInterface::class)->getMock();
-
-        $domain->setObjectFactory($of);
-
         $instance = new \stdClass();
 
-        $of->expects($this->once())
+        $this->objectFactory->expects($this->once())
             ->method('create')
             ->with(\stdClass::class, [])
-            ->will($this->returnValue($instance));
+            ->willReturn($instance);
 
-        $val = $domain->newInstance();
+        $val = $this->domain->newInstance();
 
         $this->assertSame($instance, $val);
+    }
+
+    /**
+     * Create the mock object manager?
+     *
+     * @param string                        $class The class name of object manager
+     * @param ClassMetadata|MockObject|null $meta  The class metadata
+     *
+     * @return ObjectManager|MockObject
+     */
+    protected function createMockObjectManager($class = EntityManagerInterface::class, $meta = null)
+    {
+        $objectManager = $this->getMockBuilder($class)->getMock();
+
+        if (null === $meta) {
+            $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
+            $meta->expects($this->any())
+                ->method('getName')
+                ->willReturn(\stdClass::class);
+        }
+
+        $objectManager->expects($this->any())
+            ->method('getClassMetadata')
+            ->willReturn($meta);
+
+        return $objectManager;
     }
 }

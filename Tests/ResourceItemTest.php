@@ -13,6 +13,7 @@ namespace Fxp\Component\Resource\Tests;
 
 use Fxp\Component\Resource\ResourceItem;
 use Fxp\Component\Resource\ResourceStatutes;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Test\FormInterface;
 
@@ -55,7 +56,7 @@ class ResourceItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /* @var FormInterface|\PHPUnit_Framework_MockObject_MockObject $form */
+        /* @var FormInterface|MockObject $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\FormInterface')->getMock();
         $form->expects($this->any())
             ->method('getData')
@@ -91,7 +92,7 @@ class ResourceItemTest extends TestCase
         /* @var object $object */
         $object = 42;
 
-        /* @var FormInterface|\PHPUnit_Framework_MockObject_MockObject $form */
+        /* @var FormInterface|MockObject $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\FormInterface')->getMock();
         $form->expects($this->any())
             ->method('getData')

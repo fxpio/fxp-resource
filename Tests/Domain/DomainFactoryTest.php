@@ -18,8 +18,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
 use Fxp\Component\Resource\Domain\Domain;
 use Fxp\Component\Resource\Domain\DomainFactory;
-use Fxp\Component\Resource\Domain\DomainInterface;
 use Fxp\Component\Resource\Object\ObjectFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -38,37 +38,37 @@ class DomainFactoryTest extends TestCase
     protected $factory;
 
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var ClassMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClassMetadataFactory|MockObject
      */
     protected $metaFactory;
 
     /**
-     * @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerRegistry|MockObject
      */
     protected $registry;
 
     /**
-     * @var EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EventDispatcherInterface|MockObject
      */
     protected $eventDispatcher;
 
     /**
-     * @var ObjectFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectFactoryInterface|MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorInterface|MockObject
      */
     protected $validator;
 
     /**
-     * @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TranslatorInterface|MockObject
      */
     protected $translator;
 
@@ -101,27 +101,6 @@ class DomainFactoryTest extends TestCase
     public function testAddResolveTargets()
     {
         $this->assertInstanceOf(DomainFactory::class, $this->factory->addResolveTargets(['FooInterface' => 'Foo']));
-    }
-
-    public function testGetShortNames()
-    {
-        $expected = [
-            'Foo' => 'Bar\Foo',
-        ];
-
-        /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $metaFoo */
-        $metaFoo = $this->getMockBuilder(ClassMetadata::class)->getMock();
-        $metaFoo->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Bar\Foo'));
-
-        $this->metaFactory->expects($this->once())
-            ->method('getAllMetadata')
-            ->willReturn([$metaFoo]);
-
-        $res = $this->factory->getShortNames();
-
-        $this->assertSame($expected, $res);
     }
 
     public function testIsManagedClass()
@@ -159,7 +138,7 @@ class DomainFactoryTest extends TestCase
             ->with(\stdClass::class)
             ->willReturn($this->objectManager);
 
-        /* @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $meta */
+        /* @var ClassMetadata|MockObject $meta */
         $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $meta->expects($this->any())
             ->method('getName')
@@ -200,7 +179,7 @@ class DomainFactoryTest extends TestCase
      */
     public function testGetManagedClassWithOrmMappedSuperClass()
     {
-        /* @var OrmClassMetadata|\PHPUnit_Framework_MockObject_MockObject $meta */
+        /* @var OrmClassMetadata|MockObject $meta */
         $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
         $meta->isMappedSuperclass = true;
 
@@ -219,47 +198,26 @@ class DomainFactoryTest extends TestCase
 
     public function testCreate()
     {
-        $domain = $this->factory->create(\stdClass::class, 'std');
+        /* @var OrmClassMetadata|MockObject $meta */
+        $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
 
-        $this->assertInstanceOf(Domain::class, $domain);
-        $this->assertSame(\stdClass::class, $domain->getClass());
-        $this->assertSame('std', $domain->getShortName());
-    }
-
-    public function testInjectDependencies()
-    {
-        /* @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject $domain */
-        $domain = $this->getMockBuilder(DomainInterface::class)->getMock();
-
-        $domain->expects($this->once())
-            ->method('getClass')
+        $meta->expects($this->once())
+            ->method('getName')
             ->willReturn(\stdClass::class);
 
-        $domain->expects($this->once())
-            ->method('setDebug')
-            ->with(false);
+        $this->objectManager->expects($this->any())
+            ->method('getClassMetadata')
+            ->with(\stdClass::class)
+            ->willReturn($meta);
 
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn($this->objectManager);
 
-        $domain->expects($this->once())
-            ->method('setObjectManager')
-            ->with($this->objectManager);
+        $domain = $this->factory->create(\stdClass::class);
 
-        $domain->expects($this->once())
-            ->method('setEventDispatcher')
-            ->with($this->eventDispatcher);
-
-        $domain->expects($this->once())
-            ->method('setObjectFactory')
-            ->with($this->objectFactory);
-
-        $domain->expects($this->once())
-            ->method('setValidator')
-            ->with($this->validator);
-
-        $this->factory->injectDependencies($domain);
+        $this->assertInstanceOf(Domain::class, $domain);
+        $this->assertSame(\stdClass::class, $domain->getClass());
     }
 }

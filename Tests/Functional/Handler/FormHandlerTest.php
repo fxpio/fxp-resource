@@ -17,6 +17,7 @@ use Fxp\Component\Resource\Handler\FormConfigListInterface;
 use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
 use Fxp\Component\Resource\Tests\Fixtures\Form\FooType;
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -208,7 +209,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
      * @param array           $objects
      * @param InvokedRecorder $count
      *
-     * @return FormConfigListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FormConfigListInterface|MockObject
      */
     protected function createFormConfigList($objects, InvokedRecorder $count)
     {

@@ -13,8 +13,8 @@ namespace Fxp\Component\Resource\Tests\Functional\Domain;
 
 use Doctrine\ORM\Events;
 use Fxp\Component\Resource\Domain\DomainInterface;
-use Fxp\Component\Resource\Event\ResourceEvent;
-use Fxp\Component\Resource\ResourceEvents;
+use Fxp\Component\Resource\Event\PostCreatesEvent;
+use Fxp\Component\Resource\Event\PreCreatesEvent;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceListInterface;
 use Fxp\Component\Resource\ResourceListStatutes;
@@ -56,16 +56,16 @@ class DomainCreateTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_CREATES, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_CREATES, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
             }
@@ -96,16 +96,16 @@ class DomainCreateTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_CREATES, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_CREATES, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::CREATED, $resource->getStatus());
             }
@@ -153,16 +153,16 @@ class DomainCreateTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_CREATES, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_CREATES, function (ResourceEvent $e) use (&$postEvent, $autoCommit, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $autoCommit, $domain) {
             $postEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             $resources = $e->getResources();
             $this->assertCount(2, $resources);
             $this->assertSame(ResourceStatutes::ERROR, $resources[0]->getStatus());
@@ -246,16 +246,16 @@ class DomainCreateTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_CREATES, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_CREATES, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
             }
@@ -294,16 +294,16 @@ class DomainCreateTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::PRE_CREATES, function (ResourceEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
             $preEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener($domain->getEventPrefix().ResourceEvents::POST_CREATES, function (ResourceEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
             $postEvent = true;
-            $this->assertSame($domain, $e->getDomain());
+            $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
             }

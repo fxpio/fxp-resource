@@ -12,10 +12,6 @@
 namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\Mapping\ClassMetadata as OrmClassMetadata;
-use Fxp\Component\Resource\Exception\InvalidArgumentException;
 use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -110,30 +106,9 @@ class DomainFactory implements DomainFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getShortNames()
-    {
-        $names = [];
-
-        foreach ($this->or->getManagers() as $manager) {
-            /* @var ClassMetadata|OrmClassMetadata $meta */
-            foreach ($manager->getMetadataFactory()->getAllMetadata() as $meta) {
-                $isOrmMeta = $meta instanceof OrmClassMetadata;
-
-                if (!$isOrmMeta || ($isOrmMeta && !$meta->isMappedSuperclass)) {
-                    $names[DomainUtil::generateShortName($meta->getName())] = $meta->getName();
-                }
-            }
-        }
-
-        return $names;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isManagedClass($class)
     {
-        return null !== $this->getManager($class);
+        return null !== DomainDoctrineUtil::getManager($this->or, $this->findClassName($class));
     }
 
     /**
@@ -141,64 +116,27 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function getManagedClass($class)
     {
-        return $this->getRequiredManager($class)->getClassMetadata($class)->getName();
+        return DomainDoctrineUtil::getRequiredManager($this->or, $this->findClassName($class))
+            ->getClassMetadata($class)->getName();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function create($class, $shortName = null)
+    public function create($class)
     {
-        return new Domain($class, $shortName);
+        return new Domain($class,
+            DomainDoctrineUtil::getRequiredManager($this->or, $this->findClassName($class)),
+            $this->of,
+            $this->ed,
+            $this->validator,
+            $this->translator,
+            $this->undeleteDisableFilters,
+            $this->debug);
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function injectDependencies(DomainInterface $domain)
-    {
-        $domain->setDebug($this->debug);
-        $domain->setObjectManager($this->getRequiredManager($domain->getClass()), $this->undeleteDisableFilters);
-        $domain->setEventDispatcher($this->ed);
-        $domain->setObjectFactory($this->of);
-        $domain->setValidator($this->validator);
-        $domain->setTranslator($this->translator);
-
-        return $domain;
-    }
-
-    /**
-     * Get the doctrine object manager of the class.
-     *
-     * @param string $class The class name or doctrine shortcut class name
-     *
-     * @return ObjectManager|null
-     */
-    protected function getManager($class)
-    {
-        $class = $this->findClassName($class);
-
-        return DomainDoctrineUtil::getManager($this->or, $class);
-    }
-
-    /**
-     * Get the required object manager.
-     *
-     * @param string $class The class name
-     *
-     * @return ObjectManager
-     *
-     * @throws InvalidArgumentException When the class is not registered in doctrine
-     */
-    protected function getRequiredManager($class)
-    {
-        $class = $this->findClassName($class);
-
-        return DomainDoctrineUtil::getRequiredManager($this->or, $class);
-    }
-
-    /**
-     * Find the class name by the the short name.
+     * Find the class name by the the class name or the Doctrine resolved target.
      *
      * @param string $class The class name
      *
@@ -206,8 +144,6 @@ class DomainFactory implements DomainFactoryInterface
      */
     protected function findClassName($class)
     {
-        return isset($this->resolveTargets[$class])
-            ? $this->resolveTargets[$class]
-            : $class;
+        return $this->resolveTargets[$class] ?? $class;
     }
 }

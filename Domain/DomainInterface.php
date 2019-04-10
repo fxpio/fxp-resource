@@ -15,14 +15,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Fxp\Component\Resource\Exception\InvalidConfigurationException;
-use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceListInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A resource domain interface.
@@ -32,23 +27,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 interface DomainInterface
 {
     /**
-     * Set the debug mode.
-     *
-     * @param bool $debug The debug mode
-     */
-    public function setDebug($debug);
-
-    /**
-     * Set the doctrine object registry.
-     *
-     * @param ObjectManager $om             The object manager
-     * @param array         $disableFilters The list of doctrine filters must be disabled for undelete resources
-     *
-     * @throws InvalidConfigurationException When this resource domain class is not managed by doctrine
-     */
-    public function setObjectManager(ObjectManager $om, $disableFilters = []);
-
-    /**
      * Get the doctrine object registry.
      *
      * @return ObjectManager
@@ -56,46 +34,11 @@ interface DomainInterface
     public function getObjectManager();
 
     /**
-     * Set the event dispatcher.
-     *
-     * @param EventDispatcherInterface $ed
-     */
-    public function setEventDispatcher(EventDispatcherInterface $ed);
-
-    /**
-     * Set the object factory.
-     *
-     * @param ObjectFactoryInterface $of
-     */
-    public function setObjectFactory(ObjectFactoryInterface $of);
-
-    /**
-     * Set the validator.
-     *
-     * @param ValidatorInterface $validator The validator
-     */
-    public function setValidator(ValidatorInterface $validator);
-
-    /**
-     * Set the translator.
-     *
-     * @param TranslatorInterface $translator The translator
-     */
-    public function setTranslator(TranslatorInterface $translator);
-
-    /**
      * Get the class name for this resource domain.
      *
      * @return string
      */
     public function getClass();
-
-    /**
-     * Get the short name of this resource domain.
-     *
-     * @return string
-     */
-    public function getShortName();
 
     /**
      * Get the doctrine repository for this resource domain.
@@ -113,22 +56,6 @@ interface DomainInterface
      * @return QueryBuilder
      */
     public function createQueryBuilder($alias = 'o', $indexBy = null);
-
-    /**
-     * Get the prefix event of this domain.
-     *
-     * @return string
-     */
-    public function getEventPrefix();
-
-    /**
-     * Get the full qualified event name.
-     *
-     * @param string $name The event name defined in Fxp\Component\Resource\ResourceEvents
-     *
-     * @return string
-     */
-    public function getEventName($name);
 
     /**
      * Generate a new resource instance with default values.

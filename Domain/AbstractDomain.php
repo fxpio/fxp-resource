@@ -45,11 +45,6 @@ abstract class AbstractDomain implements DomainInterface
     protected $class;
 
     /**
-     * @var string
-     */
-    protected $shortName;
-
-    /**
      * @var Connection
      */
     protected $connection;
@@ -60,14 +55,14 @@ abstract class AbstractDomain implements DomainInterface
     protected $om;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    protected $ed;
-
-    /**
      * @var ObjectFactoryInterface
      */
     protected $of;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $ed;
 
     /**
      * @var ValidatorInterface;
@@ -97,36 +92,36 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * Constructor.
      *
-     * @param string      $class     The class name
-     * @param string|null $shortName The short name
+     * @param string                   $class          The class name
+     * @param ObjectManager            $om             The object manager
+     * @param ObjectFactoryInterface   $of             The object factory
+     * @param EventDispatcherInterface $ed             The event dispatcher
+     * @param ValidatorInterface       $validator      The validator
+     * @param TranslatorInterface      $translator     The translator
+     * @param array                    $disableFilters The list of doctrine filters must be disabled for undelete resources
+     * @param bool                     $debug          The debug mode
      */
-    public function __construct($class, $shortName = null)
-    {
-        $this->class = $class;
-        $this->shortName = $shortName;
-        $this->debug = false;
-        $this->disableFilters = [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDebug($debug)
-    {
-        $this->debug = (bool) $debug;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setObjectManager(ObjectManager $om, $disableFilters = [])
+    public function __construct($class,
+                                ObjectManager $om,
+                                ObjectFactoryInterface $of,
+                                EventDispatcherInterface $ed,
+                                ValidatorInterface $validator,
+                                TranslatorInterface $translator,
+                                $disableFilters = [],
+                                $debug = false)
     {
         $this->om = $om;
+        $this->of = $of;
+        $this->ed = $ed;
+        $this->validator = $validator;
+        $this->translator = $translator;
+        $this->disableFilters = [];
+        $this->debug = (bool) $debug;
 
         try {
-            $this->class = $om->getClassMetadata($this->class)->getName();
+            $this->class = $om->getClassMetadata($class)->getName();
         } catch (MappingException $e) {
-            $msg = sprintf('The "%s" class is not managed by doctrine object manager', $this->getClass());
+            $msg = sprintf('The "%s" class is not managed by doctrine object manager', $class);
             throw new InvalidConfigurationException($msg, 0, $e);
         }
 
@@ -147,53 +142,9 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function setEventDispatcher(EventDispatcherInterface $ed)
-    {
-        $this->ed = $ed;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setObjectFactory(ObjectFactoryInterface $of)
-    {
-        $this->of = $of;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setValidator(ValidatorInterface $validator)
-    {
-        $this->validator = $validator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTranslator(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getClass()
     {
         return $this->class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getShortName()
-    {
-        if (null === $this->shortName) {
-            $this->shortName = DomainUtil::generateShortName($this->class);
-        }
-
-        return $this->shortName;
     }
 
     /**
@@ -210,26 +161,6 @@ abstract class AbstractDomain implements DomainInterface
     public function getClassMetadata()
     {
         return $this->om->getClassMetadata($this->getClass());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEventPrefix()
-    {
-        if (null === $this->eventPrefix) {
-            $this->eventPrefix = ResourceEvent::formatEventPrefix($this->getShortName());
-        }
-
-        return $this->eventPrefix;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEventName($name)
-    {
-        return $this->getEventPrefix().$name;
     }
 
     /**
@@ -307,14 +238,15 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * Dispatch the event.
      *
-     * @param string        $name  The event name
      * @param ResourceEvent $event The event
      *
      * @return ResourceEvent
      */
-    protected function dispatchEvent($name, ResourceEvent $event)
+    protected function dispatchEvent(ResourceEvent $event)
     {
-        return $this->ed->dispatch($this->getEventName($name), $event);
+        $this->ed->dispatch(\get_class($event), $event);
+
+        return $event;
     }
 
     /**

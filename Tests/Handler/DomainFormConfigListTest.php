@@ -15,6 +15,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Fxp\Component\DefaultValue\Tests\Fixtures\Object\Foo;
 use Fxp\Component\Resource\Domain\DomainInterface;
 use Fxp\Component\Resource\Handler\DomainFormConfigList;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 
@@ -26,7 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 class DomainFormConfigListTest extends TestCase
 {
     /**
-     * @var DomainInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainInterface|MockObject
      */
     protected $domain;
 
