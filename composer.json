@@ -23,7 +23,7 @@
         "symfony/translation": "^4.2.0",
         "doctrine/persistence": "^1.0.0",
         "doctrine/orm": "^2.6.0",
-        "fxp/doctrine-extra": "^1.0.0",
+        "fxp/doctrine-extra": "^1.1.0",
         "fxp/doctrine-extensions": "^1.1.0"
     },
     "require-dev": {

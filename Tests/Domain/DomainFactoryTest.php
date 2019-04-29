@@ -144,7 +144,7 @@ class DomainFactoryTest extends TestCase
             ->method('getName')
             ->will($this->returnValue(\stdClass::class));
 
-        $this->objectManager->expects($this->atLeast(2))
+        $this->objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willReturn($meta);
@@ -155,8 +155,8 @@ class DomainFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The "stdClass" class is not registered in doctrine
+     * @expectedException \Fxp\Component\DoctrineExtra\Exception\ObjectManagerNotFoundException
+     * @expectedExceptionMessage The doctrine manager for the "stdClass" class is not found
      */
     public function testGetManagedClassWithNonManagedClass()
     {
@@ -174,11 +174,16 @@ class DomainFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The "stdClass" class is not registered in doctrine
+     * @expectedException \Fxp\Component\DoctrineExtra\Exception\ObjectManagerNotFoundException
+     * @expectedExceptionMessage The doctrine manager for the "stdClass" class is not found
      */
     public function testGetManagedClassWithOrmMappedSuperClass()
     {
+        $this->metaFactory->expects($this->atLeastOnce())
+            ->method('hasMetadataFor')
+            ->with(\stdClass::class)
+            ->willReturn(true);
+
         /* @var OrmClassMetadata|MockObject $meta */
         $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
         $meta->isMappedSuperclass = true;
@@ -191,7 +196,11 @@ class DomainFactoryTest extends TestCase
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
-            ->willReturn($this->objectManager);
+            ->willReturn(null);
+
+        $this->registry->expects($this->once())
+            ->method('getManagers')
+            ->willReturn([$this->objectManager]);
 
         $this->factory->getManagedClass(\stdClass::class);
     }

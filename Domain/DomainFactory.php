@@ -12,6 +12,7 @@
 namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Fxp\Component\DoctrineExtra\Util\ManagerUtils;
 use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -108,7 +109,7 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function isManagedClass($class)
     {
-        return null !== DomainDoctrineUtil::getManager($this->or, $this->findClassName($class));
+        return null !== ManagerUtils::getManager($this->or, $this->findClassName($class));
     }
 
     /**
@@ -116,7 +117,7 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function getManagedClass($class)
     {
-        return DomainDoctrineUtil::getRequiredManager($this->or, $this->findClassName($class))
+        return ManagerUtils::getRequiredManager($this->or, $this->findClassName($class))
             ->getClassMetadata($class)->getName();
     }
 
@@ -126,7 +127,7 @@ class DomainFactory implements DomainFactoryInterface
     public function create($class)
     {
         return new Domain($class,
-            DomainDoctrineUtil::getRequiredManager($this->or, $this->findClassName($class)),
+            ManagerUtils::getRequiredManager($this->or, $this->findClassName($class)),
             $this->of,
             $this->ed,
             $this->validator,
