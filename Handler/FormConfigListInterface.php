@@ -21,7 +21,7 @@ interface FormConfigListInterface extends FormConfigInterface
     /**
      * Set the limit of the size list.
      *
-     * @param int|null $limit The limit
+     * @param null|int $limit The limit
      *
      * @return self
      */
@@ -30,7 +30,7 @@ interface FormConfigListInterface extends FormConfigInterface
     /**
      * Get the limit of the size list.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getLimit();
 

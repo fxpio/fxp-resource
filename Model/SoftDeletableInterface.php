@@ -21,7 +21,7 @@ interface SoftDeletableInterface
     /**
      * Set deleted at.
      *
-     * @param \Datetime|null $deletedAt
+     * @param null|\Datetime $deletedAt
      *
      * @return $this
      */
@@ -30,7 +30,7 @@ interface SoftDeletableInterface
     /**
      * Get deleted at.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getDeletedAt();
 

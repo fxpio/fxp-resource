@@ -40,7 +40,7 @@ interface ResourceInterface
     /**
      * Get the data instance of this resource.
      *
-     * @return object|FormInterface
+     * @return FormInterface|object
      */
     public function getData();
 
@@ -61,9 +61,9 @@ interface ResourceInterface
     /**
      * Get the form errors.
      *
-     * @return FormErrorIterator
-     *
      * @throws InvalidArgumentException When the data is not a form
+     *
+     * @return FormErrorIterator
      */
     public function getFormErrors();
 

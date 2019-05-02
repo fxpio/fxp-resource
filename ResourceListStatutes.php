@@ -27,7 +27,7 @@ final class ResourceListStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const PENDING = 'pending';
+    public const PENDING = 'pending';
 
     /**
      * The ResourceStatutes::SUCCESSFULLY status is used when the all resources in the
@@ -36,7 +36,7 @@ final class ResourceListStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const SUCCESSFULLY = 'successfully';
+    public const SUCCESSFULLY = 'successfully';
 
     /**
      * The ResourceStatutes::MIXED status is used when several different statuses are
@@ -45,7 +45,7 @@ final class ResourceListStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const MIXED = 'mixed';
+    public const MIXED = 'mixed';
 
     /**
      * The ResourceStatutes::CANCEL status is used when the all resources in the
@@ -54,7 +54,7 @@ final class ResourceListStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const CANCEL = 'cancel';
+    public const CANCEL = 'cancel';
 
     /**
      * The ResourceStatutes::ERROR status is used when the all resources in the
@@ -63,7 +63,7 @@ final class ResourceListStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const ERROR = 'error';
+    public const ERROR = 'error';
 
     /**
      * Constructor.

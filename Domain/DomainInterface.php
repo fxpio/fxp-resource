@@ -43,7 +43,7 @@ interface DomainInterface
     /**
      * Get the doctrine repository for this resource domain.
      *
-     * @return ObjectRepository|EntityRepository
+     * @return EntityRepository|ObjectRepository
      */
     public function getRepository();
 
@@ -51,7 +51,7 @@ interface DomainInterface
      * Create the query builder for this domain.
      *
      * @param string      $alias   The alias of class in query
-     * @param string|null $indexBy The index for the from
+     * @param null|string $indexBy The index for the from
      *
      * @return QueryBuilder
      */
@@ -69,7 +69,7 @@ interface DomainInterface
     /**
      * Create a resource.
      *
-     * @param object|FormInterface $resource The object resource instance of defined class name
+     * @param FormInterface|object $resource The object resource instance of defined class name
      *
      * @return ResourceInterface
      */
@@ -80,7 +80,7 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param object[]|FormInterface[] $resources  The list of object resource instance
+     * @param FormInterface[]|object[] $resources  The list of object resource instance
      * @param bool                     $autoCommit Commit transaction for each resource or all
      *                                             (continue the action even if there is an error on a resource)
      *
@@ -91,7 +91,7 @@ interface DomainInterface
     /**
      * Update a resource.
      *
-     * @param object|FormInterface $resource The object resource
+     * @param FormInterface|object $resource The object resource
      *
      * @return ResourceInterface
      */
@@ -102,7 +102,7 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param object[]|FormInterface[] $resources  The list of object resource instance
+     * @param FormInterface[]|object[] $resources  The list of object resource instance
      * @param bool                     $autoCommit Commit transaction for each resource or all
      *                                             (continue the action even if there is an error on a resource)
      *
@@ -113,7 +113,7 @@ interface DomainInterface
     /**
      * Update or insert a resource.
      *
-     * @param object|FormInterface $resource The object resource
+     * @param FormInterface|object $resource The object resource
      *
      * @return ResourceInterface
      */
@@ -124,7 +124,7 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param object[]|FormInterface[] $resources  The list of object resource instance
+     * @param FormInterface[]|object[] $resources  The list of object resource instance
      * @param bool                     $autoCommit Commit transaction for each resource or all
      *                                             (continue the action even if there is an error on a resource)
      *
@@ -159,7 +159,7 @@ interface DomainInterface
     /**
      * Undelete a resource.
      *
-     * @param object|int|string $identifier The object or object identifier
+     * @param int|object|string $identifier The object or object identifier
      *
      * @return ResourceInterface
      */
@@ -170,7 +170,7 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param object[]|int[]|string[] $identifiers The list of objects or object identifiers
+     * @param int[]|object[]|string[] $identifiers The list of objects or object identifiers
      * @param bool                    $autoCommit  Commit transaction for each resource or all
      *                                             (continue the action even if there is an error on a resource)
      *

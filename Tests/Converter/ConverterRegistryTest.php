@@ -19,62 +19,62 @@ use PHPUnit\Framework\TestCase;
  * Tests case for converter registry.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ConverterRegistryTest extends TestCase
+final class ConverterRegistryTest extends TestCase
 {
     /**
      * @var ConverterRegistryInterface
      */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $converter = $this->getMockBuilder('Fxp\Component\Resource\Converter\ConverterInterface')->getMock();
         $converter->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('foo'));
+            ->will($this->returnValue('foo'))
+        ;
 
         $this->registry = new ConverterRegistry([
             $converter,
         ]);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Fxp\Component\Resource\Converter\ConverterInterface", "DateTime" given
-     */
-    public function testUnexpectedTypeException()
+    public function testUnexpectedTypeException(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessage('Expected argument of type "Fxp\\Component\\Resource\\Converter\\ConverterInterface", "DateTime" given');
+
         new ConverterRegistry([
             new \DateTime(),
         ]);
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $this->assertTrue($this->registry->has('foo'));
         $this->assertFalse($this->registry->has('bar'));
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /Expected argument of type "(\w+)", "(\w+)" given/
-     */
-    public function testGetInvalidType()
+    public function testGetInvalidType(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessageRegExp('/Expected argument of type "(\\w+)", "(\\w+)" given/');
+
         $this->registry->get(42);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessageRegExp /Could not load content converter "(\w+)"/
-     */
-    public function testGetNonExistentConverter()
+    public function testGetNonExistentConverter(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/Could not load content converter "(\\w+)"/');
+
         $this->registry->get('bar');
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $converter = $this->registry->get('foo');
 

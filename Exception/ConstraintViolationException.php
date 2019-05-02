@@ -32,9 +32,12 @@ class ConstraintViolationException extends RuntimeException
      * @param int                              $code       The code of exception
      * @param \Exception                       $previous   The previous exception
      */
-    public function __construct(ConstraintViolationListInterface $violations,
-                                $message = null, $code = 0, \Exception $previous = null)
-    {
+    public function __construct(
+        ConstraintViolationListInterface $violations,
+        $message = null,
+        $code = 0,
+        \Exception $previous = null
+    ) {
         parent::__construct(null !== $message ? $message : Response::$statusTexts[422], $code, $previous);
 
         $this->violations = $violations;

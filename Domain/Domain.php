@@ -102,7 +102,7 @@ class Domain extends BaseDomain
                 $missingIds = $searchIds;
 
                 foreach ($objects as $object) {
-                    $pos = array_search(DomainUtil::getIdentifier($this->om, $object), $missingIds);
+                    $pos = array_search(DomainUtil::getIdentifier($this->om, $object), $missingIds, true);
 
                     if (false !== $pos) {
                         array_splice($missingIds, $pos, 1);
@@ -201,7 +201,7 @@ class Domain extends BaseDomain
      * @param ResourceInterface $resource The resource
      * @param int               $type     The type of persist action
      */
-    protected function validateUndeleteResource(ResourceInterface $resource, $type)
+    protected function validateUndeleteResource(ResourceInterface $resource, $type): void
     {
         if (static::TYPE_UNDELETE === $type) {
             $object = $resource->getRealData();
@@ -279,9 +279,9 @@ class Domain extends BaseDomain
      * @param ResourceInterface $resource The resource
      * @param bool              $soft     The soft deletable
      *
-     * @return bool Check if the resource is skipped or deleted
-     *
      * @throws
+     *
+     * @return bool Check if the resource is skipped or deleted
      */
     protected function doDeleteResource(ResourceInterface $resource, $soft)
     {
@@ -313,7 +313,7 @@ class Domain extends BaseDomain
      *
      * @param ResourceInterface $resource The resource
      */
-    protected function doDeleteResourceAction(ResourceInterface $resource)
+    protected function doDeleteResourceAction(ResourceInterface $resource): void
     {
         try {
             $this->om->remove($resource->getRealData());

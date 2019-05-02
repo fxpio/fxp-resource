@@ -31,7 +31,7 @@ class SoftDeletableSubscriber implements EventSubscriber
     /**
      * Enable the soft deletable.
      */
-    public function enable()
+    public function enable(): void
     {
         $this->enabled = true;
     }
@@ -39,7 +39,7 @@ class SoftDeletableSubscriber implements EventSubscriber
     /**
      * Disable the soft deletable.
      */
-    public function disable()
+    public function disable(): void
     {
         $this->enabled = false;
     }
@@ -60,7 +60,7 @@ class SoftDeletableSubscriber implements EventSubscriber
      *
      * @param OnFlushEventArgs $args
      */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->enabled) {
             return;

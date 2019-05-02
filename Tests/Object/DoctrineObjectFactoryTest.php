@@ -21,19 +21,22 @@ use PHPUnit\Framework\TestCase;
  * Tests case for Doctrine object factory.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DoctrineObjectFactoryTest extends TestCase
+final class DoctrineObjectFactoryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
-        /* @var EntityManagerInterface|MockObject $em */
+        /** @var EntityManagerInterface|MockObject $em */
         $em = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
         $of = new DoctrineObjectFactory($em);
 
         $em->expects($this->once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
-            ->willReturn(new ClassMetadata(\stdClass::class));
+            ->willReturn(new ClassMetadata(\stdClass::class))
+        ;
 
         $val = $of->create(\stdClass::class);
 

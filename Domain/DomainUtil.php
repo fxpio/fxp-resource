@@ -46,7 +46,7 @@ abstract class DomainUtil
      * @param ObjectManager $om     The doctrine object manager
      * @param object        $object The resource object
      *
-     * @return int|string|null
+     * @return null|int|string
      */
     public static function getIdentifier(ObjectManager $om, $object)
     {
@@ -60,6 +60,7 @@ abstract class DomainUtil
 
             if (null !== $idVal) {
                 $value = $idVal;
+
                 break;
             }
         }
@@ -122,6 +123,7 @@ abstract class DomainUtil
         foreach ($identifiers as $identifier) {
             if (\is_object($identifier)) {
                 $objects[] = $identifier;
+
                 continue;
             }
             $searchIds[] = $identifier;
@@ -150,7 +152,7 @@ abstract class DomainUtil
      * @param ResourceListInterface            $resources The list of resources
      * @param ConstraintViolationListInterface $errors    The list of flush errors
      */
-    public static function moveFlushErrorsInResource(ResourceListInterface $resources, ConstraintViolationListInterface $errors)
+    public static function moveFlushErrorsInResource(ResourceListInterface $resources, ConstraintViolationListInterface $errors): void
     {
         if ($errors->count() > 0) {
             $maps = static::getMapErrors($errors);
@@ -175,7 +177,7 @@ abstract class DomainUtil
      *
      * @param ResourceListInterface $resources The list of resources
      */
-    public static function cancelAllSuccessResources(ResourceListInterface $resources)
+    public static function cancelAllSuccessResources(ResourceListInterface $resources): void
     {
         foreach ($resources->all() as $resource) {
             if (ResourceStatutes::ERROR !== $resource->getStatus()) {
@@ -215,9 +217,9 @@ abstract class DomainUtil
      *
      * @param ResourceInterface $resource The resource
      * @param string            $message  The error message
-     * @param \Exception|null   $e        The exception
+     * @param null|\Exception   $e        The exception
      */
-    public static function addResourceError(ResourceInterface $resource, $message, \Exception $e = null)
+    public static function addResourceError(ResourceInterface $resource, $message, \Exception $e = null): void
     {
         $resource->setStatus(ResourceStatutes::ERROR);
         $resource->getErrors()->add(new ConstraintViolation($message, $message, [], $resource->getRealData(), null, null, null, null, null, $e));

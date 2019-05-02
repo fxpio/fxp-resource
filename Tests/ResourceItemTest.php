@@ -21,10 +21,12 @@ use Symfony\Component\Form\Test\FormInterface;
  * Tests case for resource item.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ResourceItemTest extends TestCase
+final class ResourceItemTest extends TestCase
 {
-    public function testDefaultGetterSetter()
+    public function testDefaultGetterSetter(): void
     {
         $data = $this->getMockBuilder(\stdClass::class)->getMock();
         $resource = new ResourceItem($data);
@@ -40,30 +42,32 @@ class ResourceItemTest extends TestCase
         $this->assertTrue($resource->isValid());
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The data of resource is not a form instance, used the "getErrors()" method
-     */
-    public function testGetFormErrorsWithObjectData()
+    public function testGetFormErrorsWithObjectData(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The data of resource is not a form instance, used the "getErrors()" method');
+
         $resource = new ResourceItem($this->getMockBuilder(\stdClass::class)->getMock());
         $resource->getFormErrors();
     }
 
-    public function testGetFormErrorsWithFormData()
+    public function testGetFormErrorsWithFormData(): void
     {
         $fErrors = $this->getMockBuilder('Symfony\Component\Form\FormErrorIterator')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
 
-        /* @var FormInterface|MockObject $form */
+        /** @var FormInterface|MockObject $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\FormInterface')->getMock();
         $form->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($this->getMockBuilder(\stdClass::class)->getMock()));
+            ->will($this->returnValue($this->getMockBuilder(\stdClass::class)->getMock()))
+        ;
         $form->expects($this->any())
             ->method('getErrors')
-            ->will($this->returnValue($fErrors));
+            ->will($this->returnValue($fErrors))
+        ;
 
         $resource = new ResourceItem($form);
         $errors = $resource->getFormErrors();
@@ -71,32 +75,31 @@ class ResourceItemTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\FormErrorIterator', $errors);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "object", "integer" given
-     */
-    public function testUnexpectedTypeException()
+    public function testUnexpectedTypeException(): void
     {
-        /* @var object $object */
+        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessage('Expected argument of type "object", "integer" given');
+
+        /** @var object $object */
         $object = 42;
 
         new ResourceItem($object);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "object", "integer" given
-     */
-    public function testUnexpectedTypeExceptionWithForm()
+    public function testUnexpectedTypeExceptionWithForm(): void
     {
-        /* @var object $object */
+        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessage('Expected argument of type "object", "integer" given');
+
+        /** @var object $object */
         $object = 42;
 
-        /* @var FormInterface|MockObject $form */
+        /** @var FormInterface|MockObject $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\FormInterface')->getMock();
         $form->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($object));
+            ->will($this->returnValue($object))
+        ;
 
         new ResourceItem($form);
     }

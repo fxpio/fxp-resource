@@ -37,7 +37,7 @@ class FormConfig implements FormConfigInterface
     protected $method;
 
     /**
-     * @var bool|null
+     * @var null|bool
      */
     protected $clearMissing;
 
@@ -54,11 +54,12 @@ class FormConfig implements FormConfigInterface
      * @param string $method    The request method
      * @param string $converter The data converter for request content
      */
-    public function __construct($type,
-                                array $options = [],
-                                $method = Request::METHOD_POST,
-                                $converter = 'json')
-    {
+    public function __construct(
+        $type,
+        array $options = [],
+        $method = Request::METHOD_POST,
+        $converter = 'json'
+    ) {
         $this->setType($type);
         $this->setOptions($options);
         $this->setMethod($method);
@@ -68,7 +69,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setType($type)
+    public function setType($type): void
     {
         if (!\is_string($type)) {
             throw new InvalidArgumentException('The form type of domain form config must be an string of class name of form type');
@@ -88,7 +89,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         if (isset($options['method'])) {
             $this->setMethod($options['method']);
@@ -108,7 +109,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setMethod($method)
+    public function setMethod($method): void
     {
         $this->method = $method;
         $this->options['method'] = $method;
@@ -125,7 +126,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setSubmitClearMissing($clearMissing)
+    public function setSubmitClearMissing($clearMissing): void
     {
         $this->clearMissing = $clearMissing;
     }
@@ -153,7 +154,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setConverter($converter)
+    public function setConverter($converter): void
     {
         $this->converter = $converter;
     }

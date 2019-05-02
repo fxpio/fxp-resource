@@ -21,12 +21,14 @@ use Fxp\Component\Resource\Tests\Fixtures\Listener\ErrorListener;
  * Functional tests for delete methods of Domain.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainDeleteTest extends AbstractDomainTest
+final class DomainDeleteTest extends AbstractDomainTest
 {
     protected $softClass = Bar::class;
 
-    public function testSoftDeletableListener()
+    public function testSoftDeletableListener(): void
     {
         $this->softDeletable->disable();
 
@@ -46,7 +48,7 @@ class DomainDeleteTest extends AbstractDomainTest
         // soft delete
         $this->em->remove($objects[0]);
         $this->em->flush();
-        /* @var Bar[] $objects */
+        /** @var Bar[] $objects */
         $objects = $domain->getRepository()->findAll();
         $this->assertCount(1, $objects);
         $this->assertTrue($objects[0]->isDeleted());
@@ -73,7 +75,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteObject($withSoftObject, $softDelete)
+    public function testDeleteObject($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $object = $this->insertResource($domain);
@@ -88,7 +90,7 @@ class DomainDeleteTest extends AbstractDomainTest
         if (!$withSoftObject) {
             $this->assertCount(0, $domain->getRepository()->findAll());
         } else {
-            /* @var Bar[] $objects */
+            /** @var Bar[] $objects */
             $objects = $domain->getRepository()->findAll();
             $this->assertCount($softDelete ? 1 : 0, $objects);
         }
@@ -100,7 +102,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteObjects($withSoftObject, $softDelete)
+    public function testDeleteObjects($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -121,7 +123,7 @@ class DomainDeleteTest extends AbstractDomainTest
         } elseif (!$softDelete) {
             $this->assertCount(0, $domain->getRepository()->findAll());
         } else {
-            /* @var Bar[] $objects */
+            /** @var Bar[] $objects */
             $objects = $domain->getRepository()->findAll();
             $this->assertCount(2, $objects);
 
@@ -137,7 +139,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitObjects($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitObjects($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -158,7 +160,7 @@ class DomainDeleteTest extends AbstractDomainTest
         } elseif (!$softDelete) {
             $this->assertCount(0, $domain->getRepository()->findAll());
         } else {
-            /* @var Bar[] $objects */
+            /** @var Bar[] $objects */
             $objects = $domain->getRepository()->findAll();
             $this->assertCount(2, $objects);
 
@@ -174,7 +176,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteNonExistentObject($withSoftObject, $softDelete)
+    public function testDeleteNonExistentObject($withSoftObject, $softDelete): void
     {
         $this->loadFixtures([]);
 
@@ -196,7 +198,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteNonExistentObjects($withSoftObject, $softDelete)
+    public function testDeleteNonExistentObjects($withSoftObject, $softDelete): void
     {
         $this->loadFixtures([]);
 
@@ -223,7 +225,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitNonExistentObjects($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitNonExistentObjects($withSoftObject, $softDelete): void
     {
         $this->loadFixtures([]);
 
@@ -250,7 +252,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteNonExistentAndExistentObjects($withSoftObject, $softDelete)
+    public function testDeleteNonExistentAndExistentObjects($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 1);
@@ -273,7 +275,7 @@ class DomainDeleteTest extends AbstractDomainTest
             if (!$softDelete) {
                 $this->assertCount(1, $domain->getRepository()->findAll());
             } else {
-                /* @var Bar[] $objects */
+                /** @var Bar[] $objects */
                 $objects = $domain->getRepository()->findAll();
                 $this->assertCount(1, $objects);
 
@@ -290,7 +292,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitNonExistentAndExistentObjects($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitNonExistentAndExistentObjects($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 1);
@@ -313,7 +315,7 @@ class DomainDeleteTest extends AbstractDomainTest
             if (!$softDelete) {
                 $this->assertCount(0, $domain->getRepository()->findAll());
             } else {
-                /* @var Bar[] $objects */
+                /** @var Bar[] $objects */
                 $objects = $domain->getRepository()->findAll();
                 $this->assertCount(1, $objects);
 
@@ -337,7 +339,7 @@ class DomainDeleteTest extends AbstractDomainTest
      *
      * @param bool $autoCommit
      */
-    public function testDeleteSkipAlreadyDeletedObjects($autoCommit)
+    public function testDeleteSkipAlreadyDeletedObjects($autoCommit): void
     {
         $domain = $this->createDomain($this->softClass);
         $objects = $this->insertResources($domain, 2);
@@ -370,7 +372,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteErrorAndSuccessObjectsWithViolationException($withSoftObject, $softDelete)
+    public function testDeleteErrorAndSuccessObjectsWithViolationException($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -397,7 +399,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitErrorAndSuccessObjects($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitErrorAndSuccessObjects($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -424,7 +426,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitErrorAndSuccessObjectsWithViolationException($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitErrorAndSuccessObjectsWithViolationException($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -451,7 +453,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitErrorOnPreRemoveAndSuccessObjects($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitErrorOnPreRemoveAndSuccessObjects($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -478,7 +480,7 @@ class DomainDeleteTest extends AbstractDomainTest
      * @param bool $withSoftObject
      * @param bool $softDelete
      */
-    public function testDeleteAutoCommitErrorOnPreRemoveAndSuccessObjectsWithViolationException($withSoftObject, $softDelete)
+    public function testDeleteAutoCommitErrorOnPreRemoveAndSuccessObjectsWithViolationException($withSoftObject, $softDelete): void
     {
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);

@@ -28,10 +28,10 @@ interface ConverterRegistryInterface
      *
      * @param string $name The name of the converter
      *
-     * @return ConverterInterface The converter
-     *
      * @throws UnexpectedTypeException  If the parameter is not a string
      * @throws InvalidArgumentException If the converter can not be retrieved
+     *
+     * @return ConverterInterface The converter
      */
     public function get($name);
 

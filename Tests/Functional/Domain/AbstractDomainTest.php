@@ -78,7 +78,7 @@ abstract class AbstractDomainTest extends TestCase
      */
     protected $softDeletable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = Setup::createXMLMetadataConfiguration([
             __DIR__.'/../../Fixtures/config/doctrine',
@@ -102,11 +102,13 @@ abstract class AbstractDomainTest extends TestCase
 
         $this->validator = Validation::createValidatorBuilder()
             ->addXmlMapping(__DIR__.'/../../Fixtures/config/validation.xml')
-            ->getValidator();
+            ->getValidator()
+        ;
 
         $this->formFactory = Forms::createFormFactoryBuilder()
             ->addExtension(new ValidatorExtension($this->validator))
-            ->getFormFactory();
+            ->getFormFactory()
+        ;
 
         $this->translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
@@ -114,7 +116,7 @@ abstract class AbstractDomainTest extends TestCase
         $this->translator->addLoader('xml', new XliffFileLoader());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $tool = new SchemaTool($this->em);
         $tool->dropDatabase();
@@ -127,7 +129,7 @@ abstract class AbstractDomainTest extends TestCase
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
-    protected function loadFixtures(array $fixtures)
+    protected function loadFixtures(array $fixtures): void
     {
         $tool = new SchemaTool($this->em);
         $tool->dropDatabase();
@@ -144,7 +146,8 @@ abstract class AbstractDomainTest extends TestCase
      */
     protected function createDomain($class = Foo::class)
     {
-        return new Domain($class,
+        return new Domain(
+            $class,
             $this->em,
             $this->objectFactory,
             $this->dispatcher,
@@ -173,7 +176,7 @@ abstract class AbstractDomainTest extends TestCase
      * @param DomainInterface $domain
      * @param int             $size
      *
-     * @return Foo[]|Bar[]
+     * @return Bar[]|Foo[]
      */
     protected function insertResources(DomainInterface $domain, $size)
     {
@@ -182,7 +185,7 @@ abstract class AbstractDomainTest extends TestCase
         $objects = [];
 
         for ($i = 0; $i < $size; ++$i) {
-            /* @var Foo|Bar $object */
+            /** @var Bar|Foo $object */
             $object = $domain->newInstance();
             $object->setName('Bar '.($i + 1));
             $object->setDetail('Detail '.($i + 1));

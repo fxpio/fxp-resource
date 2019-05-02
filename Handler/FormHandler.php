@@ -48,7 +48,7 @@ class FormHandler implements FormHandlerInterface
     protected $translator;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     protected $defaultLimit;
 
@@ -59,16 +59,17 @@ class FormHandler implements FormHandlerInterface
      * @param FormFactoryInterface       $formFactory       The form factory
      * @param RequestStack               $requestStack      The request stack
      * @param TranslatorInterface        $translator        The translator
-     * @param int|null                   $defaultLimit      The limit of max data rows
+     * @param null|int                   $defaultLimit      The limit of max data rows
      *
      * @throws InvalidArgumentException When the current request is request stack is empty
      */
-    public function __construct(ConverterRegistryInterface $converterRegistry,
-                                FormFactoryInterface $formFactory,
-                                RequestStack $requestStack,
-                                TranslatorInterface $translator,
-                                $defaultLimit = null)
-    {
+    public function __construct(
+        ConverterRegistryInterface $converterRegistry,
+        FormFactoryInterface $formFactory,
+        RequestStack $requestStack,
+        TranslatorInterface $translator,
+        $defaultLimit = null
+    ) {
         $this->converterRegistry = $converterRegistry;
         $this->formFactory = $formFactory;
         $this->request = $requestStack->getCurrentRequest();
@@ -107,43 +108,10 @@ class FormHandler implements FormHandlerInterface
     }
 
     /**
-     * Create the list of form for the object instances.
-     *
-     * @param FormConfigInterface $config  The form config
-     * @param object[]|array[]    $objects The list of object instance
-     *
-     * @return FormInterface[]
-     *
-     * @throws InvalidResourceException When the size if request data and the object instances is different
-     */
-    private function process(FormConfigInterface $config, array $objects)
-    {
-        list($dataList, $objects) = $this->getDataListObjects($config, $objects);
-        $forms = [];
-
-        if (\count($objects) !== \count($dataList)) {
-            $msg = $this->translator->trans('form_handler.different_size_request_list', [
-                '{{ requestSize }}' => \count($dataList),
-                '{{ objectSize }}' => \count($objects),
-            ], 'FxpResource');
-            throw new InvalidResourceException($msg);
-        }
-
-        foreach ($objects as $i => $object) {
-            $form = $this->formFactory->create($config->getType(), $object, $config->getOptions());
-
-            $form->submit($dataList[$i], $config->getSubmitClearMissing());
-            $forms[] = $form;
-        }
-
-        return $forms;
-    }
-
-    /**
      * Get the data list and objects.
      *
      * @param FormConfigInterface $config  The form config
-     * @param object[]|array[]    $objects The list of object instance
+     * @param array[]|object[]    $objects The list of object instance
      *
      * @return array
      */
@@ -156,6 +124,7 @@ class FormHandler implements FormHandlerInterface
             $msg = $this->translator->trans('form_handler.size_exceeds', [
                 '{{ limit }}' => $limit,
             ], 'FxpResource');
+
             throw new InvalidResourceException(sprintf($msg, $limit));
         }
 
@@ -197,9 +166,9 @@ class FormHandler implements FormHandlerInterface
     /**
      * Get the limit.
      *
-     * @param int|null $limit The limit
+     * @param null|int $limit The limit
      *
-     * @return int|null Returns null for unlimited row or a integer greater than 1
+     * @return null|int Returns null for unlimited row or a integer greater than 1
      */
     protected function getLimit($limit = null)
     {
@@ -213,14 +182,48 @@ class FormHandler implements FormHandlerInterface
     /**
      * Validate the limit with a integer greater than 1.
      *
-     * @param int|null $limit The limit
+     * @param null|int $limit The limit
      *
-     * @return int|null
+     * @return null|int
      */
     protected function validateLimit($limit)
     {
         return null === $limit
             ? null
             : max(1, $limit);
+    }
+
+    /**
+     * Create the list of form for the object instances.
+     *
+     * @param FormConfigInterface $config  The form config
+     * @param array[]|object[]    $objects The list of object instance
+     *
+     * @throws InvalidResourceException When the size if request data and the object instances is different
+     *
+     * @return FormInterface[]
+     */
+    private function process(FormConfigInterface $config, array $objects)
+    {
+        list($dataList, $objects) = $this->getDataListObjects($config, $objects);
+        $forms = [];
+
+        if (\count($objects) !== \count($dataList)) {
+            $msg = $this->translator->trans('form_handler.different_size_request_list', [
+                '{{ requestSize }}' => \count($dataList),
+                '{{ objectSize }}' => \count($objects),
+            ], 'FxpResource');
+
+            throw new InvalidResourceException($msg);
+        }
+
+        foreach ($objects as $i => $object) {
+            $form = $this->formFactory->create($config->getType(), $object, $config->getOptions());
+
+            $form->submit($dataList[$i], $config->getSubmitClearMissing());
+            $forms[] = $form;
+        }
+
+        return $forms;
     }
 }

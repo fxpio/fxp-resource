@@ -40,17 +40,17 @@ class ErrorListener
         $this->useConstraint = $useConstraint;
     }
 
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $this->doException($args->getObject());
     }
 
-    public function preRemove(LifecycleEventArgs $args)
+    public function preRemove(LifecycleEventArgs $args): void
     {
         $this->doException($args->getObject());
     }
 
-    public function preFlush(PreFlushEventArgs $args)
+    public function preFlush(PreFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
@@ -65,7 +65,7 @@ class ErrorListener
      *
      * @throws \Exception When the entity does not deleted
      */
-    public function doException($entity)
+    public function doException($entity): void
     {
         if ($this->useConstraint) {
             $message = 'The entity does not '.$this->action.' (violation exception)';

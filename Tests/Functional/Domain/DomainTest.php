@@ -17,28 +17,29 @@ use Fxp\Component\Resource\Tests\Fixtures\Entity\Foo;
  * Functional tests for Domain.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainTest extends AbstractDomainTest
+final class DomainTest extends AbstractDomainTest
 {
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /The "([\w\\\/]+)" class is not managed by doctrine object manager/
-     */
-    public function testMappingException()
+    public function testMappingException(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessageRegExp('/The "([\\w\\\\\\/]+)" class is not managed by doctrine object manager/');
+
         $class = 'DateTime';
 
         $this->createDomain($class);
     }
 
-    public function testGetRepository()
+    public function testGetRepository(): void
     {
         $domain = $this->createDomain();
 
         $this->assertInstanceOf('Doctrine\Common\Persistence\ObjectRepository', $domain->getRepository());
     }
 
-    public function testNewInstance()
+    public function testNewInstance(): void
     {
         $domain = $this->createDomain(Foo::class);
         $resource1 = $domain->newInstance();

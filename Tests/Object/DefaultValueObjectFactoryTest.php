@@ -20,19 +20,22 @@ use PHPUnit\Framework\TestCase;
  * Tests case for default value object factory.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DefaultValueObjectFactoryTest extends TestCase
+final class DefaultValueObjectFactoryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
-        /* @var DefaultValueObjectFactoryInterface|MockObject $dvof */
+        /** @var DefaultValueObjectFactoryInterface|MockObject $dvof */
         $dvof = $this->getMockBuilder(DefaultValueObjectFactoryInterface::class)->getMock();
         $of = new DefaultValueObjectFactory($dvof);
 
         $dvof->expects($this->once())
             ->method('create')
             ->with(\stdClass::class, null, [])
-            ->willReturn(new \stdClass());
+            ->willReturn(new \stdClass())
+        ;
 
         $val = $of->create(\stdClass::class);
 

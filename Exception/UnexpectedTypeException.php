@@ -23,7 +23,7 @@ class UnexpectedTypeException extends InvalidArgumentException
      *
      * @param mixed    $value        The value given
      * @param string   $expectedType The expected type
-     * @param int|null $position     The position in list
+     * @param null|int $position     The position in list
      */
     public function __construct($value, $expectedType, $position = null)
     {

@@ -23,8 +23,10 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
  * Tests case for resource list.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ResourceListTest extends TestCase
+final class ResourceListTest extends TestCase
 {
     public function getData()
     {
@@ -52,7 +54,7 @@ class ResourceListTest extends TestCase
      * @param string $valid            The valid status of resource list
      * @param array  $resourceStatutes The status of resource in list
      */
-    public function testStatus($valid, array $resourceStatutes)
+    public function testStatus($valid, array $resourceStatutes): void
     {
         $resources = [];
 
@@ -60,7 +62,8 @@ class ResourceListTest extends TestCase
             $resource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
             $resource->expects($this->any())
                 ->method('getStatus')
-                ->will($this->returnValue($rStatus));
+                ->will($this->returnValue($rStatus))
+            ;
 
             $resources[] = $resource;
         }
@@ -70,7 +73,7 @@ class ResourceListTest extends TestCase
         $this->assertSame($valid, $list->getStatus());
     }
 
-    public function testGetResources()
+    public function testGetResources(): void
     {
         $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
@@ -111,17 +114,16 @@ class ResourceListTest extends TestCase
         $this->assertSame($all[3], $list->offsetGet(3));
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\OutOfBoundsException
-     * @expectedExceptionMessage The offset "0" does not exist.
-     */
-    public function testGetOUtOfBoundsException()
+    public function testGetOUtOfBoundsException(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\OutOfBoundsException::class);
+        $this->expectExceptionMessage('The offset "0" does not exist.');
+
         $list = new ResourceList([]);
         $list->get(0);
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
@@ -129,7 +131,7 @@ class ResourceListTest extends TestCase
         ];
         $list = new ResourceList($resources);
 
-        /* @var ResourceInterface $new */
+        /** @var ResourceInterface $new */
         $new = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
         $this->assertNotSame($new, $list->get(0));
@@ -137,7 +139,7 @@ class ResourceListTest extends TestCase
         $this->assertNotSame($resources[0], $list->get(0));
         $this->assertSame($new, $list->get(0));
 
-        /* @var ResourceInterface $new2 */
+        /** @var ResourceInterface $new2 */
         $new2 = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
         $this->assertNotSame($new2, $list->offsetGet(1));
@@ -145,7 +147,7 @@ class ResourceListTest extends TestCase
         $this->assertNotSame($resources[1], $list->offsetGet(1));
         $this->assertSame($new2, $list->offsetGet(1));
 
-        /* @var ResourceInterface $new3 */
+        /** @var ResourceInterface $new3 */
         $new3 = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
         $this->assertCount(2, $list);
@@ -155,7 +157,7 @@ class ResourceListTest extends TestCase
         $this->assertSame($new3, $list->offsetGet(2));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
@@ -174,7 +176,7 @@ class ResourceListTest extends TestCase
         $this->assertCount(0, $list);
     }
 
-    public function testGetEmptyErrorsAndEmptyChildrenErrors()
+    public function testGetEmptyErrorsAndEmptyChildrenErrors(): void
     {
         $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
@@ -187,7 +189,7 @@ class ResourceListTest extends TestCase
         $this->assertFalse($list->hasErrors());
     }
 
-    public function testGetErrorsAndEmptyChildrenErrors()
+    public function testGetErrorsAndEmptyChildrenErrors(): void
     {
         $resources = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
@@ -197,23 +199,25 @@ class ResourceListTest extends TestCase
 
         $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
 
-        /* @var ConstraintViolationInterface $error */
+        /** @var ConstraintViolationInterface $error */
         $error = $this->getMockBuilder('Symfony\Component\Validator\ConstraintViolationInterface')->getMock();
         $list->getErrors()->add($error);
         $this->assertCount(1, $list->getErrors());
         $this->assertTrue($list->hasErrors());
     }
 
-    public function testGetEmptyErrorsAndChildrenErrors()
+    public function testGetEmptyErrorsAndChildrenErrors(): void
     {
-        /* @var ResourceInterface|MockObject $errorResource */
+        /** @var MockObject|ResourceInterface $errorResource */
         $errorResource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
         $errorResource->expects($this->any())
             ->method('getStatus')
-            ->will($this->returnValue(ResourceStatutes::ERROR));
+            ->will($this->returnValue(ResourceStatutes::ERROR))
+        ;
         $errorResource->expects($this->any())
             ->method('isValid')
-            ->will($this->returnValue(false));
+            ->will($this->returnValue(false))
+        ;
 
         $resources = [
             $errorResource,

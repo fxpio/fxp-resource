@@ -34,9 +34,9 @@ interface DomainManagerInterface
      *
      * @param string $class The class name
      *
-     * @return DomainInterface
-     *
      * @throws InvalidArgumentException When the class of resource domain is not managed
+     *
+     * @return DomainInterface
      */
     public function get($class);
 }

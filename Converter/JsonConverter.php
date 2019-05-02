@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class JsonConverter implements ConverterInterface
 {
-    const NAME = 'json';
+    public const NAME = 'json';
 
     /**
      * @var TranslatorInterface

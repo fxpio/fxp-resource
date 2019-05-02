@@ -22,8 +22,10 @@ use Symfony\Component\Form\FormInterface;
  * Tests case for resource util.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ResourceUtilTest extends TestCase
+final class ResourceUtilTest extends TestCase
 {
     public function getAllowForm()
     {
@@ -38,7 +40,7 @@ class ResourceUtilTest extends TestCase
      *
      * @param bool $allowForm The allow form value
      */
-    public function testConvertObjectsToResourceList($allowForm)
+    public function testConvertObjectsToResourceList($allowForm): void
     {
         $objects = [
             new \stdClass(),
@@ -56,7 +58,7 @@ class ResourceUtilTest extends TestCase
      *
      * @param bool $allowForm The allow form value
      */
-    public function testValidateObjectResource($allowForm)
+    public function testValidateObjectResource($allowForm): void
     {
         $obj = new \stdClass();
         ResourceUtil::validateObjectResource($obj, \stdClass::class, $allowForm);
@@ -67,36 +69,37 @@ class ResourceUtilTest extends TestCase
      * @dataProvider getAllowForm
      *
      * @param bool $allowForm The allow form value
-     *
-     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage Expected argument of type "Fxp\Component\Resource\Model\SoftDeletableInterface", "stdClass" given
      */
-    public function testValidateObjectResourceWithInvalidClass($allowForm)
+    public function testValidateObjectResourceWithInvalidClass($allowForm): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessage('Expected argument of type "Fxp\\Component\\Resource\\Model\\SoftDeletableInterface", "stdClass" given');
+
         ResourceUtil::validateObjectResource(new \stdClass(), SoftDeletableInterface::class, 0, $allowForm);
     }
 
-    public function testValidateObjectResourceWithForm()
+    public function testValidateObjectResourceWithForm(): void
     {
-        /* @var FormInterface|MockObject */
+        /** @var FormInterface|MockObject */
         $form = $this->getMockBuilder(FormInterface::class)->getMock();
         $form->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue(new \stdClass()));
+            ->will($this->returnValue(new \stdClass()))
+        ;
 
         ResourceUtil::validateObjectResource($form, \stdClass::class, 0, true);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\UnexpectedTypeException
-     * @expectedExceptionMessageRegExp /Expected argument of type "stdClass", "([\w\_0-9]+)" given/
-     */
-    public function testValidateObjectResourceWithoutAllowedForm()
+    public function testValidateObjectResourceWithoutAllowedForm(): void
     {
-        /* @var FormInterface|MockObject */
+        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
+        $this->expectExceptionMessageRegExp('/Expected argument of type "stdClass", "([\\w\\_0-9]+)" given/');
+
+        /** @var FormInterface|MockObject */
         $form = $this->getMockBuilder(FormInterface::class)->getMock();
         $form->expects($this->never())
-            ->method('getData');
+            ->method('getData')
+        ;
 
         ResourceUtil::validateObjectResource($form, \stdClass::class, 0, false);
     }

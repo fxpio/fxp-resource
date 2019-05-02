@@ -29,11 +29,6 @@ class DomainFormConfigList extends FormConfigList
     protected $domain;
 
     /**
-     * @var PropertyAccessorInterface
-     */
-    private $propertyAccessor;
-
-    /**
      * @var string
      */
     protected $identifier = 'id';
@@ -49,6 +44,11 @@ class DomainFormConfigList extends FormConfigList
     protected $creation = true;
 
     /**
+     * @var PropertyAccessorInterface
+     */
+    private $propertyAccessor;
+
+    /**
      * Constructor.
      *
      * @param DomainInterface $domain    The domain resource
@@ -57,12 +57,13 @@ class DomainFormConfigList extends FormConfigList
      * @param string          $method    The request method
      * @param string          $converter The data converter for request content
      */
-    public function __construct(DomainInterface $domain,
-                                $type,
-                                array $options = [],
-                                $method = Request::METHOD_POST,
-                                $converter = 'json')
-    {
+    public function __construct(
+        DomainInterface $domain,
+        $type,
+        array $options = [],
+        $method = Request::METHOD_POST,
+        $converter = 'json'
+    ) {
         parent::__construct($type, $options, $method, $converter);
 
         $this->domain = $domain;
@@ -74,7 +75,7 @@ class DomainFormConfigList extends FormConfigList
      *
      * @param string $identifier The property name of the identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier($identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -147,9 +148,8 @@ class DomainFormConfigList extends FormConfigList
         }
 
         foreach ($ids as $i => $id) {
-            $objects[$i] = isset($mapFinds[$id])
-                ? $mapFinds[$id]
-                : $this->domain->newInstance($this->defaultValueOptions);
+            $objects[$i] = $mapFinds[$id]
+                ?? $this->domain->newInstance($this->defaultValueOptions);
         }
 
         return $objects;

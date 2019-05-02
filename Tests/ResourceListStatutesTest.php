@@ -16,14 +16,15 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ResourceListStatutesTest extends TestCase
+final class ResourceListStatutesTest extends TestCase
 {
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\ClassNotInstantiableException
-     */
-    public function testInstantiationOfClass()
+    public function testInstantiationOfClass(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\ClassNotInstantiableException::class);
+
         new ResourceListStatutes();
     }
 }

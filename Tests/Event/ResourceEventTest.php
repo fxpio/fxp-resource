@@ -18,12 +18,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ResourceEventTest extends TestCase
+final class ResourceEventTest extends TestCase
 {
-    public function testGetter()
+    public function testGetter(): void
     {
-        /* @var ResourceListInterface $list */
+        /** @var ResourceListInterface $list */
         $list = $this->getMockBuilder(ResourceListInterface::class)->getMock();
 
         $event = new PreCreatesEvent(\stdClass::class, $list);

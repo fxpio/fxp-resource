@@ -76,14 +76,15 @@ class DomainFactory implements DomainFactoryInterface
      * @param array                    $undeleteDisableFilters The undelete disable filters
      * @param bool                     $debug                  The debug mode
      */
-    public function __construct(ManagerRegistry $or,
-                                EventDispatcherInterface $ed,
-                                ObjectFactoryInterface $of,
-                                ValidatorInterface $validator,
-                                TranslatorInterface $translator,
-                                array $undeleteDisableFilters = [],
-                                $debug = false)
-    {
+    public function __construct(
+        ManagerRegistry $or,
+        EventDispatcherInterface $ed,
+        ObjectFactoryInterface $of,
+        ValidatorInterface $validator,
+        TranslatorInterface $translator,
+        array $undeleteDisableFilters = [],
+        $debug = false
+    ) {
         $this->or = $or;
         $this->ed = $ed;
         $this->of = $of;
@@ -126,14 +127,16 @@ class DomainFactory implements DomainFactoryInterface
      */
     public function create($class)
     {
-        return new Domain($class,
+        return new Domain(
+            $class,
             ManagerUtils::getRequiredManager($this->or, $this->findClassName($class)),
             $this->of,
             $this->ed,
             $this->validator,
             $this->translator,
             $this->undeleteDisableFilters,
-            $this->debug);
+            $this->debug
+        );
     }
 
     /**

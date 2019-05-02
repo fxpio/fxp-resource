@@ -42,7 +42,7 @@ class ResourceItem implements ResourceInterface
     /**
      * Constructor.
      *
-     * @param object|FormInterface             $data   The data instance or form with data instance
+     * @param FormInterface|object             $data   The data instance or form with data instance
      * @param ConstraintViolationListInterface $errors The list of errors
      */
     public function __construct($data, ConstraintViolationListInterface $errors = null)
@@ -57,7 +57,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function setStatus($status)
+    public function setStatus($status): void
     {
         $this->status = $status;
     }
@@ -135,7 +135,7 @@ class ResourceItem implements ResourceInterface
      *
      * @throws UnexpectedTypeException When the data or form data is not an instance of object
      */
-    protected function validateData($data)
+    protected function validateData($data): void
     {
         if ($data instanceof FormInterface) {
             $data = $data->getData();

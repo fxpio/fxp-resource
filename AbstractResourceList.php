@@ -39,7 +39,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     protected $errors;
 
     /**
-     * @var ConstraintViolationListInterface|FormErrorIterator[]|null
+     * @var null|ConstraintViolationListInterface|FormErrorIterator[]
      */
     protected $childrenErrors;
 
@@ -49,9 +49,10 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
      * @param ResourceInterface[]              $resources The list of resource
      * @param ConstraintViolationListInterface $errors    The list of errors
      */
-    public function __construct(array $resources = [],
-                                ConstraintViolationListInterface $errors = null)
-    {
+    public function __construct(
+        array $resources = [],
+        ConstraintViolationListInterface $errors = null
+    ) {
         $this->resources = [];
         $this->errors = null !== $errors ? $errors : new ConstraintViolationList();
 
@@ -83,7 +84,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * {@inheritdoc}
      */
-    public function add(ResourceInterface $resource)
+    public function add(ResourceInterface $resource): void
     {
         $this->reset();
         $this->resources[] = $resource;
@@ -92,7 +93,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * {@inheritdoc}
      */
-    public function addAll(ResourceListInterface $otherList)
+    public function addAll(ResourceListInterface $otherList): void
     {
         $this->reset();
 
@@ -132,7 +133,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * {@inheritdoc}
      */
-    public function set($offset, ResourceInterface $resource)
+    public function set($offset, ResourceInterface $resource): void
     {
         $this->reset();
         $this->resources[$offset] = $resource;
@@ -141,7 +142,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * {@inheritdoc}
      */
-    public function remove($offset)
+    public function remove($offset): void
     {
         $this->reset();
         unset($this->resources[$offset]);
@@ -174,7 +175,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $resource)
+    public function offsetSet($offset, $resource): void
     {
         if (null === $offset) {
             $this->add($resource);
@@ -186,7 +187,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->remove($offset);
     }
@@ -194,7 +195,7 @@ abstract class AbstractResourceList implements \IteratorAggregate, ResourceListI
     /**
      * Reset the value of status and children errors.
      */
-    protected function reset()
+    protected function reset(): void
     {
         $this->status = null;
         $this->childrenErrors = null;

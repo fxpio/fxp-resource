@@ -20,10 +20,12 @@ use Symfony\Component\HttpFoundation\Request;
  * Tests case for Form Config Handler.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class FormConfigTest extends TestCase
+final class FormConfigTest extends TestCase
 {
-    public function testWithStringType()
+    public function testWithStringType(): void
     {
         $type = FormType::class;
         $config = new FormConfig($type);
@@ -34,7 +36,7 @@ class FormConfigTest extends TestCase
         $this->assertTrue($config->getSubmitClearMissing());
     }
 
-    public function testWithStringTypeAndPatchMethod()
+    public function testWithStringTypeAndPatchMethod(): void
     {
         $type = FormType::class;
         $config = new FormConfig($type, [], Request::METHOD_PATCH);
@@ -45,7 +47,7 @@ class FormConfigTest extends TestCase
         $this->assertFalse($config->getSubmitClearMissing());
     }
 
-    public function testSetType()
+    public function testSetType(): void
     {
         $config = new FormConfig(FormType::class);
 
@@ -55,17 +57,16 @@ class FormConfigTest extends TestCase
         $this->assertSame(FormType::class, $config->getType());
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The form type of domain form config must be an string of class name of form type
-     */
-    public function testSetInvalidType()
+    public function testSetInvalidType(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The form type of domain form config must be an string of class name of form type');
+
         $config = new FormConfig('form_type_name');
         $config->setType(42);
     }
 
-    public function testSetOptions()
+    public function testSetOptions(): void
     {
         $config = new FormConfig(FormType::class);
 
@@ -86,7 +87,7 @@ class FormConfigTest extends TestCase
         $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
     }
 
-    public function testSetMethod()
+    public function testSetMethod(): void
     {
         $config = new FormConfig(FormType::class);
 
@@ -145,11 +146,11 @@ class FormConfigTest extends TestCase
     /**
      * @dataProvider getRequestMethod
      *
-     * @param bool|null $submitClearMissing
+     * @param null|bool $submitClearMissing
      * @param string    $method
      * @param bool      $validSubmitClearMissing
      */
-    public function testGetSubmitClearMissing($submitClearMissing, $method, $validSubmitClearMissing)
+    public function testGetSubmitClearMissing($submitClearMissing, $method, $validSubmitClearMissing): void
     {
         $config = new FormConfig(FormType::class);
         $config->setMethod($method);

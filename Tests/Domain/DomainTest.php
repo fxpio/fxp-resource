@@ -33,8 +33,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Tests case for Domain.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainTest extends TestCase
+final class DomainTest extends TestCase
 {
     /**
      * @var DomainFactory
@@ -42,7 +44,7 @@ class DomainTest extends TestCase
     protected $factory;
 
     /**
-     * @var ObjectManager|MockObject
+     * @var MockObject|ObjectManager
      */
     protected $objectManager;
 
@@ -62,17 +64,17 @@ class DomainTest extends TestCase
     protected $eventDispatcher;
 
     /**
-     * @var ObjectFactoryInterface|MockObject
+     * @var MockObject|ObjectFactoryInterface
      */
     protected $objectFactory;
 
     /**
-     * @var ValidatorInterface|MockObject
+     * @var MockObject|ValidatorInterface
      */
     protected $validator;
 
     /**
-     * @var TranslatorInterface|MockObject
+     * @var MockObject|TranslatorInterface
      */
     protected $translator;
 
@@ -81,7 +83,7 @@ class DomainTest extends TestCase
      */
     protected $domain;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         $this->objectFactory = $this->getMockBuilder(ObjectFactoryInterface::class)->getMock();
@@ -91,7 +93,8 @@ class DomainTest extends TestCase
         $this->metaFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
         $this->registry = $this->getMockBuilder(ManagerRegistry::class)->getMock();
 
-        $this->domain = new Domain(\stdClass::class,
+        $this->domain = new Domain(
+            \stdClass::class,
             $this->objectManager,
             $this->objectFactory,
             $this->eventDispatcher,
@@ -100,7 +103,7 @@ class DomainTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->eventDispatcher = null;
         $this->objectFactory = null;
@@ -112,16 +115,18 @@ class DomainTest extends TestCase
         $this->domain = null;
     }
 
-    public function testCreateQueryBuilder()
+    public function testCreateQueryBuilder(): void
     {
         $mockRepo = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $qbMock = $this->getMockBuilder(QueryBuilder::class)->disableOriginalConstructor()->getMock();
         $mockRepo->expects($this->once())
             ->method('createQueryBuilder')
-            ->willReturn($qbMock);
+            ->willReturn($qbMock)
+        ;
         $this->objectManager->expects($this->once())
             ->method('getRepository')
-            ->willReturn($mockRepo);
+            ->willReturn($mockRepo)
+        ;
 
         $qb = $this->domain->createQueryBuilder('f');
 
@@ -129,15 +134,15 @@ class DomainTest extends TestCase
         $this->assertSame($qbMock, $qb);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\BadMethodCallException
-     * @expectedExceptionMessage The "Domain::createQueryBuilder()" method can only be called for a domain with Doctrine ORM Entity Manager
-     */
-    public function testCreateQueryBuilderInvalidObjectManager()
+    public function testCreateQueryBuilderInvalidObjectManager(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\BadMethodCallException::class);
+        $this->expectExceptionMessage('The "Domain::createQueryBuilder()" method can only be called for a domain with Doctrine ORM Entity Manager');
+
         $this->objectManager = $this->createMockObjectManager(ObjectManager::class);
 
-        $this->domain = new Domain(\stdClass::class,
+        $this->domain = new Domain(
+            \stdClass::class,
             $this->objectManager,
             $this->objectFactory,
             $this->eventDispatcher,
@@ -148,19 +153,20 @@ class DomainTest extends TestCase
         $this->domain->createQueryBuilder();
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /The "([\w\\]+)" class is not managed by doctrine object manager/
-     */
-    public function testInvalidObjectManager()
+    public function testInvalidObjectManager(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessageRegExp('/The "([\\w\\\\]+)" class is not managed by doctrine object manager/');
+
         $objectManager = $this->createMockObjectManager(ObjectManager::class);
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
-            ->willThrowException(new MappingException());
+            ->willThrowException(new MappingException())
+        ;
 
-        new Domain(\stdClass::class,
+        new Domain(
+            \stdClass::class,
             $objectManager,
             $this->objectFactory,
             $this->eventDispatcher,
@@ -169,29 +175,32 @@ class DomainTest extends TestCase
         );
     }
 
-    public function testGetRepository()
+    public function testGetRepository(): void
     {
         $mockRepo = $this->getMockBuilder(ObjectRepository::class)->getMock();
 
         $this->objectManager->expects($this->once())
             ->method('getRepository')
             ->with(\stdClass::class)
-            ->willReturn($mockRepo);
+            ->willReturn($mockRepo)
+        ;
 
         $repo = $this->domain->getRepository();
 
         $this->assertSame($mockRepo, $repo);
     }
 
-    public function testGetClassMetadata()
+    public function testGetClassMetadata(): void
     {
         $mockMeta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $mockMeta->expects($this->once())
             ->method('getName')
-            ->willReturn(\stdClass::class);
+            ->willReturn(\stdClass::class)
+        ;
 
         $objectManager = $this->createMockObjectManager(ObjectManager::class, $mockMeta);
-        $domain = new Domain(\stdClass::class,
+        $domain = new Domain(
+            \stdClass::class,
             $objectManager,
             $this->objectFactory,
             $this->eventDispatcher,
@@ -204,14 +213,15 @@ class DomainTest extends TestCase
         $this->assertSame($mockMeta, $meta);
     }
 
-    public function testNewInstance()
+    public function testNewInstance(): void
     {
         $instance = new \stdClass();
 
         $this->objectFactory->expects($this->once())
             ->method('create')
             ->with(\stdClass::class, [])
-            ->willReturn($instance);
+            ->willReturn($instance)
+        ;
 
         $val = $this->domain->newInstance();
 
@@ -222,9 +232,9 @@ class DomainTest extends TestCase
      * Create the mock object manager?
      *
      * @param string                        $class The class name of object manager
-     * @param ClassMetadata|MockObject|null $meta  The class metadata
+     * @param null|ClassMetadata|MockObject $meta  The class metadata
      *
-     * @return ObjectManager|MockObject
+     * @return MockObject|ObjectManager
      */
     protected function createMockObjectManager($class = EntityManagerInterface::class, $meta = null)
     {
@@ -234,12 +244,14 @@ class DomainTest extends TestCase
             $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
             $meta->expects($this->any())
                 ->method('getName')
-                ->willReturn(\stdClass::class);
+                ->willReturn(\stdClass::class)
+            ;
         }
 
         $objectManager->expects($this->any())
             ->method('getClassMetadata')
-            ->willReturn($meta);
+            ->willReturn($meta)
+        ;
 
         return $objectManager;
     }

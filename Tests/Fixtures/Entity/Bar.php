@@ -31,7 +31,7 @@ class Bar implements SoftDeletableInterface
     protected $name;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $description;
 
@@ -41,7 +41,7 @@ class Bar implements SoftDeletableInterface
     protected $detail;
 
     /**
-     * @var \DateTime|null
+     * @var null|\DateTime
      */
     protected $deletedAt;
 
@@ -56,7 +56,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -72,13 +72,13 @@ class Bar implements SoftDeletableInterface
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -88,7 +88,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @param string $detail
      */
-    public function setDetail($detail)
+    public function setDetail($detail): void
     {
         $this->detail = $detail;
     }
@@ -104,7 +104,7 @@ class Bar implements SoftDeletableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDeletedAt(\DateTime $deletedAt = null)
+    public function setDeletedAt(\DateTime $deletedAt = null): void
     {
         $this->deletedAt = $deletedAt;
     }

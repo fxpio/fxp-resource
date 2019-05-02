@@ -26,13 +26,15 @@ use Symfony\Component\Form\FormInterface;
  * Functional tests for create methods of Domain with form resources.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainCreateFormTest extends AbstractDomainTest
+final class DomainCreateFormTest extends AbstractDomainTest
 {
-    public function testCreateWithErrorValidation()
+    public function testCreateWithErrorValidation(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo */
+        /** @var Foo $foo */
         $foo = $domain->newInstance();
         $form = $this->buildForm($foo, [
             'description' => 'test',
@@ -43,14 +45,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -73,10 +75,10 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertCount(0, $domain->getRepository()->findAll());
     }
 
-    public function testCreateWithErrorDatabase()
+    public function testCreateWithErrorDatabase(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo */
+        /** @var Foo $foo */
         $foo = $domain->newInstance();
         $form = $this->buildForm($foo, [
             'name' => 'Bar',
@@ -87,14 +89,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -118,10 +120,10 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertCount(0, $domain->getRepository()->findAll());
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo */
+        /** @var Foo $foo */
         $foo = $domain->newInstance();
         $form = $this->buildForm($foo, [
             'name' => 'Bar',
@@ -133,14 +135,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -161,12 +163,12 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertCount(1, $domain->getRepository()->findAll());
     }
 
-    public function testCreatesWithErrorValidation()
+    public function testCreatesWithErrorValidation(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo1 */
+        /** @var Foo $foo1 */
         $foo1 = $domain->newInstance();
-        /* @var Foo $foo2 */
+        /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
         $form1 = $this->buildForm($foo1, [
@@ -179,12 +181,12 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->runTestCreatesException($domain, [$form1, $form2], '/This value should not be blank./', true);
     }
 
-    public function testCreatesWithErrorDatabase()
+    public function testCreatesWithErrorDatabase(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo1 */
+        /** @var Foo $foo1 */
         $foo1 = $domain->newInstance();
-        /* @var Foo $foo2 */
+        /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
         $form1 = $this->buildForm($foo1, [
@@ -197,60 +199,17 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->runTestCreatesException($domain, [$form1, $form2], $this->getIntegrityViolationMessage(), false);
     }
 
-    protected function runTestCreatesException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false)
-    {
-        $this->loadFixtures([]);
-
-        $preEvent = false;
-        $postEvent = false;
-
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
-            $preEvent = true;
-            $this->assertSame($domain->getClass(), $e->getClass());
-            foreach ($e->getResources() as $resource) {
-                $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
-            }
-        });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $autoCommit, $domain) {
-            $postEvent = true;
-            $this->assertSame($domain->getClass(), $e->getClass());
-            $resources = $e->getResources();
-            $this->assertCount(2, $resources);
-            $this->assertSame(ResourceStatutes::ERROR, $resources[0]->getStatus());
-            $this->assertSame($autoCommit ? ResourceStatutes::CANCELED
-                : ResourceStatutes::ERROR, $resources[1]->getStatus());
-        });
-
-        $this->assertCount(0, $domain->getRepository()->findAll());
-
-        $resources = $domain->creates($objects);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
-
-        $errors = $autoCommit
-            ? $resources->get(0)->getFormErrors()
-            : $resources->getErrors();
-        $this->assertRegExp($errorMessage, $errors[0]->getMessage());
-
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
-
-        $this->assertCount(0, $domain->getRepository()->findAll());
-        $this->assertSame($autoCommit ? ResourceListStatutes::MIXED
-            : ResourceListStatutes::ERROR, $resources->getStatus());
-    }
-
-    public function testCreates()
+    public function testCreates(): void
     {
         $this->runTestCreates(false);
     }
 
-    public function testCreatesAutoCommitWithErrorValidationAndErrorDatabase()
+    public function testCreatesAutoCommitWithErrorValidationAndErrorDatabase(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo1 */
+        /** @var Foo $foo1 */
         $foo1 = $domain->newInstance();
-        /* @var Foo $foo2 */
+        /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
         $form1 = $this->buildForm($foo1, []);
@@ -265,14 +224,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -296,14 +255,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertCount(0, $domain->getRepository()->findAll());
     }
 
-    public function testCreatesAutoCommitWithErrorDatabase()
+    public function testCreatesAutoCommitWithErrorDatabase(): void
     {
         $domain = $this->createDomain();
 
         $this->loadFixtures([]);
-        /* @var Foo $foo1 */
+        /** @var Foo $foo1 */
         $foo1 = $domain->newInstance();
-        /* @var Foo $foo2 */
+        /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
         $form1 = $this->buildForm($foo1, [
@@ -318,14 +277,14 @@ class DomainCreateFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -354,12 +313,12 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertCount(0, $domain->getRepository()->findAll());
     }
 
-    public function testCreatesAutoCommitWithErrorValidationAndSuccess()
+    public function testCreatesAutoCommitWithErrorValidationAndSuccess(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo1 */
+        /** @var Foo $foo1 */
         $foo1 = $domain->newInstance();
-        /* @var Foo $foo2 */
+        /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
         $form1 = $this->buildForm($foo1, []);
@@ -385,17 +344,111 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertSame(ResourceStatutes::CREATED, $resources->get(1)->getStatus());
     }
 
-    public function testCreatesAutoCommit()
+    public function testCreatesAutoCommit(): void
     {
         $this->runTestCreates(true);
     }
 
-    protected function runTestCreates($autoCommit)
+    public function testCreateWithMissingFormSubmission(): void
     {
         $domain = $this->createDomain();
-        /* @var Foo $foo1 */
+        /** @var Foo $foo */
+        $foo = $domain->newInstance();
+
+        $form = $this->formFactory->create(FooType::class, $foo, []);
+
+        $this->loadFixtures([]);
+
+        $preEvent = false;
+        $postEvent = false;
+
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
+            $preEvent = true;
+            $this->assertSame($domain->getClass(), $e->getClass());
+            foreach ($e->getResources() as $resource) {
+                $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
+            }
+        });
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain): void {
+            $postEvent = true;
+            $this->assertSame($domain->getClass(), $e->getClass());
+            foreach ($e->getResources() as $resource) {
+                $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
+            }
+        });
+
+        $this->assertCount(0, $domain->getRepository()->findAll());
+
+        $resource = $domain->create($form);
+        $this->assertCount(0, $resource->getErrors());
+        $this->assertCount(1, $resource->getFormErrors());
+    }
+
+    public function testErrorIdentifier(): void
+    {
+        $domain = $this->createDomain();
+        $foo = $this->insertResource($domain);
+        $foo->setDetail(null);
+        $form = $this->buildForm($foo, [
+            'name' => 'New Bar',
+            'detail' => 'New Detail',
+        ]);
+
+        $resource = $domain->create($form);
+        $this->assertFalse($resource->isValid());
+        $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
+        $this->assertRegExp('/The resource cannot be created because it has an identifier/', $resource->getErrors()->get(0)->getMessage());
+    }
+
+    protected function runTestCreatesException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false): void
+    {
+        $this->loadFixtures([]);
+
+        $preEvent = false;
+        $postEvent = false;
+
+        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain): void {
+            $preEvent = true;
+            $this->assertSame($domain->getClass(), $e->getClass());
+            foreach ($e->getResources() as $resource) {
+                $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
+            }
+        });
+        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $autoCommit, $domain): void {
+            $postEvent = true;
+            $this->assertSame($domain->getClass(), $e->getClass());
+            $resources = $e->getResources();
+            $this->assertCount(2, $resources);
+            $this->assertSame(ResourceStatutes::ERROR, $resources[0]->getStatus());
+            $this->assertSame($autoCommit ? ResourceStatutes::CANCELED
+                : ResourceStatutes::ERROR, $resources[1]->getStatus());
+        });
+
+        $this->assertCount(0, $domain->getRepository()->findAll());
+
+        $resources = $domain->creates($objects);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
+        $this->assertTrue($resources->hasErrors());
+
+        $errors = $autoCommit
+            ? $resources->get(0)->getFormErrors()
+            : $resources->getErrors();
+        $this->assertRegExp($errorMessage, $errors[0]->getMessage());
+
+        $this->assertTrue($preEvent);
+        $this->assertTrue($postEvent);
+
+        $this->assertCount(0, $domain->getRepository()->findAll());
+        $this->assertSame($autoCommit ? ResourceListStatutes::MIXED
+            : ResourceListStatutes::ERROR, $resources->getStatus());
+    }
+
+    protected function runTestCreates($autoCommit): void
+    {
+        $domain = $this->createDomain();
+        /** @var Foo $foo1 */
         $foo1 = $domain->newInstance();
-        /* @var Foo $foo2 */
+        /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
         $form1 = $this->buildForm($foo1, [
@@ -424,57 +477,6 @@ class DomainCreateFormTest extends AbstractDomainTest
         $this->assertTrue($resources->get(0)->isValid());
         $this->assertSame(ResourceStatutes::CREATED, $resources->get(1)->getStatus());
         $this->assertTrue($resources->get(1)->isValid());
-    }
-
-    public function testCreateWithMissingFormSubmission()
-    {
-        $domain = $this->createDomain();
-        /* @var Foo $foo */
-        $foo = $domain->newInstance();
-
-        $form = $this->formFactory->create(FooType::class, $foo, []);
-
-        $this->loadFixtures([]);
-
-        $preEvent = false;
-        $postEvent = false;
-
-        $this->dispatcher->addListener(PreCreatesEvent::class, function (PreCreatesEvent $e) use (&$preEvent, $domain) {
-            $preEvent = true;
-            $this->assertSame($domain->getClass(), $e->getClass());
-            foreach ($e->getResources() as $resource) {
-                $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
-            }
-        });
-        $this->dispatcher->addListener(PostCreatesEvent::class, function (PostCreatesEvent $e) use (&$postEvent, $domain) {
-            $postEvent = true;
-            $this->assertSame($domain->getClass(), $e->getClass());
-            foreach ($e->getResources() as $resource) {
-                $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
-            }
-        });
-
-        $this->assertCount(0, $domain->getRepository()->findAll());
-
-        $resource = $domain->create($form);
-        $this->assertCount(0, $resource->getErrors());
-        $this->assertCount(1, $resource->getFormErrors());
-    }
-
-    public function testErrorIdentifier()
-    {
-        $domain = $this->createDomain();
-        $foo = $this->insertResource($domain);
-        $foo->setDetail(null);
-        $form = $this->buildForm($foo, [
-            'name' => 'New Bar',
-            'detail' => 'New Detail',
-        ]);
-
-        $resource = $domain->create($form);
-        $this->assertFalse($resource->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
-        $this->assertRegExp('/The resource cannot be created because it has an identifier/', $resource->getErrors()->get(0)->getMessage());
     }
 
     /**

@@ -43,9 +43,9 @@ interface DomainFactoryInterface
      *
      * @param string $class
      *
-     * @return string
-     *
      * @throws InvalidArgumentException When the class is not registered in doctrine
+     *
+     * @return string
      */
     public function getManagedClass($class);
 
@@ -54,9 +54,9 @@ interface DomainFactoryInterface
      *
      * @param string $class The class name
      *
-     * @return DomainInterface
-     *
      * @throws InvalidArgumentException When the class is not registered in doctrine
+     *
+     * @return DomainInterface
      */
     public function create($class);
 }

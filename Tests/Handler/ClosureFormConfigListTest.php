@@ -19,10 +19,12 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
  * Tests case for ClosureFormConfigList.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ClosureFormConfigListTest extends TestCase
+final class ClosureFormConfigListTest extends TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
 
@@ -31,7 +33,7 @@ class ClosureFormConfigListTest extends TestCase
         $this->assertFalse($config->isTransactional());
     }
 
-    public function testConvertObjectsWithoutClosure()
+    public function testConvertObjectsWithoutClosure(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
         $list = ['mock'];
@@ -40,7 +42,7 @@ class ClosureFormConfigListTest extends TestCase
         $this->assertEquals([], $config->convertObjects($list));
     }
 
-    public function testConvertObjectsWithClosure()
+    public function testConvertObjectsWithClosure(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
         $list = ['mock'];
@@ -52,7 +54,7 @@ class ClosureFormConfigListTest extends TestCase
         $this->assertEquals($list, $config->convertObjects($list));
     }
 
-    public function testLimit()
+    public function testLimit(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
 
@@ -61,7 +63,7 @@ class ClosureFormConfigListTest extends TestCase
         $this->assertSame(5, $config->getLimit());
     }
 
-    public function testFindList()
+    public function testFindList(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
         $data = [
@@ -72,7 +74,7 @@ class ClosureFormConfigListTest extends TestCase
         $this->assertSame($data['records'], $list);
     }
 
-    public function testFindListWithTransactionalOption()
+    public function testFindListWithTransactionalOption(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
         $data = [
@@ -87,12 +89,11 @@ class ClosureFormConfigListTest extends TestCase
         $this->assertFalse($config->isTransactional());
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The "records" field is required
-     */
-    public function testFindListWithoutRecords()
+    public function testFindListWithoutRecords(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidResourceException::class);
+        $this->expectExceptionMessage('The "records" field is required');
+
         $config = new ClosureFormConfigList(FormType::class);
 
         $config->findList([]);

@@ -29,7 +29,7 @@ class Foo
     protected $name;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $description;
 
@@ -49,7 +49,7 @@ class Foo
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -65,13 +65,13 @@ class Foo
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -81,7 +81,7 @@ class Foo
     /**
      * @param string $detail
      */
-    public function setDetail($detail)
+    public function setDetail($detail): void
     {
         $this->detail = $detail;
     }

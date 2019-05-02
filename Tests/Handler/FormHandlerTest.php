@@ -32,8 +32,10 @@ use Symfony\Component\Translation\Translator;
  * Tests case for Form Config Handler.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class FormHandlerTest extends TestCase
+final class FormHandlerTest extends TestCase
 {
     /**
      * @var ConverterRegistryInterface|MockObject
@@ -46,7 +48,7 @@ class FormHandlerTest extends TestCase
     protected $formFactory;
 
     /**
-     * @var Request|MockObject
+     * @var MockObject|Request
      */
     protected $request;
 
@@ -65,14 +67,15 @@ class FormHandlerTest extends TestCase
      */
     protected $formHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
-        /* @var RequestStack|MockObject $requestStack */
+        /** @var MockObject|RequestStack $requestStack */
         $requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
         $requestStack->expects($this->any())
             ->method('getCurrentRequest')
-            ->will($this->returnValue($request));
+            ->will($this->returnValue($request))
+        ;
 
         $this->converterRegistry = $this->getMockBuilder(ConverterRegistryInterface::class)->getMock();
         $this->formFactory = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
@@ -93,16 +96,16 @@ class FormHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The current request is required in request stack
-     */
-    public function testBuildFormHandlerWithoutCurrentRequest()
+    public function testBuildFormHandlerWithoutCurrentRequest(): void
     {
-        /* @var RequestStack|MockObject $requestStack */
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The current request is required in request stack');
+
+        /** @var MockObject|RequestStack $requestStack */
         $requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
         $requestStack->expects($this->once())
-            ->method('getCurrentRequest');
+            ->method('getCurrentRequest')
+        ;
 
         new FormHandler(
             $this->converterRegistry,
@@ -113,12 +116,12 @@ class FormHandlerTest extends TestCase
         );
     }
 
-    public function testGetDefaultLimit()
+    public function testGetDefaultLimit(): void
     {
         $this->assertSame($this->defaultLimit, $this->formHandler->getDefaultLimit());
     }
 
-    public function testProcessForm()
+    public function testProcessForm(): void
     {
         $object = new \stdClass();
         $config = $this->configureProcessForms([$object], FormConfigInterface::class, '{}');
@@ -127,7 +130,7 @@ class FormHandlerTest extends TestCase
         $this->assertInstanceOf(FormInterface::class, $form);
     }
 
-    public function testProcessForms()
+    public function testProcessForms(): void
     {
         $objects = [
             new \stdClass(),
@@ -141,7 +144,7 @@ class FormHandlerTest extends TestCase
         $this->assertInstanceOf(FormInterface::class, $forms[0]);
     }
 
-    public function testProcessFormWithCreationOfNewObject()
+    public function testProcessFormWithCreationOfNewObject(): void
     {
         $objects = [
             new \stdClass(),
@@ -150,7 +153,8 @@ class FormHandlerTest extends TestCase
         $config->expects($this->once())
             ->method('convertObjects')
             ->with($objects)
-            ->will($this->returnValue($objects));
+            ->will($this->returnValue($objects))
+        ;
 
         $forms = $this->formHandler->processForms($config, []);
 
@@ -159,12 +163,11 @@ class FormHandlerTest extends TestCase
         $this->assertInstanceOf(FormInterface::class, $forms[0]);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The list of resource sent exceeds the permitted limit (1)
-     */
-    public function testProcessFormWithExceededPermittedLimit()
+    public function testProcessFormWithExceededPermittedLimit(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidResourceException::class);
+        $this->expectExceptionMessage('The list of resource sent exceeds the permitted limit (1)');
+
         $objects = [
             new \stdClass(),
             new \stdClass(),
@@ -174,12 +177,11 @@ class FormHandlerTest extends TestCase
         $this->formHandler->processForms($config, $objects);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The size of the request data list (0) is different that the object instance list (1)
-     */
-    public function testProcessFormWithDifferentSize()
+    public function testProcessFormWithDifferentSize(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidResourceException::class);
+        $this->expectExceptionMessage('The size of the request data list (0) is different that the object instance list (1)');
+
         $objects = [
             new \stdClass(),
         ];
@@ -193,35 +195,39 @@ class FormHandlerTest extends TestCase
      * @param array    $objects        The objects
      * @param string   $configClass    The config classname
      * @param string   $requestContent The content of request
-     * @param int|null $limit          The config limit
+     * @param null|int $limit          The config limit
      *
      * @return FormConfigInterface|FormConfigListInterface|MockObject
      */
     protected function configureProcessForms(array $objects, $configClass, $requestContent, $limit = null)
     {
-        /* @var FormConfigInterface|FormConfigListInterface|MockObject $config */
+        /** @var FormConfigInterface|FormConfigListInterface|MockObject $config */
         $config = $this->getMockBuilder($configClass)->getMock();
 
         if (FormConfigListInterface::class === $configClass) {
             $config->expects($this->once())
                 ->method('getLimit')
-                ->will($this->returnValue($limit));
+                ->will($this->returnValue($limit))
+            ;
         }
 
-        /* @var ConverterInterface|MockObject $converter */
+        /** @var ConverterInterface|MockObject $converter */
         $converter = $this->getMockBuilder(ConverterInterface::class)->getMock();
 
         $config->expects($this->once())
             ->method('getConverter')
-            ->will($this->returnValue('json'));
+            ->will($this->returnValue('json'))
+        ;
 
         $this->converterRegistry->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($converter));
+            ->will($this->returnValue($converter))
+        ;
 
         $this->request->expects($this->any())
             ->method('getContent')
-            ->will($this->returnValue($requestContent));
+            ->will($this->returnValue($requestContent))
+        ;
 
         if (FormConfigListInterface::class === $configClass) {
             $dataList = [
@@ -234,40 +240,48 @@ class FormHandlerTest extends TestCase
         $converter->expects($this->once())
             ->method('convert')
             ->with($requestContent)
-            ->will($this->returnValue($dataList));
+            ->will($this->returnValue($dataList))
+        ;
 
         if (FormConfigListInterface::class === $configClass) {
             $config->expects($this->once())
                 ->method('findList')
                 ->with($dataList)
-                ->will($this->returnValue($dataList['records']));
+                ->will($this->returnValue($dataList['records']))
+            ;
         }
 
         if (\count($objects) > 0 && null === $limit) {
             $config->expects($this->once())
                 ->method('getType')
-                ->will($this->returnValue(FormType::class));
+                ->will($this->returnValue(FormType::class))
+            ;
 
             $config->expects($this->once())
                 ->method('getSubmitClearMissing')
-                ->will($this->returnValue(false));
+                ->will($this->returnValue(false))
+            ;
 
             $config->expects($this->once())
                 ->method('getOptions')
-                ->will($this->returnValue([]));
+                ->will($this->returnValue([]))
+            ;
 
             $form = $this->getMockBuilder(FormInterface::class)->getMock();
             $form->expects($this->any())
                 ->method('getData')
-                ->will($this->returnValue($objects[0]));
+                ->will($this->returnValue($objects[0]))
+            ;
 
             $this->formFactory->expects($this->at(0))
                 ->method('create')
-                ->will($this->returnValue($form));
+                ->will($this->returnValue($form))
+            ;
 
             $form->expects($this->once())
                 ->method('submit')
-                ->with($objects[0]);
+                ->with($objects[0])
+            ;
         }
 
         return $config;

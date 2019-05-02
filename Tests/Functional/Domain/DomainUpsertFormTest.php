@@ -26,8 +26,10 @@ use Symfony\Component\Form\FormInterface;
  * Functional tests for upsert methods of Domain with form resources.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainUpsertFormTest extends AbstractDomainTest
+final class DomainUpsertFormTest extends AbstractDomainTest
 {
     public function getUpsertType()
     {
@@ -42,7 +44,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertWithErrorValidation($isUpdate)
+    public function testUpsertWithErrorValidation($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -51,7 +53,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
             $foo->setName(null);
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo */
+            /** @var Foo $foo */
             $foo = $domain->newInstance();
         }
 
@@ -63,14 +65,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -98,7 +100,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertWithErrorDatabase($isUpdate)
+    public function testUpsertWithErrorDatabase($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -107,7 +109,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
             $foo->setDetail(null);
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo */
+            /** @var Foo $foo */
             $foo = $domain->newInstance();
             $foo->setName('Bar');
         }
@@ -119,14 +121,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -155,7 +157,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsert($isUpdate)
+    public function testUpsert($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -164,7 +166,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
             $foo->setDetail(null);
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo */
+            /** @var Foo $foo */
             $foo = $domain->newInstance();
             $foo->setName('Bar');
         }
@@ -177,14 +179,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain, $isUpdate) {
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain, $isUpdate): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -211,7 +213,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertsWithErrorValidation($isUpdate)
+    public function testUpsertsWithErrorValidation($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -230,9 +232,9 @@ class DomainUpsertFormTest extends AbstractDomainTest
             ];
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo1 */
+            /** @var Foo $foo1 */
             $foo1 = $domain->newInstance();
-            /* @var Foo $foo2 */
+            /** @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
             $form1 = $this->buildForm($foo1, [
@@ -253,7 +255,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertsWithErrorDatabase($isUpdate)
+    public function testUpsertsWithErrorDatabase($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -272,9 +274,9 @@ class DomainUpsertFormTest extends AbstractDomainTest
             ];
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo1 */
+            /** @var Foo $foo1 */
             $foo1 = $domain->newInstance();
-            /* @var Foo $foo2 */
+            /** @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
             $form1 = $this->buildForm($foo1, [
@@ -289,53 +291,12 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $this->runTestUpsertsException($domain, $forms, $this->getIntegrityViolationMessage(), false, $isUpdate);
     }
 
-    protected function runTestUpsertsException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false, $isUpdate = false)
-    {
-        $preEvent = false;
-        $postEvent = false;
-
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
-            $preEvent = true;
-            $this->assertSame($domain->getClass(), $e->getClass());
-            foreach ($e->getResources() as $resource) {
-                $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
-            }
-        });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $autoCommit, $domain) {
-            $postEvent = true;
-            $this->assertSame($domain->getClass(), $e->getClass());
-            $resources = $e->getResources();
-            $this->assertCount(2, $resources);
-            $this->assertSame(ResourceStatutes::ERROR, $resources[0]->getStatus());
-            $this->assertSame($autoCommit ? ResourceStatutes::CANCELED
-                : ResourceStatutes::ERROR, $resources[1]->getStatus());
-        });
-
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
-
-        $resources = $domain->upserts($objects);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
-
-        $errors = $autoCommit
-            ? $resources->get(0)->getFormErrors()
-            : $resources->getErrors();
-        $this->assertRegExp($errorMessage, $errors[0]->getMessage());
-
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
-
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
-        $this->assertSame($autoCommit ? ResourceListStatutes::MIXED
-            : ResourceListStatutes::ERROR, $resources->getStatus());
-    }
-
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
      */
-    public function testUpserts($isUpdate)
+    public function testUpserts($isUpdate): void
     {
         $this->runTestUpserts(false, $isUpdate);
     }
@@ -345,7 +306,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertsAutoCommitWithErrorValidationAndErrorDatabase($isUpdate)
+    public function testUpsertsAutoCommitWithErrorValidationAndErrorDatabase($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -364,9 +325,9 @@ class DomainUpsertFormTest extends AbstractDomainTest
             ];
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo1 */
+            /** @var Foo $foo1 */
             $foo1 = $domain->newInstance();
-            /* @var Foo $foo2 */
+            /** @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
             $form1 = $this->buildForm($foo1, [
@@ -382,14 +343,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -418,7 +379,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertsAutoCommitWithErrorDatabase($isUpdate)
+    public function testUpsertsAutoCommitWithErrorDatabase($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -436,9 +397,9 @@ class DomainUpsertFormTest extends AbstractDomainTest
             ];
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo1 */
+            /** @var Foo $foo1 */
             $foo1 = $domain->newInstance();
-            /* @var Foo $foo2 */
+            /** @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
             $form1 = $this->buildForm($foo1, [
@@ -454,14 +415,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -495,7 +456,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertsAutoCommitWithErrorValidationAndSuccess($isUpdate)
+    public function testUpsertsAutoCommitWithErrorValidationAndSuccess($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -514,9 +475,9 @@ class DomainUpsertFormTest extends AbstractDomainTest
             ];
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo1 */
+            /** @var Foo $foo1 */
             $foo1 = $domain->newInstance();
-            /* @var Foo $foo2 */
+            /** @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
             $form1 = $this->buildForm($foo1, [
@@ -549,12 +510,12 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertsAutoCommit($isUpdate)
+    public function testUpsertsAutoCommit($isUpdate): void
     {
         $this->runTestUpserts(true, $isUpdate);
     }
 
-    public function runTestUpserts($autoCommit, $isUpdate)
+    public function runTestUpserts($autoCommit, $isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -573,9 +534,9 @@ class DomainUpsertFormTest extends AbstractDomainTest
             ];
         } else {
             $this->loadFixtures([]);
-            /* @var Foo $foo1 */
+            /** @var Foo $foo1 */
             $foo1 = $domain->newInstance();
-            /* @var Foo $foo2 */
+            /** @var Foo $foo2 */
             $foo2 = $domain->newInstance();
 
             $form1 = $this->buildForm($foo1, [
@@ -612,7 +573,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testUpsertWithMissingFormSubmission($isUpdate)
+    public function testUpsertWithMissingFormSubmission($isUpdate): void
     {
         $domain = $this->createDomain();
 
@@ -623,7 +584,7 @@ class DomainUpsertFormTest extends AbstractDomainTest
                 'detail' => 'New Detail 1',
             ]);
         } else {
-            /* @var Foo $foo */
+            /** @var Foo $foo */
             $foo = $domain->newInstance();
             $form = $this->formFactory->create(FooType::class, $foo, []);
 
@@ -633,14 +594,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
         $preEvent = false;
         $postEvent = false;
 
-        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain) {
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
             $preEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
                 $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
             }
         });
-        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain) {
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $domain): void {
             $postEvent = true;
             $this->assertSame($domain->getClass(), $e->getClass());
             foreach ($e->getResources() as $resource) {
@@ -660,14 +621,14 @@ class DomainUpsertFormTest extends AbstractDomainTest
      *
      * @param bool $isUpdate
      */
-    public function testErrorIdentifier($isUpdate)
+    public function testErrorIdentifier($isUpdate): void
     {
         $this->loadFixtures([]);
 
         $domain = $this->createDomain();
 
         if ($isUpdate) {
-            /* @var Foo $object */
+            /** @var Foo $object */
             $object = $domain->newInstance();
             $form = $this->buildForm($object, [
                 'name' => 'Bar',
@@ -684,6 +645,47 @@ class DomainUpsertFormTest extends AbstractDomainTest
 
         $resource = $domain->upsert($form);
         $this->assertTrue($resource->isValid());
+    }
+
+    protected function runTestUpsertsException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false, $isUpdate = false): void
+    {
+        $preEvent = false;
+        $postEvent = false;
+
+        $this->dispatcher->addListener(PreUpsertsEvent::class, function (PreUpsertsEvent $e) use (&$preEvent, $domain): void {
+            $preEvent = true;
+            $this->assertSame($domain->getClass(), $e->getClass());
+            foreach ($e->getResources() as $resource) {
+                $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
+            }
+        });
+        $this->dispatcher->addListener(PostUpsertsEvent::class, function (PostUpsertsEvent $e) use (&$postEvent, $autoCommit, $domain): void {
+            $postEvent = true;
+            $this->assertSame($domain->getClass(), $e->getClass());
+            $resources = $e->getResources();
+            $this->assertCount(2, $resources);
+            $this->assertSame(ResourceStatutes::ERROR, $resources[0]->getStatus());
+            $this->assertSame($autoCommit ? ResourceStatutes::CANCELED
+                : ResourceStatutes::ERROR, $resources[1]->getStatus());
+        });
+
+        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+
+        $resources = $domain->upserts($objects);
+        $this->assertInstanceOf(ResourceListInterface::class, $resources);
+        $this->assertTrue($resources->hasErrors());
+
+        $errors = $autoCommit
+            ? $resources->get(0)->getFormErrors()
+            : $resources->getErrors();
+        $this->assertRegExp($errorMessage, $errors[0]->getMessage());
+
+        $this->assertTrue($preEvent);
+        $this->assertTrue($postEvent);
+
+        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        $this->assertSame($autoCommit ? ResourceListStatutes::MIXED
+            : ResourceListStatutes::ERROR, $resources->getStatus());
     }
 
     /**

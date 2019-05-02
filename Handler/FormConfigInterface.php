@@ -67,7 +67,7 @@ interface FormConfigInterface
     /**
      * Set the submit clear missing option.
      *
-     * @param bool|null $clearMissing The submit clear missing (use null for choose automatically the best method)
+     * @param null|bool $clearMissing The submit clear missing (use null for choose automatically the best method)
      */
     public function setSubmitClearMissing($clearMissing);
 

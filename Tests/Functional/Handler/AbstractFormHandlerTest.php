@@ -35,8 +35,8 @@ abstract class AbstractFormHandlerTest extends TestCase
     /**
      * Create form handler.
      *
-     * @param Request|null $request The request for request stack
-     * @param int|null     $limit   The limit
+     * @param null|Request $request The request for request stack
+     * @param null|int     $limit   The limit
      *
      * @return FormHandlerInterface
      */
@@ -53,11 +53,13 @@ abstract class AbstractFormHandlerTest extends TestCase
 
         $validator = Validation::createValidatorBuilder()
             ->addXmlMapping(__DIR__.'/../../Fixtures/config/validation.xml')
-            ->getValidator();
+            ->getValidator()
+        ;
 
         $formFactory = Forms::createFormFactoryBuilder()
             ->addExtension(new ValidatorExtension($validator))
-            ->getFormFactory();
+            ->getFormFactory()
+        ;
 
         $requestStack = new RequestStack();
 

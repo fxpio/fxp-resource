@@ -21,8 +21,10 @@ use PHPUnit\Framework\TestCase;
  * Tests case for Domain Manager.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainManagerTest extends TestCase
+final class DomainManagerTest extends TestCase
 {
     /**
      * @var DomainFactoryInterface|MockObject
@@ -39,48 +41,53 @@ class DomainManagerTest extends TestCase
      */
     protected $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->domain = $this->getMockBuilder(DomainInterface::class)->getMock();
         $this->factory = $this->getMockBuilder(DomainFactoryInterface::class)->getMock();
 
         $this->domain->expects($this->any())
             ->method('getClass')
-            ->will($this->returnValue('Foo'));
+            ->will($this->returnValue('Foo'))
+        ;
 
         $this->manager = new DomainManager($this->factory);
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $this->factory->expects($this->any())
             ->method('isManagedClass')
             ->willReturnCallback(static function ($value) {
                 return 'Foo' === $value;
-            });
+            })
+        ;
 
         $this->assertTrue($this->manager->has('Foo'));
         $this->assertFalse($this->manager->has('Bar'));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->factory->expects($this->once())
             ->method('isManagedClass')
             ->with('FooInterface')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->assertTrue($this->manager->has('FooInterface'));
 
         $this->factory->expects($this->once())
             ->method('getManagedClass')
             ->with('FooInterface')
-            ->willReturn('Foo');
+            ->willReturn('Foo')
+        ;
 
         $this->factory->expects($this->once())
             ->method('create')
             ->with('Foo')
-            ->willReturn($this->domain);
+            ->willReturn($this->domain)
+        ;
 
         $this->assertSame($this->domain, $this->manager->get('FooInterface'));
         $this->assertTrue($this->manager->has('Foo'));

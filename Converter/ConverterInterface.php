@@ -32,9 +32,9 @@ interface ConverterInterface
      *
      * @param string $content
      *
-     * @return array
-     *
      * @throws InvalidConverterException When the data can not be converted
+     *
+     * @return array
      */
     public function convert($content);
 }

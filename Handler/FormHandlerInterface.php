@@ -24,7 +24,7 @@ interface FormHandlerInterface
      * Process form for one object instance (create and submit form).
      *
      * @param FormConfigInterface $config The form config
-     * @param object|array        $object The object instance
+     * @param array|object        $object The object instance
      *
      * @return FormInterface
      */
@@ -34,7 +34,7 @@ interface FormHandlerInterface
      * Process form for one object instance (create and submit form).
      *
      * @param FormConfigListInterface $config  The form config
-     * @param object[]|array[]        $objects The list of object instance
+     * @param array[]|object[]        $objects The list of object instance
      *
      * @return FormInterface[]
      */
@@ -43,7 +43,7 @@ interface FormHandlerInterface
     /**
      * Get the default limit. If the value is null, then there is not limit of quantity of rows.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getDefaultLimit();
 }

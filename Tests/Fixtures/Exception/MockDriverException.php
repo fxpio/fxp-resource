@@ -31,7 +31,7 @@ class MockDriverException extends \Exception implements DriverException
     /**
      * {@inheritdoc}
      */
-    public function getSQLState()
+    public function getSQLState(): void
     {
         null;
     }

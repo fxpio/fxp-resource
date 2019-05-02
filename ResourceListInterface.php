@@ -60,9 +60,9 @@ interface ResourceListInterface extends \Traversable, \Countable, \ArrayAccess
      *
      * @param int $offset The offset
      *
-     * @return ResourceInterface
-     *
      * @throws \OutOfBoundsException When the offset does not exist
+     *
+     * @return ResourceInterface
      */
     public function get($offset);
 

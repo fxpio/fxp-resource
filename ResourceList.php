@@ -44,7 +44,7 @@ class ResourceList extends AbstractResourceList
         }
 
         foreach ($this->resources as $i => $resource) {
-            if (\in_array($resource->getStatus(), [ResourceStatutes::ERROR, ResourceStatutes::PENDING])
+            if (\in_array($resource->getStatus(), [ResourceStatutes::ERROR, ResourceStatutes::PENDING], true)
                     && !$resource->isValid()) {
                 return true;
             }
@@ -56,7 +56,7 @@ class ResourceList extends AbstractResourceList
     /**
      * {@inheritdoc}
      */
-    protected function refreshStatus()
+    protected function refreshStatus(): void
     {
         $countPending = 0;
         $countCancel = 0;
@@ -67,15 +67,19 @@ class ResourceList extends AbstractResourceList
             switch ($resource->getStatus()) {
                 case ResourceStatutes::PENDING:
                     $countPending++;
+
                     break;
                 case ResourceStatutes::CANCELED:
                     $countCancel++;
+
                     break;
                 case ResourceStatutes::ERROR:
                     $countError++;
+
                     break;
                 default:
                     $countSuccess++;
+
                     break;
             }
         }

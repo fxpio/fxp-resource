@@ -22,15 +22,17 @@ use Symfony\Component\Translation\Translator;
  * Tests case for json converter.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class JsonConverterTest extends TestCase
+final class JsonConverterTest extends TestCase
 {
     /**
      * @var ConverterInterface
      */
     protected $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $translator = new Translator('en');
         $ref = new \ReflectionClass(ResourceInterface::class);
@@ -40,21 +42,20 @@ class JsonConverterTest extends TestCase
         $this->converter = new JsonConverter($translator);
     }
 
-    public function testBasic()
+    public function testBasic(): void
     {
         $this->assertSame('json', $this->converter->getName());
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidConverterException
-     * @expectedExceptionMessage Request body should be a JSON object
-     */
-    public function testInvalidConversion()
+    public function testInvalidConversion(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidConverterException::class);
+        $this->expectExceptionMessage('Request body should be a JSON object');
+
         $this->converter->convert('<xml>content</xml>');
     }
 
-    public function testConversion()
+    public function testConversion(): void
     {
         $content = $this->converter->convert('{"foo": "bar"}');
 

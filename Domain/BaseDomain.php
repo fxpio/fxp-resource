@@ -57,7 +57,7 @@ abstract class BaseDomain extends AbstractDomain
      *                                          (continue the action even if there is an error on a resource)
      * @param bool                  $hasError   Check if there is an error
      */
-    protected function doFlushFinalTransaction(ResourceListInterface $resources, $autoCommit, $hasError)
+    protected function doFlushFinalTransaction(ResourceListInterface $resources, $autoCommit, $hasError): void
     {
         if (!$autoCommit) {
             if ($hasError) {
@@ -97,7 +97,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @param bool $autoCommit Check if each resource must be flushed immediately or in the end
      */
-    protected function beginTransaction($autoCommit = false)
+    protected function beginTransaction($autoCommit = false): void
     {
         if (!$autoCommit && null !== $this->connection) {
             $this->connection->beginTransaction();
@@ -107,7 +107,7 @@ abstract class BaseDomain extends AbstractDomain
     /**
      * Flush data in database with automatic declaration of the transaction for the collection.
      *
-     * @param object|null $object The resource for auto commit or null for flush at the end
+     * @param null|object $object The resource for auto commit or null for flush at the end
      *
      * @return ConstraintViolationList
      */
@@ -133,11 +133,11 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @param \Exception                       $e          The exception on flush transaction
      * @param ConstraintViolationListInterface $violations The constraint violation list
-     * @param object|null                      $object     The resource for auto commit or null for flush at the end
+     * @param null|object                      $object     The resource for auto commit or null for flush at the end
      *
      * @throws
      */
-    protected function flushTransactionException(\Exception $e, ConstraintViolationListInterface $violations, $object = null)
+    protected function flushTransactionException(\Exception $e, ConstraintViolationListInterface $violations, $object = null): void
     {
         if (null !== $this->connection && null === $object) {
             $this->connection->rollback();
@@ -157,7 +157,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @throws
      */
-    protected function cancelTransaction()
+    protected function cancelTransaction(): void
     {
         if (null !== $this->connection) {
             $this->connection->rollBack();
@@ -170,7 +170,7 @@ abstract class BaseDomain extends AbstractDomain
      * @param ResourceInterface $resource The resource
      * @param int               $type     The type of persist
      */
-    protected function validateResource($resource, $type)
+    protected function validateResource($resource, $type): void
     {
         if (!$resource->isValid()) {
             return;
@@ -199,7 +199,7 @@ abstract class BaseDomain extends AbstractDomain
      * @param object $object The object data
      * @param int    $type   The type of persist
      *
-     * @return string|null
+     * @return null|string
      */
     protected function getErrorIdentifier($object, $type)
     {

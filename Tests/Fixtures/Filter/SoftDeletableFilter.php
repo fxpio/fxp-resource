@@ -23,7 +23,7 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
 class SoftDeletableFilter extends SQLFilter
 {
     /**
-     * @var EntityManager|null
+     * @var null|EntityManager
      */
     protected $entityManager;
 
@@ -38,13 +38,11 @@ class SoftDeletableFilter extends SQLFilter
         $addCondSql = $platform->getIsNullExpression($targetTableAlias.'.'.$column);
 
         $now = $conn->quote(date('Y-m-d H:i:s')); // should use UTC in database and PHP
-        $addCondSql = "({$addCondSql} OR {$targetTableAlias}.{$column} > {$now})";
-
-        return $addCondSql;
+        return "({$addCondSql} OR {$targetTableAlias}.{$column} > {$now})";
     }
 
     /**
-     * @return EntityManager|mixed|null
+     * @return null|EntityManager|mixed
      */
     protected function getEntityManager()
     {

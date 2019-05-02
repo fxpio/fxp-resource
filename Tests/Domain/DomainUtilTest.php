@@ -45,12 +45,14 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  * Tests case for Domain util.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainUtilTest extends TestCase
+final class DomainUtilTest extends TestCase
 {
-    public function testExtractDriverExceptionMessage()
+    public function testExtractDriverExceptionMessage(): void
     {
-        /* @var DriverException|MockObject $ex */
+        /** @var DriverException|MockObject $ex */
         $ex = $this->getMockBuilder(DriverException::class)->disableOriginalConstructor()->getMock();
 
         $message = DomainUtil::getExceptionMessage($this->getTranslator(), $ex, false);
@@ -58,7 +60,7 @@ class DomainUtilTest extends TestCase
         $this->assertSame('Database error', $message);
     }
 
-    public function testExtractDriverExceptionMessageInDebug()
+    public function testExtractDriverExceptionMessageInDebug(): void
     {
         $rootMsg = 'SQLSTATE[HY000]: General error: 1364 Field \'foo\' doesn\'t have a default value';
         $rootEx = new MockDriverException($rootMsg);
@@ -70,21 +72,23 @@ class DomainUtilTest extends TestCase
         $this->assertSame('Database error [Doctrine\DBAL\Exception\DriverException]: General error: 1364 Field \'foo\' doesn\'t have a default value', $message);
     }
 
-    public function testGetIdentifier()
+    public function testGetIdentifier(): void
     {
         $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $meta->expects($this->once())
             ->method('getIdentifier')
             ->will($this->returnValue([
                 'id',
-            ]));
+            ]))
+        ;
 
-        /* @var ObjectManager|MockObject $om */
+        /** @var MockObject|ObjectManager $om */
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
         $om->expects($this->once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
-            ->will($this->returnValue($meta));
+            ->will($this->returnValue($meta))
+        ;
 
         $object = new \stdClass();
         $object->id = 42;
@@ -94,78 +98,82 @@ class DomainUtilTest extends TestCase
         $this->assertSame($object->id, $identifier);
     }
 
-    public function testGetIdentifierName()
+    public function testGetIdentifierName(): void
     {
         $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
         $meta->expects($this->once())
             ->method('getIdentifier')
             ->will($this->returnValue([
                 'id',
-            ]));
+            ]))
+        ;
 
-        /* @var ObjectManager|MockObject $om */
+        /** @var MockObject|ObjectManager $om */
         $om = $this->getMockBuilder(ObjectManager::class)->getMock();
         $om->expects($this->once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
-            ->will($this->returnValue($meta));
+            ->will($this->returnValue($meta))
+        ;
 
         $identifierName = DomainUtil::getIdentifierName($om, \stdClass::class);
 
         $this->assertSame('id', $identifierName);
     }
 
-    public function testGetEventClassCreate()
+    public function testGetEventClassCreate(): void
     {
         $classes = DomainUtil::getEventClasses(Domain::TYPE_CREATE);
         $validClasses = [PreCreatesEvent::class, PostCreatesEvent::class];
         $this->assertSame($validClasses, $classes);
     }
 
-    public function testGetEventClassUpdate()
+    public function testGetEventClassUpdate(): void
     {
         $names = DomainUtil::getEventClasses(Domain::TYPE_UPDATE);
         $validNames = [PreUpdatesEvent::class, PostUpdatesEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testGetEventClassUpsert()
+    public function testGetEventClassUpsert(): void
     {
         $names = DomainUtil::getEventClasses(Domain::TYPE_UPSERT);
         $validNames = [PreUpsertsEvent::class, PostUpsertsEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testGetEventClassDelete()
+    public function testGetEventClassDelete(): void
     {
         $names = DomainUtil::getEventClasses(Domain::TYPE_DELETE);
         $validNames = [PreDeletesEvent::class, PostDeletesEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testGetEventClassUndelete()
+    public function testGetEventClassUndelete(): void
     {
         $names = DomainUtil::getEventClasses(Domain::TYPE_UNDELETE);
         $validNames = [PreUndeletesEvent::class, PostUndeletesEvent::class];
         $this->assertSame($validNames, $names);
     }
 
-    public function testAddResourceError()
+    public function testAddResourceError(): void
     {
         $errors = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
         $errors->expects($this->once())
-            ->method('add');
+            ->method('add')
+        ;
 
-        /* @var ResourceInterface|MockObject $resource */
+        /** @var MockObject|ResourceInterface $resource */
         $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getErrors')
-            ->will($this->returnValue($errors));
+            ->will($this->returnValue($errors))
+        ;
 
         DomainUtil::addResourceError($resource, 'Message error');
     }
 
-    public function testExtractIdentifierInObjectList()
+    public function testExtractIdentifierInObjectList(): void
     {
         $identifiers = [
             new \stdClass(),
@@ -183,7 +191,7 @@ class DomainUtilTest extends TestCase
         $this->assertSame(5, $searchIds[0]);
     }
 
-    public function testInjectErrorMessage()
+    public function testInjectErrorMessage(): void
     {
         $res = new ResourceItem(new \stdClass());
 
@@ -197,7 +205,7 @@ class DomainUtilTest extends TestCase
         $this->assertCount(1, $res->getErrors());
     }
 
-    public function testInjectErrorMessageWithConstraintViolation()
+    public function testInjectErrorMessageWithConstraintViolation(): void
     {
         $data = new \stdClass();
         $res = new ResourceItem($data);
@@ -215,35 +223,39 @@ class DomainUtilTest extends TestCase
         $this->assertCount(2, $res->getErrors());
     }
 
-    public function testOneAction()
+    public function testOneAction(): void
     {
         $errors = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
         $errors->expects($this->once())
-            ->method('addAll');
+            ->method('addAll')
+        ;
 
-        /* @var ResourceListInterface|MockObject $resource */
+        /** @var MockObject|ResourceListInterface $resource */
         $resource = $this->getMockBuilder(ResourceListInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getErrors')
-            ->will($this->returnValue($errors));
+            ->will($this->returnValue($errors))
+        ;
 
         $listErrors = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
 
-        /* @var ResourceListInterface|MockObject $resourceList */
+        /** @var MockObject|ResourceListInterface $resourceList */
         $resourceList = $this->getMockBuilder(ResourceListInterface::class)->getMock();
         $resourceList->expects($this->once())
             ->method('getErrors')
-            ->will($this->returnValue($listErrors));
+            ->will($this->returnValue($listErrors))
+        ;
 
         $resourceList->expects($this->atLeast(2))
             ->method('get')
             ->with(0)
-            ->will($this->returnValue($resource));
+            ->will($this->returnValue($resource))
+        ;
 
         DomainUtil::oneAction($resourceList);
     }
 
-    public function testMoveFlushErrorsInResource()
+    public function testMoveFlushErrorsInResource(): void
     {
         $resources = new ResourceList();
         $errors = new ConstraintViolationList();
@@ -268,7 +280,7 @@ class DomainUtilTest extends TestCase
         $this->assertCount(0, $resources->get(2)->getErrors());
     }
 
-    public function testCancelAllSuccessResources()
+    public function testCancelAllSuccessResources(): void
     {
         $resList = new ResourceList();
         $resList->add(new ResourceItem(new \stdClass()));

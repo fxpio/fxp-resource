@@ -21,7 +21,7 @@ use Fxp\Component\Resource\Exception\InvalidResourceException;
 abstract class FormConfigList extends FormConfig implements FormConfigListInterface
 {
     /**
-     * @var int|null
+     * @var null|int
      */
     protected $limit;
 

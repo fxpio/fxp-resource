@@ -23,8 +23,10 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
  * Tests case for DomainFormConfigList.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainFormConfigListTest extends TestCase
+final class DomainFormConfigListTest extends TestCase
 {
     /**
      * @var DomainInterface|MockObject
@@ -36,13 +38,13 @@ class DomainFormConfigListTest extends TestCase
      */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->domain = $this->getMockBuilder(DomainInterface::class)->getMock();
         $this->config = new DomainFormConfigList($this->domain, FormType::class);
     }
 
-    public function testBasic()
+    public function testBasic(): void
     {
         $this->assertTrue($this->config->isTransactional());
         $this->config->setTransactional(false);
@@ -52,7 +54,7 @@ class DomainFormConfigListTest extends TestCase
         $this->assertFalse($this->config->isTransactional());
     }
 
-    public function testConvertObjectsCreation()
+    public function testConvertObjectsCreation(): void
     {
         $defaultValue = ['foo' => 'bar'];
         $this->config->setCreation(true);
@@ -75,11 +77,13 @@ class DomainFormConfigListTest extends TestCase
 
         $this->domain->expects($this->at(0))
             ->method('newInstance')
-            ->will($this->returnValue($instances[0]));
+            ->will($this->returnValue($instances[0]))
+        ;
 
         $this->domain->expects($this->at(1))
             ->method('newInstance')
-            ->will($this->returnValue($instances[1]));
+            ->will($this->returnValue($instances[1]))
+        ;
 
         $res = $this->config->convertObjects($list);
 
@@ -88,7 +92,7 @@ class DomainFormConfigListTest extends TestCase
         $this->assertSame($instances[1], $res[1]);
     }
 
-    public function testConvertObjectsUpdate()
+    public function testConvertObjectsUpdate(): void
     {
         $defaultValue = ['foo' => 'bar'];
         $this->config->setCreation(false);
@@ -117,15 +121,18 @@ class DomainFormConfigListTest extends TestCase
         $repo = $this->getMockBuilder(ObjectRepository::class)->getMock();
         $repo->expects($this->once())
             ->method('findBy')
-            ->will($this->returnValue($instances));
+            ->will($this->returnValue($instances))
+        ;
 
         $this->domain->expects($this->once())
             ->method('getRepository')
-            ->will($this->returnValue($repo));
+            ->will($this->returnValue($repo))
+        ;
 
         $this->domain->expects($this->once())
             ->method('newInstance')
-            ->will($this->returnValue($new));
+            ->will($this->returnValue($new))
+        ;
 
         $res = $this->config->convertObjects($list);
 

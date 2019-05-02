@@ -33,11 +33,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class AbstractDomain implements DomainInterface
 {
-    const TYPE_CREATE = 0;
-    const TYPE_UPDATE = 1;
-    const TYPE_UPSERT = 2;
-    const TYPE_DELETE = 3;
-    const TYPE_UNDELETE = 4;
+    public const TYPE_CREATE = 0;
+    public const TYPE_UPDATE = 1;
+    public const TYPE_UPSERT = 2;
+    public const TYPE_DELETE = 3;
+    public const TYPE_UNDELETE = 4;
 
     /**
      * @var string
@@ -101,15 +101,16 @@ abstract class AbstractDomain implements DomainInterface
      * @param array                    $disableFilters The list of doctrine filters must be disabled for undelete resources
      * @param bool                     $debug          The debug mode
      */
-    public function __construct($class,
-                                ObjectManager $om,
-                                ObjectFactoryInterface $of,
-                                EventDispatcherInterface $ed,
-                                ValidatorInterface $validator,
-                                TranslatorInterface $translator,
-                                $disableFilters = [],
-                                $debug = false)
-    {
+    public function __construct(
+        $class,
+        ObjectManager $om,
+        ObjectFactoryInterface $of,
+        EventDispatcherInterface $ed,
+        ValidatorInterface $validator,
+        TranslatorInterface $translator,
+        $disableFilters = [],
+        $debug = false
+    ) {
         $this->om = $om;
         $this->of = $of;
         $this->ed = $ed;
@@ -122,6 +123,7 @@ abstract class AbstractDomain implements DomainInterface
             $this->class = $om->getClassMetadata($class)->getName();
         } catch (MappingException $e) {
             $msg = sprintf('The "%s" class is not managed by doctrine object manager', $class);
+
             throw new InvalidConfigurationException($msg, 0, $e);
         }
 
@@ -267,7 +269,7 @@ abstract class AbstractDomain implements DomainInterface
      *
      * @param array $previousValues the previous values of filters
      */
-    protected function enableFilters(array $previousValues = [])
+    protected function enableFilters(array $previousValues = []): void
     {
         SqlFilterUtil::enableFilters($this->om, $previousValues);
     }

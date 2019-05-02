@@ -19,7 +19,7 @@ namespace Fxp\Component\Resource\Handler;
 class ClosureFormConfigList extends FormConfigList
 {
     /**
-     * @var \Closure|null
+     * @var null|\Closure
      */
     protected $objectConverter;
 

@@ -27,7 +27,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const PENDING = 'pending';
+    public const PENDING = 'pending';
 
     /**
      * The ResourceStatutes::ERROR status is used when the action of the resource
@@ -36,7 +36,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const ERROR = 'error';
+    public const ERROR = 'error';
 
     /**
      * The ResourceStatutes::CANCELED status is used when the action of the resource
@@ -46,7 +46,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const CANCELED = 'canceled';
+    public const CANCELED = 'canceled';
 
     /**
      * The ResourceStatutes::CREATED status is used when the action of domain has
@@ -55,7 +55,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const CREATED = 'created';
+    public const CREATED = 'created';
 
     /**
      * The ResourceStatutes::UPDATED status is used when the action of domain has
@@ -64,7 +64,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const UPDATED = 'updated';
+    public const UPDATED = 'updated';
 
     /**
      * The ResourceStatutes::DELETED status is used when the action of domain has
@@ -73,7 +73,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const DELETED = 'deleted';
+    public const DELETED = 'deleted';
 
     /**
      * The ResourceStatutes::UNDELETED status is used when the action of domain has
@@ -82,7 +82,7 @@ final class ResourceStatutes
      * This status is used in Fxp\Component\Resource\Event\ResourceEvent
      * and Fxp\Component\Resource\Domain\DomainInterface instances.
      */
-    const UNDELETED = 'undeleted';
+    public const UNDELETED = 'undeleted';
 
     /**
      * Constructor.

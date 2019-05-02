@@ -24,19 +24,20 @@ use Symfony\Component\HttpFoundation\Request;
  * Class for Functional tests for Form Handler.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class FormHandlerTest extends AbstractFormHandlerTest
+final class FormHandlerTest extends AbstractFormHandlerTest
 {
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The current request is required in request stack
-     */
-    public function testEmptyCurrentRequestException()
+    public function testEmptyCurrentRequestException(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The current request is required in request stack');
+
         $this->createFormHandler();
     }
 
-    public function testProcessForm()
+    public function testProcessForm(): void
     {
         $data = [
             'name' => 'Bar',
@@ -56,7 +57,7 @@ class FormHandlerTest extends AbstractFormHandlerTest
         $this->assertTrue($form->isSubmitted());
     }
 
-    public function testProcessForms()
+    public function testProcessForms(): void
     {
         $data = [
             'transaction' => true,
@@ -98,12 +99,11 @@ class FormHandlerTest extends AbstractFormHandlerTest
         }
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The "records" field is required
-     */
-    public function testProcessFormsWithoutRecordsField()
+    public function testProcessFormsWithoutRecordsField(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidResourceException::class);
+        $this->expectExceptionMessage('The "records" field is required');
+
         $data = [
             [
                 'name' => 'Bar 1',
@@ -131,12 +131,11 @@ class FormHandlerTest extends AbstractFormHandlerTest
         $handler->processForms($config);
     }
 
-    /**
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessage The size of the request data list (1) is different that the object instance list (2)
-     */
-    public function testProcessFormsWithDifferentSize()
+    public function testProcessFormsWithDifferentSize(): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidResourceException::class);
+        $this->expectExceptionMessage('The size of the request data list (1) is different that the object instance list (2)');
+
         $data = [
             'transaction' => true,
             'records' => [
@@ -173,14 +172,14 @@ class FormHandlerTest extends AbstractFormHandlerTest
      * @dataProvider getLimits
      *
      * @param int      $size
-     * @param int|null $defaultLimit
-     * @param int|null $methodLimit
-     *
-     * @expectedException \Fxp\Component\Resource\Exception\InvalidResourceException
-     * @expectedExceptionMessageRegExp /The list of resource sent exceeds the permitted limit \(\d+\)/
+     * @param null|int $defaultLimit
+     * @param null|int $methodLimit
      */
-    public function testLimitMethod($size, $defaultLimit, $methodLimit)
+    public function testLimitMethod($size, $defaultLimit, $methodLimit): void
     {
+        $this->expectException(\Fxp\Component\Resource\Exception\InvalidResourceException::class);
+        $this->expectExceptionMessageRegExp('/The list of resource sent exceeds the permitted limit \\(\\d+\\)/');
+
         $data = [];
         $objects = [];
 
@@ -215,10 +214,12 @@ class FormHandlerTest extends AbstractFormHandlerTest
     {
         $config = $this->getMockBuilder(FormConfigList::class)
             ->setConstructorArgs([FooType::class, [], Request::METHOD_POST, 'json'])
-            ->getMockForAbstractClass();
+            ->getMockForAbstractClass()
+        ;
         $config->expects($count)
             ->method('convertObjects')
-            ->will($this->returnValue($objects));
+            ->will($this->returnValue($objects))
+        ;
 
         return $config;
     }

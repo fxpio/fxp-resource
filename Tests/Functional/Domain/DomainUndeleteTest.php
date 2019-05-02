@@ -22,8 +22,10 @@ use Fxp\Component\Resource\Tests\Fixtures\Filter\SoftDeletableFilter;
  * Functional tests for undelete methods of Domain.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class DomainUndeleteTest extends AbstractDomainTest
+final class DomainUndeleteTest extends AbstractDomainTest
 {
     protected $softClass = Bar::class;
 
@@ -58,12 +60,12 @@ class DomainUndeleteTest extends AbstractDomainTest
      *
      * @param string $resourceType
      */
-    public function testUndeleteObject($resourceType)
+    public function testUndeleteObject($resourceType): void
     {
         $this->configureEntityManager();
 
         $domain = $this->createDomain($this->softClass);
-        /* @var Bar $object */
+        /** @var Bar $object */
         $object = $this->insertResource($domain);
 
         $this->assertCount(1, $domain->getRepository()->findAll());
@@ -98,12 +100,12 @@ class DomainUndeleteTest extends AbstractDomainTest
      * @param bool   $autoCommit
      * @param string $resourceType
      */
-    public function testUndeleteObjects($autoCommit, $resourceType)
+    public function testUndeleteObjects($autoCommit, $resourceType): void
     {
         $this->configureEntityManager();
 
         $domain = $this->createDomain($this->softClass);
-        /* @var Bar[] $objects */
+        /** @var Bar[] $objects */
         $objects = $this->insertResources($domain, 2);
 
         $this->assertCount(2, $domain->getRepository()->findAll());
@@ -145,13 +147,13 @@ class DomainUndeleteTest extends AbstractDomainTest
      *
      * @param string $resourceType
      */
-    public function testUndeleteNonExistentObject($resourceType)
+    public function testUndeleteNonExistentObject($resourceType): void
     {
         $this->configureEntityManager();
         $this->loadFixtures([]);
 
         $domain = $this->createDomain($this->softClass);
-        /* @var Bar $object */
+        /** @var Bar $object */
         $object = $domain->newInstance();
 
         $val = 'object' === $resourceType
@@ -178,13 +180,13 @@ class DomainUndeleteTest extends AbstractDomainTest
      * @param bool   $autoCommit
      * @param string $resourceType
      */
-    public function testUndeleteNonExistentObjects($autoCommit, $resourceType)
+    public function testUndeleteNonExistentObjects($autoCommit, $resourceType): void
     {
         $this->configureEntityManager();
         $this->loadFixtures([]);
 
         $domain = $this->createDomain($this->softClass);
-        /* @var Bar $object */
+        /** @var Bar $object */
         $objects = [$domain->newInstance(), $domain->newInstance()];
 
         $val = 'object' === $resourceType
@@ -230,13 +232,13 @@ class DomainUndeleteTest extends AbstractDomainTest
      *
      * @param bool $autoCommit
      */
-    public function testUndeleteMixedIdentifiers($autoCommit)
+    public function testUndeleteMixedIdentifiers($autoCommit): void
     {
         $this->configureEntityManager();
 
         $successStatus = $autoCommit ? ResourceStatutes::UNDELETED : ResourceStatutes::CANCELED;
         $domain = $this->createDomain($this->softClass);
-        /* @var Bar[] $objects */
+        /** @var Bar[] $objects */
         $objects = $this->insertResources($domain, 4);
 
         $this->assertCount(4, $domain->getRepository()->findAll());
@@ -271,13 +273,13 @@ class DomainUndeleteTest extends AbstractDomainTest
         $this->assertFalse($res->get(2)->isValid());
     }
 
-    public function testUndeleteAutoCommitNonExistentAndExistentObjects()
+    public function testUndeleteAutoCommitNonExistentAndExistentObjects(): void
     {
         //TODO
         $this->assertNull(null);
     }
 
-    public function testDeleteAutoCommitErrorAndSuccessObjects()
+    public function testDeleteAutoCommitErrorAndSuccessObjects(): void
     {
         //TODO
         $this->assertNull(null);
@@ -288,12 +290,12 @@ class DomainUndeleteTest extends AbstractDomainTest
      *
      * @param string $resourceType
      */
-    public function testUndeleteNonSoftDeletableObject($resourceType)
+    public function testUndeleteNonSoftDeletableObject($resourceType): void
     {
         $this->loadFixtures([]);
 
         $domain = $this->createDomain();
-        /* @var Foo $object */
+        /** @var Foo $object */
         $object = $domain->newInstance();
 
         $val = 'object' === $resourceType
@@ -322,12 +324,12 @@ class DomainUndeleteTest extends AbstractDomainTest
      * @param bool   $autoCommit
      * @param string $resourceType
      */
-    public function testUndeleteNonSoftDeletableObjects($autoCommit, $resourceType)
+    public function testUndeleteNonSoftDeletableObjects($autoCommit, $resourceType): void
     {
         $this->loadFixtures([]);
 
         $domain = $this->createDomain();
-        /* @var Foo[] $objects */
+        /** @var Foo[] $objects */
         $objects = [$domain->newInstance(), $domain->newInstance()];
 
         $val = 'object' === $resourceType
@@ -370,10 +372,11 @@ class DomainUndeleteTest extends AbstractDomainTest
         }
     }
 
-    protected function configureEntityManager()
+    protected function configureEntityManager(): void
     {
         $this->em->getConfiguration()
-            ->addFilter('soft_deletable', SoftDeletableFilter::class);
+            ->addFilter('soft_deletable', SoftDeletableFilter::class)
+        ;
         $this->em->getFilters()->enable('soft_deletable');
     }
 
