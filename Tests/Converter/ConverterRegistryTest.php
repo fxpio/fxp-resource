@@ -58,14 +58,6 @@ final class ConverterRegistryTest extends TestCase
         $this->assertFalse($this->registry->has('bar'));
     }
 
-    public function testGetInvalidType(): void
-    {
-        $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
-        $this->expectExceptionMessageRegExp('/Expected argument of type "(\\w+)", "(\\w+)" given/');
-
-        $this->registry->get(42);
-    }
-
     public function testGetNonExistentConverter(): void
     {
         $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);

@@ -57,15 +57,6 @@ final class FormConfigTest extends TestCase
         $this->assertSame(FormType::class, $config->getType());
     }
 
-    public function testSetInvalidType(): void
-    {
-        $this->expectException(\Fxp\Component\Resource\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The form type of domain form config must be an string of class name of form type');
-
-        $config = new FormConfig('form_type_name');
-        $config->setType(42);
-    }
-
     public function testSetOptions(): void
     {
         $config = new FormConfig(FormType::class);

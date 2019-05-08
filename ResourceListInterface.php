@@ -25,35 +25,35 @@ interface ResourceListInterface extends \Traversable, \Countable, \ArrayAccess
      *
      * @return string
      */
-    public function getStatus();
+    public function getStatus(): string;
 
     /**
      * Get the resource instance.
      *
      * @return ResourceInterface[]
      */
-    public function getResources();
+    public function getResources(): array;
 
     /**
      * Add a resource.
      *
      * @param ResourceInterface $resource The resource
      */
-    public function add(ResourceInterface $resource);
+    public function add(ResourceInterface $resource): void;
 
     /**
      * Add resources.
      *
      * @param ResourceListInterface $otherList The other resources
      */
-    public function addAll(self $otherList);
+    public function addAll(ResourceListInterface $otherList);
 
     /**
      * Get all resources.
      *
      * @return ResourceInterface[]
      */
-    public function all();
+    public function all(): array;
 
     /**
      * Get a resource.
@@ -64,7 +64,7 @@ interface ResourceListInterface extends \Traversable, \Countable, \ArrayAccess
      *
      * @return ResourceInterface
      */
-    public function get($offset);
+    public function get($offset): ResourceInterface;
 
     /**
      * Check if the resource exist.
@@ -73,7 +73,7 @@ interface ResourceListInterface extends \Traversable, \Countable, \ArrayAccess
      *
      * @return bool
      */
-    public function has($offset);
+    public function has(int $offset): bool;
 
     /**
      * Set a resource.
@@ -81,26 +81,26 @@ interface ResourceListInterface extends \Traversable, \Countable, \ArrayAccess
      * @param int               $offset   The offset
      * @param ResourceInterface $resource The resource
      */
-    public function set($offset, ResourceInterface $resource);
+    public function set(int $offset, ResourceInterface $resource): void;
 
     /**
      * Remove a resource.
      *
      * @param int $offset The offset
      */
-    public function remove($offset);
+    public function remove(int $offset): void;
 
     /**
      * Get the errors defined for this list (not include the children error).
      *
      * @return ConstraintViolationListInterface
      */
-    public function getErrors();
+    public function getErrors(): ConstraintViolationListInterface;
 
     /**
      * Check if there is an error on resource list or children.
      *
      * @return bool
      */
-    public function hasErrors();
+    public function hasErrors(): bool;
 }

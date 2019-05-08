@@ -37,7 +37,7 @@ class ConverterRegistry implements ConverterRegistryInterface
     {
         foreach ($converters as $converter) {
             if (!$converter instanceof ConverterInterface) {
-                throw new UnexpectedTypeException($converter, 'Fxp\Component\Resource\Converter\ConverterInterface');
+                throw new UnexpectedTypeException($converter, ConverterInterface::class);
             }
             $this->converters[strtolower($converter->getName())] = $converter;
         }
@@ -46,12 +46,8 @@ class ConverterRegistry implements ConverterRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function get($name)
+    public function get(string $name): ConverterInterface
     {
-        if (!\is_string($name)) {
-            throw new UnexpectedTypeException($name, 'string');
-        }
-
         $sName = strtolower($name);
 
         if (isset($this->converters[$sName])) {
@@ -64,7 +60,7 @@ class ConverterRegistry implements ConverterRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function has($name)
+    public function has(string $name): bool
     {
         return isset($this->converters[strtolower($name)]);
     }

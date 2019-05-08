@@ -28,14 +28,14 @@ interface ResourceInterface
      *
      * @param string $status The status defined in ResourceStatutes class
      */
-    public function setStatus($status);
+    public function setStatus(string $status): void;
 
     /**
      * Get the status of action by the resource domain.
      *
      * @return string
      */
-    public function getStatus();
+    public function getStatus(): string;
 
     /**
      * Get the data instance of this resource.
@@ -56,7 +56,7 @@ interface ResourceInterface
      *
      * @return ConstraintViolationListInterface
      */
-    public function getErrors();
+    public function getErrors(): ConstraintViolationListInterface;
 
     /**
      * Get the form errors.
@@ -65,19 +65,19 @@ interface ResourceInterface
      *
      * @return FormErrorIterator
      */
-    public function getFormErrors();
+    public function getFormErrors(): FormErrorIterator;
 
     /**
      * Check if the resource is a resource for a form.
      *
      * @return bool
      */
-    public function isForm();
+    public function isForm(): bool;
 
     /**
      * Check if the resource has errors.
      *
      * @return bool
      */
-    public function isValid();
+    public function isValid(): bool;
 }

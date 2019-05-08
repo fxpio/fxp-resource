@@ -38,7 +38,7 @@ class DefaultValueObjectFactory implements ObjectFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($classname, array $options = [])
+    public function create(string $classname, array $options = [])
     {
         return $this->of->create($classname, null, $options);
     }

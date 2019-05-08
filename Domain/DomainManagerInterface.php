@@ -27,7 +27,7 @@ interface DomainManagerInterface
      *
      * @return bool
      */
-    public function has($class);
+    public function has(string $class): bool;
 
     /**
      * Get a resource domain.
@@ -38,5 +38,5 @@ interface DomainManagerInterface
      *
      * @return DomainInterface
      */
-    public function get($class);
+    public function get(string $class): DomainInterface;
 }

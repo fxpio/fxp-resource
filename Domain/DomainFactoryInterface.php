@@ -27,7 +27,7 @@ interface DomainFactoryInterface
      *
      * @return self
      */
-    public function addResolveTargets(array $resolveTargets);
+    public function addResolveTargets(array $resolveTargets): DomainFactoryInterface;
 
     /**
      * Check if the class is managed by doctrine.
@@ -36,7 +36,7 @@ interface DomainFactoryInterface
      *
      * @return bool
      */
-    public function isManagedClass($class);
+    public function isManagedClass(string $class): bool;
 
     /**
      * Get the managed class name defined in doctrine.
@@ -47,7 +47,7 @@ interface DomainFactoryInterface
      *
      * @return string
      */
-    public function getManagedClass($class);
+    public function getManagedClass(string $class): string;
 
     /**
      * Create a resource domain.
@@ -58,5 +58,5 @@ interface DomainFactoryInterface
      *
      * @return DomainInterface
      */
-    public function create($class);
+    public function create(string $class): DomainInterface;
 }

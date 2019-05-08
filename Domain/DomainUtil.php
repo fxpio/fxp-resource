@@ -76,7 +76,7 @@ abstract class DomainUtil
      *
      * @return string
      */
-    public static function getIdentifierName(ObjectManager $om, $className)
+    public static function getIdentifierName(ObjectManager $om, string $className): string
     {
         $meta = $om->getClassMetadata($className);
         $ids = $meta->getIdentifier();
@@ -91,7 +91,7 @@ abstract class DomainUtil
      *
      * @return array The list of pre event name and post event name
      */
-    public static function getEventClasses($type)
+    public static function getEventClasses(int $type): array
     {
         $names = [PreUpsertsEvent::class, PostUpsertsEvent::class];
 
@@ -116,7 +116,7 @@ abstract class DomainUtil
      *
      * @return array The identifiers that are not a object
      */
-    public static function extractIdentifierInObjectList(array $identifiers, array &$objects)
+    public static function extractIdentifierInObjectList(array $identifiers, array &$objects): array
     {
         $searchIds = [];
 
@@ -139,7 +139,7 @@ abstract class DomainUtil
      *
      * @return ResourceInterface The first resource
      */
-    public static function oneAction(ResourceListInterface $resources)
+    public static function oneAction(ResourceListInterface $resources): ResourceInterface
     {
         $resources->get(0)->getErrors()->addAll($resources->getErrors());
 
@@ -195,7 +195,7 @@ abstract class DomainUtil
      *
      * @return string
      */
-    public static function getExceptionMessage(TranslatorInterface $translator, \Exception $exception, $debug = false)
+    public static function getExceptionMessage(TranslatorInterface $translator, \Exception $exception, bool $debug = false): string
     {
         $message = $translator->trans('domain.database_error', [], 'FxpResource');
 
@@ -219,7 +219,7 @@ abstract class DomainUtil
      * @param string            $message  The error message
      * @param null|\Exception   $e        The exception
      */
-    public static function addResourceError(ResourceInterface $resource, $message, \Exception $e = null): void
+    public static function addResourceError(ResourceInterface $resource, string $message, ?\Exception $e = null): void
     {
         $resource->setStatus(ResourceStatutes::ERROR);
         $resource->getErrors()->add(new ConstraintViolation($message, $message, [], $resource->getRealData(), null, null, null, null, null, $e));
@@ -235,7 +235,7 @@ abstract class DomainUtil
      *
      * @return bool
      */
-    public static function injectErrorMessage(TranslatorInterface $translator, ResourceInterface $resource, \Exception $e, $debug = false)
+    public static function injectErrorMessage(TranslatorInterface $translator, ResourceInterface $resource, \Exception $e, bool $debug = false): bool
     {
         if ($e instanceof ConstraintViolationException) {
             $resource->setStatus(ResourceStatutes::ERROR);
@@ -254,7 +254,7 @@ abstract class DomainUtil
      *
      * @return array The map of object hash and constraint violation list
      */
-    protected static function getMapErrors(ConstraintViolationListInterface $errors)
+    protected static function getMapErrors(ConstraintViolationListInterface $errors): array
     {
         $maps = [];
         $size = $errors->count();
@@ -281,7 +281,7 @@ abstract class DomainUtil
      *
      * @return string
      */
-    protected static function extractDriverExceptionMessage(DriverException $exception, $message, $debug = false)
+    protected static function extractDriverExceptionMessage(DriverException $exception, string $message, bool $debug = false): string
     {
         if ($debug && null !== $exception->getPrevious()) {
             $prevMessage = static::getFirstException($exception)->getMessage();
@@ -302,7 +302,7 @@ abstract class DomainUtil
      *
      * @return \Exception
      */
-    protected static function getFirstException(\Exception $exception)
+    protected static function getFirstException(\Exception $exception): \Exception
     {
         if (null !== $exception->getPrevious()) {
             return static::getFirstException($exception->getPrevious());

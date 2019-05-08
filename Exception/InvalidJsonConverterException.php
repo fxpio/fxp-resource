@@ -25,7 +25,7 @@ class InvalidJsonConverterException extends InvalidConverterException
      * @param int        $code     The exception code
      * @param \Exception $previous The previous exception
      */
-    public function __construct($message = 'Body should be a JSON object', $code = 0, \Exception $previous = null)
+    public function __construct(string $message = 'Body should be a JSON object', int $code = 0, ?\Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

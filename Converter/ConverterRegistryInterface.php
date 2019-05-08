@@ -33,7 +33,7 @@ interface ConverterRegistryInterface
      *
      * @return ConverterInterface The converter
      */
-    public function get($name);
+    public function get(string $name): ConverterInterface;
 
     /**
      * Returns whether the given converter is supported.
@@ -42,5 +42,5 @@ interface ConverterRegistryInterface
      *
      * @return bool Whether the type is supported
      */
-    public function has($name);
+    public function has(string $name): bool;
 }

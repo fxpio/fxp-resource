@@ -25,19 +25,19 @@ interface SoftDeletableInterface
      *
      * @return $this
      */
-    public function setDeletedAt(\DateTime $deletedAt = null);
+    public function setDeletedAt(?\DateTime $deletedAt = null): self;
 
     /**
      * Get deleted at.
      *
      * @return null|\DateTime
      */
-    public function getDeletedAt();
+    public function getDeletedAt(): ?\DateTime;
 
     /**
      * Check if the resource is deleted.
      *
      * @return bool
      */
-    public function isDeleted();
+    public function isDeleted(): bool;
 }

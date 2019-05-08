@@ -31,21 +31,21 @@ interface DomainInterface
      *
      * @return ObjectManager
      */
-    public function getObjectManager();
+    public function getObjectManager(): ObjectManager;
 
     /**
      * Get the class name for this resource domain.
      *
      * @return string
      */
-    public function getClass();
+    public function getClass(): string;
 
     /**
      * Get the doctrine repository for this resource domain.
      *
      * @return EntityRepository|ObjectRepository
      */
-    public function getRepository();
+    public function getRepository(): ObjectRepository;
 
     /**
      * Create the query builder for this domain.
@@ -55,7 +55,7 @@ interface DomainInterface
      *
      * @return QueryBuilder
      */
-    public function createQueryBuilder($alias = 'o', $indexBy = null);
+    public function createQueryBuilder($alias = 'o', ?string $indexBy = null): QueryBuilder;
 
     /**
      * Generate a new resource instance with default values.
@@ -73,7 +73,7 @@ interface DomainInterface
      *
      * @return ResourceInterface
      */
-    public function create($resource);
+    public function create($resource): ResourceInterface;
 
     /**
      * Create resources.
@@ -86,7 +86,7 @@ interface DomainInterface
      *
      * @return ResourceListInterface
      */
-    public function creates(array $resources, $autoCommit = false);
+    public function creates(array $resources, bool $autoCommit = false): ResourceListInterface;
 
     /**
      * Update a resource.
@@ -95,7 +95,7 @@ interface DomainInterface
      *
      * @return ResourceInterface
      */
-    public function update($resource);
+    public function update($resource): ResourceInterface;
 
     /**
      * Update resources.
@@ -108,7 +108,7 @@ interface DomainInterface
      *
      * @return ResourceListInterface
      */
-    public function updates(array $resources, $autoCommit = false);
+    public function updates(array $resources, bool $autoCommit = false): ResourceListInterface;
 
     /**
      * Update or insert a resource.
@@ -117,7 +117,7 @@ interface DomainInterface
      *
      * @return ResourceInterface
      */
-    public function upsert($resource);
+    public function upsert($resource): ResourceInterface;
 
     /**
      * Update or insert resources.
@@ -130,7 +130,7 @@ interface DomainInterface
      *
      * @return ResourceListInterface
      */
-    public function upserts(array $resources, $autoCommit = false);
+    public function upserts(array $resources, bool $autoCommit = false): ResourceListInterface;
 
     /**
      * Delete a resource.
@@ -140,7 +140,7 @@ interface DomainInterface
      *
      * @return ResourceInterface
      */
-    public function delete($resource, $soft = true);
+    public function delete($resource, bool $soft = true): ResourceInterface;
 
     /**
      * Delete resources.
@@ -154,7 +154,7 @@ interface DomainInterface
      *
      * @return ResourceListInterface
      */
-    public function deletes(array $resources, $soft = true, $autoCommit = false);
+    public function deletes(array $resources, bool $soft = true, bool $autoCommit = false): ResourceListInterface;
 
     /**
      * Undelete a resource.
@@ -163,7 +163,7 @@ interface DomainInterface
      *
      * @return ResourceInterface
      */
-    public function undelete($identifier);
+    public function undelete($identifier): ResourceInterface;
 
     /**
      * Undelete resources.
@@ -176,5 +176,5 @@ interface DomainInterface
      *
      * @return ResourceListInterface
      */
-    public function undeletes(array $identifiers, $autoCommit = false);
+    public function undeletes(array $identifiers, bool $autoCommit = false): ResourceListInterface;
 }

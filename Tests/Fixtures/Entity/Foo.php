@@ -41,7 +41,7 @@ class Foo
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -49,7 +49,7 @@ class Foo
     /**
      * @param string $name
      */
-    public function setName($name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -57,7 +57,7 @@ class Foo
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -65,7 +65,7 @@ class Foo
     /**
      * @param string $description
      */
-    public function setDescription($description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -73,7 +73,7 @@ class Foo
     /**
      * @return null|string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -81,7 +81,7 @@ class Foo
     /**
      * @param string $detail
      */
-    public function setDetail($detail): void
+    public function setDetail(?string $detail): void
     {
         $this->detail = $detail;
     }
@@ -89,7 +89,7 @@ class Foo
     /**
      * @return string
      */
-    public function getDetail()
+    public function getDetail(): ?string
     {
         return $this->detail;
     }

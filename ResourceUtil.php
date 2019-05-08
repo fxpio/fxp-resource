@@ -33,7 +33,7 @@ abstract class ResourceUtil
      *
      * @return ResourceList
      */
-    public static function convertObjectsToResourceList(array $objects, $requireClass, $allowForm = true)
+    public static function convertObjectsToResourceList(array $objects, string $requireClass, bool $allowForm = true): ResourceList
     {
         $list = new ResourceList();
 
@@ -57,7 +57,7 @@ abstract class ResourceUtil
      * @throws InvalidResourceException When the object in form is not an object
      * @throws InvalidResourceException When the object instance is not an instance of the required class
      */
-    public static function validateObjectResource($object, $requireClass, $i, $allowForm = true): void
+    public static function validateObjectResource($object, string $requireClass, int $i, bool $allowForm = true): void
     {
         if ($allowForm && $object instanceof FormInterface) {
             $object = $object->getData();

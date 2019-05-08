@@ -25,7 +25,7 @@ interface ConverterInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Convert the string content to array.
@@ -36,5 +36,5 @@ interface ConverterInterface
      *
      * @return array
      */
-    public function convert($content);
+    public function convert(string $content): array;
 }

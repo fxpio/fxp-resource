@@ -37,7 +37,7 @@ abstract class ResourceEvent extends Event
      * @param string                $class     The class name of resources
      * @param ResourceListInterface $resources The list of resource instances
      */
-    public function __construct($class, ResourceListInterface $resources)
+    public function __construct(string $class, ResourceListInterface $resources)
     {
         $this->class = $class;
         $this->resources = $resources;
@@ -48,7 +48,7 @@ abstract class ResourceEvent extends Event
      *
      * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }
@@ -58,7 +58,7 @@ abstract class ResourceEvent extends Event
      *
      * @return ResourceListInterface
      */
-    public function getResources()
+    public function getResources(): ResourceListInterface
     {
         return $this->resources;
     }
@@ -70,7 +70,7 @@ abstract class ResourceEvent extends Event
      *
      * @return bool
      */
-    public function is($class)
+    public function is(string $class): bool
     {
         return is_a($this->class, $class, true) || \in_array($class, class_implements($class), true);
     }

@@ -47,7 +47,7 @@ class SoftDeletableSubscriber implements EventSubscriber
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::onFlush,
@@ -59,6 +59,8 @@ class SoftDeletableSubscriber implements EventSubscriber
      * and skip the removal of the object.
      *
      * @param OnFlushEventArgs $args
+     *
+     * @throws
      */
     public function onFlush(OnFlushEventArgs $args): void
     {

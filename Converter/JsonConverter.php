@@ -41,7 +41,7 @@ class JsonConverter implements ConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return static::NAME;
     }
@@ -49,7 +49,7 @@ class JsonConverter implements ConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function convert($content)
+    public function convert(string $content): array
     {
         $content = json_decode($content, true);
 

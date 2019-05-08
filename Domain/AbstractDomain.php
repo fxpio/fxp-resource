@@ -13,6 +13,7 @@ namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Fxp\Component\DoctrineExtensions\Util\SqlFilterUtil;
@@ -21,6 +22,7 @@ use Fxp\Component\Resource\Exception\InvalidConfigurationException;
 use Fxp\Component\Resource\Object\ObjectFactoryInterface;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceList;
+use Fxp\Component\Resource\ResourceListInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -108,8 +110,8 @@ abstract class AbstractDomain implements DomainInterface
         EventDispatcherInterface $ed,
         ValidatorInterface $validator,
         TranslatorInterface $translator,
-        $disableFilters = [],
-        $debug = false
+        array $disableFilters = [],
+        bool $debug = false
     ) {
         $this->om = $om;
         $this->of = $of;
@@ -117,7 +119,7 @@ abstract class AbstractDomain implements DomainInterface
         $this->validator = $validator;
         $this->translator = $translator;
         $this->disableFilters = [];
-        $this->debug = (bool) $debug;
+        $this->debug = $debug;
 
         try {
             $this->class = $om->getClassMetadata($class)->getName();
@@ -136,7 +138,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function getObjectManager()
+    public function getObjectManager(): ObjectManager
     {
         return $this->om;
     }
@@ -144,7 +146,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }
@@ -152,17 +154,9 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function getRepository()
+    public function getRepository(): ObjectRepository
     {
         return $this->om->getRepository($this->getClass());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClassMetadata()
-    {
-        return $this->om->getClassMetadata($this->getClass());
     }
 
     /**
@@ -176,7 +170,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function create($resource)
+    public function create($resource): ResourceInterface
     {
         return DomainUtil::oneAction($this->creates([$resource], true));
     }
@@ -184,7 +178,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function creates(array $resources, $autoCommit = false)
+    public function creates(array $resources, bool $autoCommit = false): ResourceListInterface
     {
         return $this->persist($resources, $autoCommit, Domain::TYPE_CREATE);
     }
@@ -192,7 +186,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function update($resource)
+    public function update($resource): ResourceInterface
     {
         return DomainUtil::oneAction($this->updates([$resource], true));
     }
@@ -200,7 +194,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function updates(array $resources, $autoCommit = false)
+    public function updates(array $resources, bool $autoCommit = false): ResourceListInterface
     {
         return $this->persist($resources, $autoCommit, Domain::TYPE_UPDATE);
     }
@@ -208,7 +202,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function upsert($resource)
+    public function upsert($resource): ResourceInterface
     {
         return DomainUtil::oneAction($this->upserts([$resource], true));
     }
@@ -216,7 +210,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function upserts(array $resources, $autoCommit = false)
+    public function upserts(array $resources, bool $autoCommit = false): ResourceListInterface
     {
         return $this->persist($resources, $autoCommit, Domain::TYPE_UPSERT);
     }
@@ -224,7 +218,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($resource, $soft = true)
+    public function delete($resource, bool $soft = true): ResourceInterface
     {
         return DomainUtil::oneAction($this->deletes([$resource], $soft, true));
     }
@@ -232,7 +226,7 @@ abstract class AbstractDomain implements DomainInterface
     /**
      * {@inheritdoc}
      */
-    public function undelete($identifier)
+    public function undelete($identifier): ResourceInterface
     {
         return DomainUtil::oneAction($this->undeletes([$identifier], true));
     }
@@ -244,7 +238,7 @@ abstract class AbstractDomain implements DomainInterface
      *
      * @return ResourceEvent
      */
-    protected function dispatchEvent(ResourceEvent $event)
+    protected function dispatchEvent(ResourceEvent $event): ResourceEvent
     {
         $this->ed->dispatch(\get_class($event), $event);
 
@@ -256,7 +250,7 @@ abstract class AbstractDomain implements DomainInterface
      *
      * @return array The previous values of filters
      */
-    protected function disableFilters()
+    protected function disableFilters(): array
     {
         $previous = SqlFilterUtil::findFilters($this->om, $this->disableFilters);
         SqlFilterUtil::disableFilters($this->om, $previous);
@@ -287,5 +281,5 @@ abstract class AbstractDomain implements DomainInterface
      *
      * @return ResourceList
      */
-    abstract protected function persist(array $resources, $autoCommit, $type, array $errorResources = []);
+    abstract protected function persist(array $resources, bool $autoCommit, int $type, array $errorResources = []): ResourceList;
 }

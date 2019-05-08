@@ -83,7 +83,7 @@ class DomainFactory implements DomainFactoryInterface
         ValidatorInterface $validator,
         TranslatorInterface $translator,
         array $undeleteDisableFilters = [],
-        $debug = false
+        bool $debug = false
     ) {
         $this->or = $or;
         $this->ed = $ed;
@@ -98,7 +98,7 @@ class DomainFactory implements DomainFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function addResolveTargets(array $resolveTargets)
+    public function addResolveTargets(array $resolveTargets): DomainFactoryInterface
     {
         $this->resolveTargets = array_merge($this->resolveTargets, $resolveTargets);
 
@@ -108,7 +108,7 @@ class DomainFactory implements DomainFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function isManagedClass($class)
+    public function isManagedClass(string $class): bool
     {
         return null !== ManagerUtils::getManager($this->or, $this->findClassName($class));
     }
@@ -116,7 +116,7 @@ class DomainFactory implements DomainFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getManagedClass($class)
+    public function getManagedClass(string $class): string
     {
         return ManagerUtils::getRequiredManager($this->or, $this->findClassName($class))
             ->getClassMetadata($class)->getName();
@@ -125,7 +125,7 @@ class DomainFactory implements DomainFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($class)
+    public function create(string $class): DomainInterface
     {
         return new Domain(
             $class,
@@ -146,7 +146,7 @@ class DomainFactory implements DomainFactoryInterface
      *
      * @return string
      */
-    protected function findClassName($class)
+    protected function findClassName(string $class): string
     {
         return $this->resolveTargets[$class] ?? $class;
     }

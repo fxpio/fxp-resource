@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\Resource;
 
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+
 /**
  * Resource list.
  *
@@ -21,7 +23,7 @@ class ResourceList extends AbstractResourceList
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->resources);
     }
@@ -29,7 +31,7 @@ class ResourceList extends AbstractResourceList
     /**
      * {@inheritdoc}
      */
-    public function getErrors()
+    public function getErrors(): ConstraintViolationListInterface
     {
         return $this->errors;
     }
@@ -37,7 +39,7 @@ class ResourceList extends AbstractResourceList
     /**
      * {@inheritdoc}
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         if ($this->getErrors()->count() > 0) {
             return true;
@@ -97,7 +99,7 @@ class ResourceList extends AbstractResourceList
      *
      * @return string
      */
-    private function getStatusValue($countPending, $countCancel, $countError, $countSuccess)
+    private function getStatusValue(int $countPending, int $countCancel, int $countError, int $countSuccess): string
     {
         $status = ResourceListStatutes::SUCCESSFULLY;
         $count = $this->count();

@@ -11,7 +11,6 @@
 
 namespace Fxp\Component\Resource\Handler;
 
-use Fxp\Component\Resource\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -55,33 +54,29 @@ class FormConfig implements FormConfigInterface
      * @param string $converter The data converter for request content
      */
     public function __construct(
-        $type,
+        string $type,
         array $options = [],
-        $method = Request::METHOD_POST,
-        $converter = 'json'
+        string $method = Request::METHOD_POST,
+        string $converter = 'json'
     ) {
         $this->setType($type);
-        $this->setOptions($options);
         $this->setMethod($method);
+        $this->setOptions($options);
         $this->setConverter($converter);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setType($type): void
+    public function setType(string $type): void
     {
-        if (!\is_string($type)) {
-            throw new InvalidArgumentException('The form type of domain form config must be an string of class name of form type');
-        }
-
         $this->type = $type;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -101,7 +96,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -109,7 +104,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setMethod($method): void
+    public function setMethod(string $method): void
     {
         $this->method = $method;
         $this->options['method'] = $method;
@@ -118,7 +113,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -126,7 +121,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setSubmitClearMissing($clearMissing): void
+    public function setSubmitClearMissing(?bool $clearMissing): void
     {
         $this->clearMissing = $clearMissing;
     }
@@ -134,19 +129,19 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubmitClearMissing()
+    public function getSubmitClearMissing(): bool
     {
         if (null === $this->clearMissing) {
             return Request::METHOD_PATCH !== $this->method;
         }
 
-        return $this->clearMissing;
+        return (bool) $this->clearMissing;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConverter()
+    public function getConverter(): string
     {
         return $this->converter;
     }
@@ -154,7 +149,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function setConverter($converter): void
+    public function setConverter(string $converter): void
     {
         $this->converter = $converter;
     }

@@ -68,7 +68,7 @@ class FormHandler implements FormHandlerInterface
         FormFactoryInterface $formFactory,
         RequestStack $requestStack,
         TranslatorInterface $translator,
-        $defaultLimit = null
+        ?int $defaultLimit = null
     ) {
         $this->converterRegistry = $converterRegistry;
         $this->formFactory = $formFactory;
@@ -84,7 +84,7 @@ class FormHandler implements FormHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function processForm(FormConfigInterface $config, $object)
+    public function processForm(FormConfigInterface $config, $object): FormInterface
     {
         $forms = $this->process($config, [$object]);
 
@@ -94,7 +94,7 @@ class FormHandler implements FormHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function processForms(FormConfigListInterface $config, array $objects = [])
+    public function processForms(FormConfigListInterface $config, array $objects = []): array
     {
         return $this->process($config, $objects);
     }
@@ -102,7 +102,7 @@ class FormHandler implements FormHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefaultLimit()
+    public function getDefaultLimit(): ?int
     {
         return $this->defaultLimit;
     }
@@ -115,7 +115,7 @@ class FormHandler implements FormHandlerInterface
      *
      * @return array
      */
-    protected function getDataListObjects(FormConfigInterface $config, array $objects)
+    protected function getDataListObjects(FormConfigInterface $config, array $objects): array
     {
         $limit = $this->getLimit($config instanceof FormConfigListInterface ? $config->getLimit() : null);
         $dataList = $this->getDataList($config);
@@ -128,7 +128,7 @@ class FormHandler implements FormHandlerInterface
             throw new InvalidResourceException(sprintf($msg, $limit));
         }
 
-        if (0 === \count($objects) && $config instanceof FormConfigListInterface) {
+        if ($config instanceof FormConfigListInterface && 0 === \count($objects)) {
             $objects = $config->convertObjects($dataList);
         }
 
@@ -145,7 +145,7 @@ class FormHandler implements FormHandlerInterface
      *
      * @return array
      */
-    protected function getDataList(FormConfigInterface $config)
+    protected function getDataList(FormConfigInterface $config): array
     {
         $converter = $this->converterRegistry->get($config->getConverter());
         $dataList = $converter->convert((string) $this->request->getContent());
@@ -170,7 +170,7 @@ class FormHandler implements FormHandlerInterface
      *
      * @return null|int Returns null for unlimited row or a integer greater than 1
      */
-    protected function getLimit($limit = null)
+    protected function getLimit(?int $limit = null): ?int
     {
         if (null === $limit) {
             $limit = $this->getDefaultLimit();
@@ -186,7 +186,7 @@ class FormHandler implements FormHandlerInterface
      *
      * @return null|int
      */
-    protected function validateLimit($limit)
+    protected function validateLimit(?int $limit): ?int
     {
         return null === $limit
             ? null
@@ -203,7 +203,7 @@ class FormHandler implements FormHandlerInterface
      *
      * @return FormInterface[]
      */
-    private function process(FormConfigInterface $config, array $objects)
+    private function process(FormConfigInterface $config, array $objects): array
     {
         list($dataList, $objects) = $this->getDataListObjects($config, $objects);
         $forms = [];

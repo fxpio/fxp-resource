@@ -13,6 +13,7 @@ namespace Fxp\Component\Resource;
 
 use Fxp\Component\Resource\Exception\InvalidArgumentException;
 use Fxp\Component\Resource\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -45,11 +46,11 @@ class ResourceItem implements ResourceInterface
      * @param FormInterface|object             $data   The data instance or form with data instance
      * @param ConstraintViolationListInterface $errors The list of errors
      */
-    public function __construct($data, ConstraintViolationListInterface $errors = null)
+    public function __construct($data, ?ConstraintViolationListInterface $errors = null)
     {
         $this->status = ResourceStatutes::PENDING;
         $this->data = $data;
-        $this->errors = null !== $errors ? $errors : new ConstraintViolationList();
+        $this->errors = $errors ?? new ConstraintViolationList();
 
         $this->validateData($data);
     }
@@ -57,7 +58,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function setStatus($status): void
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
@@ -65,7 +66,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -91,7 +92,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getErrors()
+    public function getErrors(): ConstraintViolationListInterface
     {
         return $this->errors;
     }
@@ -99,7 +100,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getFormErrors()
+    public function getFormErrors(): FormErrorIterator
     {
         if ($this->data instanceof FormInterface) {
             return $this->data->getErrors(true);
@@ -111,7 +112,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function isForm()
+    public function isForm(): bool
     {
         return $this->getData() instanceof FormInterface;
     }
@@ -119,7 +120,7 @@ class ResourceItem implements ResourceInterface
     /**
      * {@inheritdoc}
      */
-    public function isValid()
+    public function isValid(): bool
     {
         $formSuccess = $this->isForm()
             ? 0 === $this->getFormErrors()->count()

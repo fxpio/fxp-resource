@@ -23,7 +23,7 @@ class ClassNotInstantiableException extends RuntimeException
      *
      * @param string $classname The class name
      */
-    public function __construct($classname)
+    public function __construct(string $classname)
     {
         parent::__construct(sprintf('The "%s" class cannot be instantiated', $classname));
     }

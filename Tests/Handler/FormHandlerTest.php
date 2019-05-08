@@ -124,6 +124,7 @@ final class FormHandlerTest extends TestCase
     public function testProcessForm(): void
     {
         $object = new \stdClass();
+        $object->foo = 'bar';
         $config = $this->configureProcessForms([$object], FormConfigInterface::class, '{}');
 
         $form = $this->formHandler->processForm($config, $object);
@@ -132,8 +133,10 @@ final class FormHandlerTest extends TestCase
 
     public function testProcessForms(): void
     {
+        $object = new \stdClass();
+        $object->foo = 'bar';
         $objects = [
-            new \stdClass(),
+            $object,
         ];
         $config = $this->configureProcessForms($objects, FormConfigListInterface::class, '{records: [{}]}');
 
@@ -233,20 +236,28 @@ final class FormHandlerTest extends TestCase
             $dataList = [
                 'records' => $objects,
             ];
+            $expectedConvert = [
+                'records' => array_map(static function ($value) {
+                    return \is_object($value) ? get_object_vars($value) : $value;
+                }, $objects),
+            ];
+            $expectedSubmit = $dataList['records'][0] ?? [];
         } else {
             $dataList = $objects[0];
+            $expectedConvert = get_object_vars($dataList);
+            $expectedSubmit = $expectedConvert;
         }
 
         $converter->expects($this->once())
             ->method('convert')
             ->with($requestContent)
-            ->will($this->returnValue($dataList))
+            ->will($this->returnValue($expectedConvert))
         ;
 
         if (FormConfigListInterface::class === $configClass) {
             $config->expects($this->once())
                 ->method('findList')
-                ->with($dataList)
+                ->with($expectedConvert)
                 ->will($this->returnValue($dataList['records']))
             ;
         }
@@ -280,7 +291,7 @@ final class FormHandlerTest extends TestCase
 
             $form->expects($this->once())
                 ->method('submit')
-                ->with($objects[0])
+                ->with($expectedSubmit)
             ;
         }
 

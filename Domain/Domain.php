@@ -12,12 +12,15 @@
 namespace Fxp\Component\Resource\Domain;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Fxp\Component\Resource\Event\PostDeletesEvent;
 use Fxp\Component\Resource\Event\PreDeletesEvent;
 use Fxp\Component\Resource\Exception\BadMethodCallException;
 use Fxp\Component\Resource\Model\SoftDeletableInterface;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceItem;
+use Fxp\Component\Resource\ResourceList;
 use Fxp\Component\Resource\ResourceListInterface;
 use Fxp\Component\Resource\ResourceStatutes;
 use Fxp\Component\Resource\ResourceUtil;
@@ -33,10 +36,13 @@ class Domain extends BaseDomain
     /**
      * {@inheritdoc}
      */
-    public function createQueryBuilder($alias = 'o', $indexBy = null)
+    public function createQueryBuilder($alias = 'o', ?string $indexBy = null): QueryBuilder
     {
         if ($this->om instanceof EntityManagerInterface) {
-            return $this->getRepository()->createQueryBuilder($alias, $indexBy);
+            /** @var EntityRepository $repo */
+            $repo = $this->getRepository();
+
+            return $repo->createQueryBuilder($alias, $indexBy);
         }
 
         throw new BadMethodCallException('The "Domain::createQueryBuilder()" method can only be called for a domain with Doctrine ORM Entity Manager');
@@ -45,7 +51,7 @@ class Domain extends BaseDomain
     /**
      * {@inheritdoc}
      */
-    public function deletes(array $resources, $soft = true, $autoCommit = false)
+    public function deletes(array $resources, bool $soft = true, bool $autoCommit = false): ResourceListInterface
     {
         $list = ResourceUtil::convertObjectsToResourceList(array_values($resources), $this->getClass(), false);
 
@@ -62,7 +68,7 @@ class Domain extends BaseDomain
     /**
      * {@inheritdoc}
      */
-    public function undeletes(array $identifiers, $autoCommit = false)
+    public function undeletes(array $identifiers, bool $autoCommit = false): ResourceListInterface
     {
         list($objects, $missingIds) = $this->convertIdentifierToObjects($identifiers);
         $errorResources = [];
@@ -85,7 +91,7 @@ class Domain extends BaseDomain
      *
      * @return array The list of objects and the list of identifiers that have no object
      */
-    protected function convertIdentifierToObjects(array $identifiers)
+    protected function convertIdentifierToObjects(array $identifiers): array
     {
         $idName = DomainUtil::getIdentifierName($this->om, $this->getClass());
         $objects = [];
@@ -117,7 +123,7 @@ class Domain extends BaseDomain
     /**
      * {@inheritdoc}
      */
-    protected function persist(array $resources, $autoCommit, $type, array $errorResources = [])
+    protected function persist(array $resources, bool $autoCommit, int $type, array $errorResources = []): ResourceList
     {
         list($preEventClass, $postEventClass) = DomainUtil::getEventClasses($type);
         $list = ResourceUtil::convertObjectsToResourceList(array_values($resources), $this->getClass());
@@ -146,7 +152,7 @@ class Domain extends BaseDomain
      *
      * @return bool Check if there is an error in list
      */
-    protected function doPersistList(ResourceListInterface $resources, $autoCommit, $type)
+    protected function doPersistList(ResourceListInterface $resources, bool $autoCommit, int $type): bool
     {
         $hasError = false;
         $hasFlushError = false;
@@ -175,7 +181,7 @@ class Domain extends BaseDomain
      *
      * @return array The successStatus and hasFlushError value
      */
-    protected function doPersistResource(ResourceInterface $resource, $autoCommit, $type)
+    protected function doPersistResource(ResourceInterface $resource, bool $autoCommit, int $type): array
     {
         $object = $resource->getRealData();
         $this->validateUndeleteResource($resource, $type);
@@ -224,7 +230,7 @@ class Domain extends BaseDomain
      *
      * @return bool Check if there is an error in list
      */
-    protected function doDeleteList(ResourceListInterface $resources, $autoCommit, $soft = true)
+    protected function doDeleteList(ResourceListInterface $resources, bool $autoCommit, bool $soft = true): bool
     {
         $hasError = false;
         $hasFlushError = false;
@@ -253,7 +259,7 @@ class Domain extends BaseDomain
      *
      * @return array The check if the delete action must be continued and check if there is an error
      */
-    protected function prepareDeleteResource(ResourceInterface $resource, $autoCommit, $hasError, $hasFlushError)
+    protected function prepareDeleteResource(ResourceInterface $resource, bool $autoCommit, bool $hasError, bool $hasFlushError): array
     {
         $continue = false;
 
@@ -283,7 +289,7 @@ class Domain extends BaseDomain
      *
      * @return bool Check if the resource is skipped or deleted
      */
-    protected function doDeleteResource(ResourceInterface $resource, $soft)
+    protected function doDeleteResource(ResourceInterface $resource, bool $soft): bool
     {
         $skipped = false;
         $object = $resource->getRealData();

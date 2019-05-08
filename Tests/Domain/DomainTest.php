@@ -190,29 +190,6 @@ final class DomainTest extends TestCase
         $this->assertSame($mockRepo, $repo);
     }
 
-    public function testGetClassMetadata(): void
-    {
-        $mockMeta = $this->getMockBuilder(ClassMetadata::class)->getMock();
-        $mockMeta->expects($this->once())
-            ->method('getName')
-            ->willReturn(\stdClass::class)
-        ;
-
-        $objectManager = $this->createMockObjectManager(ObjectManager::class, $mockMeta);
-        $domain = new Domain(
-            \stdClass::class,
-            $objectManager,
-            $this->objectFactory,
-            $this->eventDispatcher,
-            $this->validator,
-            $this->translator
-        );
-
-        $meta = $domain->getClassMetadata();
-
-        $this->assertSame($mockMeta, $meta);
-    }
-
     public function testNewInstance(): void
     {
         $instance = new \stdClass();

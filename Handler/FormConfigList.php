@@ -33,7 +33,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     /**
      * {@inheritdoc}
      */
-    public function setLimit($limit)
+    public function setLimit(?int $limit): FormConfigListInterface
     {
         $this->limit = $limit;
 
@@ -43,7 +43,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     /**
      * {@inheritdoc}
      */
-    public function getLimit()
+    public function getLimit(): ?int
     {
         return $this->limit;
     }
@@ -51,9 +51,9 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     /**
      * {@inheritdoc}
      */
-    public function setTransactional($transactional)
+    public function setTransactional(bool $transactional): FormConfigListInterface
     {
-        $this->transactional = (bool) $transactional;
+        $this->transactional = $transactional;
 
         return $this;
     }
@@ -61,7 +61,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     /**
      * {@inheritdoc}
      */
-    public function isTransactional()
+    public function isTransactional(): bool
     {
         return $this->transactional;
     }
@@ -69,7 +69,7 @@ abstract class FormConfigList extends FormConfig implements FormConfigListInterf
     /**
      * {@inheritdoc}
      */
-    public function findList(array $data)
+    public function findList(array $data): array
     {
         if (!isset($data['records'])) {
             throw new InvalidResourceException('The "records" field is required');

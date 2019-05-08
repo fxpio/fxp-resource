@@ -34,11 +34,11 @@ class ConstraintViolationException extends RuntimeException
      */
     public function __construct(
         ConstraintViolationListInterface $violations,
-        $message = null,
-        $code = 0,
-        \Exception $previous = null
+        ?string $message = null,
+        int $code = 0,
+        ?\Exception $previous = null
     ) {
-        parent::__construct(null !== $message ? $message : Response::$statusTexts[422], $code, $previous);
+        parent::__construct($message ?? Response::$statusTexts[422], $code, $previous);
 
         $this->violations = $violations;
     }
@@ -48,7 +48,7 @@ class ConstraintViolationException extends RuntimeException
      *
      * @return ConstraintViolationListInterface
      */
-    public function getConstraintViolations()
+    public function getConstraintViolations(): ConstraintViolationListInterface
     {
         return $this->violations;
     }

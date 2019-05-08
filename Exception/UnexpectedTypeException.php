@@ -25,7 +25,7 @@ class UnexpectedTypeException extends InvalidArgumentException
      * @param string   $expectedType The expected type
      * @param null|int $position     The position in list
      */
-    public function __construct($value, $expectedType, $position = null)
+    public function __construct($value, string $expectedType, ?int $position = null)
     {
         $msg = sprintf('Expected argument of type "%s", "%s" given', $expectedType, \is_object($value) ? \get_class((object) $value) : \gettype($value));
 

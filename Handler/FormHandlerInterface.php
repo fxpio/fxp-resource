@@ -28,7 +28,7 @@ interface FormHandlerInterface
      *
      * @return FormInterface
      */
-    public function processForm(FormConfigInterface $config, $object);
+    public function processForm(FormConfigInterface $config, $object): FormInterface;
 
     /**
      * Process form for one object instance (create and submit form).
@@ -38,12 +38,12 @@ interface FormHandlerInterface
      *
      * @return FormInterface[]
      */
-    public function processForms(FormConfigListInterface $config, array $objects = []);
+    public function processForms(FormConfigListInterface $config, array $objects = []): array;
 
     /**
      * Get the default limit. If the value is null, then there is not limit of quantity of rows.
      *
      * @return null|int
      */
-    public function getDefaultLimit();
+    public function getDefaultLimit(): ?int;
 }

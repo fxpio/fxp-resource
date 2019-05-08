@@ -36,7 +36,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @return bool Returns if there is an flush error
      */
-    protected function doAutoCommitFlushTransaction(ResourceInterface $resource, $autoCommit, $skipped = false)
+    protected function doAutoCommitFlushTransaction(ResourceInterface $resource, bool $autoCommit, bool $skipped = false): bool
     {
         $hasFlushError = $resource->getErrors()->count() > 0;
 
@@ -57,7 +57,7 @@ abstract class BaseDomain extends AbstractDomain
      *                                          (continue the action even if there is an error on a resource)
      * @param bool                  $hasError   Check if there is an error
      */
-    protected function doFlushFinalTransaction(ResourceListInterface $resources, $autoCommit, $hasError): void
+    protected function doFlushFinalTransaction(ResourceListInterface $resources, bool $autoCommit, bool $hasError): void
     {
         if (!$autoCommit) {
             if ($hasError) {
@@ -79,7 +79,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @return bool Returns the new hasError value
      */
-    protected function finalizeResourceStatus(ResourceInterface $resource, $status, $hasError)
+    protected function finalizeResourceStatus(ResourceInterface $resource, string $status, bool $hasError): bool
     {
         if ($resource->isValid()) {
             $resource->setStatus($status);
@@ -97,7 +97,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @param bool $autoCommit Check if each resource must be flushed immediately or in the end
      */
-    protected function beginTransaction($autoCommit = false): void
+    protected function beginTransaction(bool $autoCommit = false): void
     {
         if (!$autoCommit && null !== $this->connection) {
             $this->connection->beginTransaction();
@@ -111,7 +111,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @return ConstraintViolationList
      */
-    protected function flushTransaction($object = null)
+    protected function flushTransaction($object = null): ConstraintViolationList
     {
         $violations = new ConstraintViolationList();
 
@@ -170,7 +170,7 @@ abstract class BaseDomain extends AbstractDomain
      * @param ResourceInterface $resource The resource
      * @param int               $type     The type of persist
      */
-    protected function validateResource($resource, $type): void
+    protected function validateResource(ResourceInterface $resource, int $type): void
     {
         if (!$resource->isValid()) {
             return;
@@ -201,7 +201,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @return null|string
      */
-    protected function getErrorIdentifier($object, $type)
+    protected function getErrorIdentifier($object, int $type): ?string
     {
         $idValue = DomainUtil::getIdentifier($this->om, $object);
         $idError = null;
@@ -227,7 +227,7 @@ abstract class BaseDomain extends AbstractDomain
      *
      * @return string
      */
-    protected function getSuccessStatus($type, $object)
+    protected function getSuccessStatus(int $type, $object): string
     {
         if (Domain::TYPE_CREATE === $type) {
             return ResourceStatutes::CREATED;

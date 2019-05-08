@@ -59,10 +59,10 @@ class DomainFormConfigList extends FormConfigList
      */
     public function __construct(
         DomainInterface $domain,
-        $type,
+        string $type,
         array $options = [],
-        $method = Request::METHOD_POST,
-        $converter = 'json'
+        string $method = Request::METHOD_POST,
+        string $converter = 'json'
     ) {
         parent::__construct($type, $options, $method, $converter);
 
@@ -75,7 +75,7 @@ class DomainFormConfigList extends FormConfigList
      *
      * @param string $identifier The property name of the identifier
      */
-    public function setIdentifier($identifier): void
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -87,16 +87,16 @@ class DomainFormConfigList extends FormConfigList
      *
      * @return $this
      */
-    public function setDefaultValueOptions(array $options)
+    public function setDefaultValueOptions(array $options): self
     {
         $this->defaultValueOptions = $options;
 
         return $this;
     }
 
-    public function setCreation($isCreation)
+    public function setCreation(bool $isCreation): self
     {
-        $this->creation = (bool) $isCreation;
+        $this->creation = $isCreation;
 
         return $this;
     }
@@ -104,7 +104,7 @@ class DomainFormConfigList extends FormConfigList
     /**
      * {@inheritdoc}
      */
-    public function convertObjects(array &$list)
+    public function convertObjects(array &$list): array
     {
         if ($this->creation) {
             $size = \count($list);
@@ -117,7 +117,7 @@ class DomainFormConfigList extends FormConfigList
             $ids = [];
 
             foreach ($list as &$record) {
-                $ids[] = isset($record[$this->identifier]) ? $record[$this->identifier] : 0;
+                $ids[] = $record[$this->identifier] ?? 0;
                 unset($record[$this->identifier]);
             }
 
@@ -134,7 +134,7 @@ class DomainFormConfigList extends FormConfigList
      *
      * @return array
      */
-    protected function findObjects(array $ids)
+    protected function findObjects(array $ids): array
     {
         $foundObjects = $this->domain->getRepository()->findBy([
             $this->identifier => array_unique($ids),

@@ -25,14 +25,14 @@ interface FormConfigListInterface extends FormConfigInterface
      *
      * @return self
      */
-    public function setLimit($limit);
+    public function setLimit(?int $limit): FormConfigListInterface;
 
     /**
      * Get the limit of the size list.
      *
      * @return null|int
      */
-    public function getLimit();
+    public function getLimit(): ?int;
 
     /**
      * Set the transactional mode.
@@ -41,14 +41,14 @@ interface FormConfigListInterface extends FormConfigInterface
      *
      * @return self
      */
-    public function setTransactional($transactional);
+    public function setTransactional(bool $transactional): FormConfigListInterface;
 
     /**
      * Check if the domain use the transactional mode.
      *
      * @return bool
      */
-    public function isTransactional();
+    public function isTransactional(): bool;
 
     /**
      * Find the record list in form data.
@@ -57,7 +57,7 @@ interface FormConfigListInterface extends FormConfigInterface
      *
      * @return array
      */
-    public function findList(array $data);
+    public function findList(array $data): array;
 
     /**
      * Convert the list of objects, and clean the list.
@@ -66,5 +66,5 @@ interface FormConfigListInterface extends FormConfigInterface
      *
      * @return object[]
      */
-    public function convertObjects(array &$list);
+    public function convertObjects(array &$list): array;
 }

@@ -41,7 +41,7 @@ class DomainManager implements DomainManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function has($class)
+    public function has(string $class): bool
     {
         return isset($this->domains[$class])
             || $this->factory->isManagedClass($class);
@@ -50,7 +50,7 @@ class DomainManager implements DomainManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function get($class)
+    public function get(string $class): DomainInterface
     {
         $class = $this->factory->getManagedClass($class);
 

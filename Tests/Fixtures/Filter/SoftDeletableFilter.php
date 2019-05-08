@@ -42,6 +42,8 @@ class SoftDeletableFilter extends SQLFilter
     }
 
     /**
+     * @throws
+     *
      * @return null|EntityManager|mixed
      */
     protected function getEntityManager()

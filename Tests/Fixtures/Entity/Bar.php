@@ -48,7 +48,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -56,7 +56,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @param string $name
      */
-    public function setName($name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -64,7 +64,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -72,7 +72,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @param string $description
      */
-    public function setDescription($description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -80,7 +80,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @return null|string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -88,7 +88,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @param string $detail
      */
-    public function setDetail($detail): void
+    public function setDetail(?string $detail): void
     {
         $this->detail = $detail;
     }
@@ -96,7 +96,7 @@ class Bar implements SoftDeletableInterface
     /**
      * @return string
      */
-    public function getDetail()
+    public function getDetail(): ?string
     {
         return $this->detail;
     }
@@ -104,15 +104,17 @@ class Bar implements SoftDeletableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDeletedAt(\DateTime $deletedAt = null): void
+    public function setDeletedAt(?\DateTime $deletedAt = null): SoftDeletableInterface
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDeletedAt()
+    public function getDeletedAt(): ?\DateTime
     {
         return $this->deletedAt;
     }
@@ -120,7 +122,7 @@ class Bar implements SoftDeletableInterface
     /**
      * {@inheritdoc}
      */
-    public function isDeleted()
+    public function isDeleted(): bool
     {
         return null !== $this->deletedAt;
     }

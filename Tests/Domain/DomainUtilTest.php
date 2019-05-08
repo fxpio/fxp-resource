@@ -230,8 +230,8 @@ final class DomainUtilTest extends TestCase
             ->method('addAll')
         ;
 
-        /** @var MockObject|ResourceListInterface $resource */
-        $resource = $this->getMockBuilder(ResourceListInterface::class)->getMock();
+        /** @var MockObject|ResourceInterface $resource */
+        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getErrors')
             ->will($this->returnValue($errors))
