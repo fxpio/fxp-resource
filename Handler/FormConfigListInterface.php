@@ -23,7 +23,7 @@ interface FormConfigListInterface extends FormConfigInterface
      *
      * @param null|int $limit The limit
      *
-     * @return self
+     * @return FormConfigListInterface
      */
     public function setLimit(?int $limit): FormConfigListInterface;
 
@@ -39,7 +39,7 @@ interface FormConfigListInterface extends FormConfigInterface
      *
      * @param bool $transactional Check if the domain use the transactional mode
      *
-     * @return self
+     * @return FormConfigListInterface
      */
     public function setTransactional(bool $transactional): FormConfigListInterface;
 

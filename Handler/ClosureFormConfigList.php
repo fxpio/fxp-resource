@@ -26,7 +26,7 @@ class ClosureFormConfigList extends FormConfigList
     /**
      * {@inheritdoc}
      */
-    public function setObjectConverter(\Closure $converter): self
+    public function setObjectConverter(\Closure $converter): ClosureFormConfigList
     {
         $this->objectConverter = $converter;
 

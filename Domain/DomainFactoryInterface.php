@@ -25,7 +25,7 @@ interface DomainFactoryInterface
      *
      * @param array $resolveTargets The resolve targets
      *
-     * @return self
+     * @return DomainFactoryInterface
      */
     public function addResolveTargets(array $resolveTargets): DomainFactoryInterface;
 

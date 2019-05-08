@@ -25,7 +25,7 @@ interface SoftDeletableInterface
      *
      * @return $this
      */
-    public function setDeletedAt(?\DateTime $deletedAt = null): self;
+    public function setDeletedAt(?\DateTime $deletedAt = null): SoftDeletableInterface;
 
     /**
      * Get deleted at.
