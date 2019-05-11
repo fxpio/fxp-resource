@@ -85,16 +85,23 @@ class DomainFormConfigList extends FormConfigList
      *
      * @param array $options
      *
-     * @return $this
+     * @return static
      */
-    public function setDefaultValueOptions(array $options): DomainFormConfigList
+    public function setDefaultValueOptions(array $options): self
     {
         $this->defaultValueOptions = $options;
 
         return $this;
     }
 
-    public function setCreation(bool $isCreation): DomainFormConfigList
+    /**
+     * Set the creation.
+     *
+     * @param bool $isCreation
+     *
+     * @return static
+     */
+    public function setCreation(bool $isCreation): self
     {
         $this->creation = $isCreation;
 
