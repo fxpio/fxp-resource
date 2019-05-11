@@ -188,12 +188,6 @@ final class DomainFactoryTest extends TestCase
         $this->expectException(\Fxp\Component\DoctrineExtra\Exception\ObjectManagerNotFoundException::class);
         $this->expectExceptionMessage('The doctrine manager for the "stdClass" class is not found');
 
-        $this->metaFactory->expects($this->atLeastOnce())
-            ->method('hasMetadataFor')
-            ->with(\stdClass::class)
-            ->willReturn(true)
-        ;
-
         /** @var MockObject|OrmClassMetadata $meta */
         $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
         $meta->isMappedSuperclass = true;

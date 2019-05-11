@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5958683e82da803914169ee5c20dd11e",
+    "content-hash": "40d9691e95d7ca50ec8801b57d394b76",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -874,22 +874,22 @@
         },
         {
             "name": "fxp/doctrine-extensions",
-            "version": "v1.1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-doctrine-extensions.git",
-                "reference": "7d68211ea242b5c6fdacdf44af719eb2d0dd018d"
+                "reference": "0b2fdea9d80d162f8d2c45d48af84727b12a1715"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-doctrine-extensions/zipball/7d68211ea242b5c6fdacdf44af719eb2d0dd018d",
-                "reference": "7d68211ea242b5c6fdacdf44af719eb2d0dd018d",
+                "url": "https://api.github.com/repos/fxpio/fxp-doctrine-extensions/zipball/0b2fdea9d80d162f8d2c45d48af84727b12a1715",
+                "reference": "0b2fdea9d80d162f8d2c45d48af84727b12a1715",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "^2.6.0",
                 "doctrine/persistence": "^1.0.0",
-                "fxp/doctrine-extra": "^1.1.0",
+                "fxp/doctrine-extra": "^2.0.0",
                 "php": "^7.1.0"
             },
             "require-dev": {
@@ -910,7 +910,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -939,7 +939,7 @@
                 "unique entity",
                 "validator"
             ],
-            "time": "2019-04-29T13:31:37+00:00"
+            "time": "2019-05-09T14:58:50+00:00"
         },
         {
             "name": "fxp/doctrine-extra",
@@ -947,12 +947,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-doctrine-extra.git",
-                "reference": "9c672acde7892717958efff0ee3bad723be4a70f"
+                "reference": "d0be35318a9f59e7281e7bd645991128fb3b732a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-doctrine-extra/zipball/9c672acde7892717958efff0ee3bad723be4a70f",
-                "reference": "9c672acde7892717958efff0ee3bad723be4a70f",
+                "url": "https://api.github.com/repos/fxpio/fxp-doctrine-extra/zipball/d0be35318a9f59e7281e7bd645991128fb3b732a",
+                "reference": "d0be35318a9f59e7281e7bd645991128fb3b732a",
                 "shasum": ""
             },
             "require": {
@@ -965,7 +965,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -994,7 +994,7 @@
                 "doctrine",
                 "utils"
             ],
-            "time": "2019-04-30T20:39:38+00:00"
+            "time": "2019-05-09T12:59:39+00:00"
         },
         {
             "name": "psr/cache",
@@ -1337,16 +1337,16 @@
         },
         {
             "name": "symfony/contracts",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "1aa7ab2429c3d594dd70689604b5cf7421254cdf"
+                "reference": "d3636025e8253c6144358ec0a62773cae588395b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/1aa7ab2429c3d594dd70689604b5cf7421254cdf",
-                "reference": "1aa7ab2429c3d594dd70689604b5cf7421254cdf",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/d3636025e8253c6144358ec0a62773cae588395b",
+                "reference": "d3636025e8253c6144358ec0a62773cae588395b",
                 "shasum": ""
             },
             "require": {
@@ -1354,19 +1354,22 @@
             },
             "require-dev": {
                 "psr/cache": "^1.0",
-                "psr/container": "^1.0"
+                "psr/container": "^1.0",
+                "symfony/polyfill-intl-idn": "^1.10"
             },
             "suggest": {
                 "psr/cache": "When using the Cache contracts",
                 "psr/container": "When using the Service contracts",
                 "symfony/cache-contracts-implementation": "",
+                "symfony/event-dispatcher-implementation": "",
+                "symfony/http-client-contracts-implementation": "",
                 "symfony/service-contracts-implementation": "",
                 "symfony/translation-contracts-implementation": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -1401,7 +1404,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2018-12-05T08:06:11+00:00"
+            "time": "2019-04-27T14:29:50+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1990,16 +1993,16 @@
     "packages-dev": [
         {
             "name": "fxp/default-value",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-default-value.git",
-                "reference": "9d37a9d18e1117373ac8921b6f1fbfbb6877f25a"
+                "reference": "c045f5c7e3078377a092f197f8e5c633f5084091"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-default-value/zipball/9d37a9d18e1117373ac8921b6f1fbfbb6877f25a",
-                "reference": "9d37a9d18e1117373ac8921b6f1fbfbb6877f25a",
+                "url": "https://api.github.com/repos/fxpio/fxp-default-value/zipball/c045f5c7e3078377a092f197f8e5c633f5084091",
+                "reference": "c045f5c7e3078377a092f197f8e5c633f5084091",
                 "shasum": ""
             },
             "require": {
@@ -2043,7 +2046,7 @@
                 "entity",
                 "object"
             ],
-            "time": "2018-12-02T19:48:11+00:00"
+            "time": "2019-05-02T10:12:51+00:00"
         },
         {
             "name": "symfony/config",
