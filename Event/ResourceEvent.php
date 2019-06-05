@@ -12,7 +12,7 @@
 namespace Fxp\Component\Resource\Event;
 
 use Fxp\Component\Resource\ResourceListInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * The resource event.
