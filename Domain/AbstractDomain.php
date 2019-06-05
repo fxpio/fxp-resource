@@ -240,7 +240,7 @@ abstract class AbstractDomain implements DomainInterface
      */
     protected function dispatchEvent(ResourceEvent $event): ResourceEvent
     {
-        $this->ed->dispatch(\get_class($event), $event);
+        $this->ed->dispatch($event);
 
         return $event;
     }
