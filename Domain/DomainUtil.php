@@ -197,19 +197,15 @@ abstract class DomainUtil
      */
     public static function getExceptionMessage(TranslatorInterface $translator, \Exception $exception, bool $debug = false): string
     {
-        $message = $translator->trans('domain.database_error', [], 'FxpResource');
-
-        if ($debug) {
-            $message .= ' ['.\get_class($exception).']';
-        }
-
         if ($exception instanceof DriverException) {
+            $message = static::getDatabaseErrorMessage($translator, $exception, $debug);
+
             return static::extractDriverExceptionMessage($exception, $message, $debug);
         }
 
         return $debug
             ? $exception->getMessage()
-            : $message;
+            : static::getDatabaseErrorMessage($translator, $exception, $debug);
     }
 
     /**
@@ -309,5 +305,25 @@ abstract class DomainUtil
         }
 
         return $exception;
+    }
+
+    /**
+     * Get the translated message for the error database.
+     *
+     * @param TranslatorInterface $translator The translator
+     * @param \Exception          $exception  The exception
+     * @param bool                $debug      The debug mode
+     *
+     * @return string
+     */
+    protected static function getDatabaseErrorMessage(TranslatorInterface $translator, \Exception $exception, bool $debug = false): string
+    {
+        $message = $translator->trans('domain.database_error', [], 'FxpResource');
+
+        if ($debug) {
+            $message .= ' ['.\get_class($exception).']';
+        }
+
+        return $message;
     }
 }
