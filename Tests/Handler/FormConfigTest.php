@@ -29,40 +29,40 @@ final class FormConfigTest extends TestCase
     {
         $type = FormType::class;
         $config = new FormConfig($type);
-        $this->assertSame('json', $config->getConverter());
-        $this->assertSame(Request::METHOD_POST, $config->getMethod());
-        $this->assertEquals(['method' => Request::METHOD_POST], $config->getOptions());
-        $this->assertSame($type, $config->getType());
-        $this->assertTrue($config->getSubmitClearMissing());
+        static::assertSame('json', $config->getConverter());
+        static::assertSame(Request::METHOD_POST, $config->getMethod());
+        static::assertEquals(['method' => Request::METHOD_POST], $config->getOptions());
+        static::assertSame($type, $config->getType());
+        static::assertTrue($config->getSubmitClearMissing());
     }
 
     public function testWithStringTypeAndPatchMethod(): void
     {
         $type = FormType::class;
         $config = new FormConfig($type, [], Request::METHOD_PATCH);
-        $this->assertSame('json', $config->getConverter());
-        $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
-        $this->assertEquals(['method' => Request::METHOD_PATCH], $config->getOptions());
-        $this->assertSame($type, $config->getType());
-        $this->assertFalse($config->getSubmitClearMissing());
+        static::assertSame('json', $config->getConverter());
+        static::assertSame(Request::METHOD_PATCH, $config->getMethod());
+        static::assertEquals(['method' => Request::METHOD_PATCH], $config->getOptions());
+        static::assertSame($type, $config->getType());
+        static::assertFalse($config->getSubmitClearMissing());
     }
 
     public function testSetType(): void
     {
         $config = new FormConfig(FormType::class);
 
-        $this->assertSame(FormType::class, $config->getType());
+        static::assertSame(FormType::class, $config->getType());
 
         $config->setType(FormType::class);
-        $this->assertSame(FormType::class, $config->getType());
+        static::assertSame(FormType::class, $config->getType());
     }
 
     public function testSetOptions(): void
     {
         $config = new FormConfig(FormType::class);
 
-        $this->assertSame(Request::METHOD_POST, $config->getMethod());
-        $this->assertEquals([
+        static::assertSame(Request::METHOD_POST, $config->getMethod());
+        static::assertEquals([
             'method' => Request::METHOD_POST,
         ], $config->getOptions());
 
@@ -71,27 +71,27 @@ final class FormConfigTest extends TestCase
             'required' => true,
         ]);
 
-        $this->assertEquals([
+        static::assertEquals([
             'method' => Request::METHOD_PATCH,
             'required' => true,
         ], $config->getOptions());
-        $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
+        static::assertSame(Request::METHOD_PATCH, $config->getMethod());
     }
 
     public function testSetMethod(): void
     {
         $config = new FormConfig(FormType::class);
 
-        $this->assertSame(Request::METHOD_POST, $config->getMethod());
-        $this->assertEquals([
+        static::assertSame(Request::METHOD_POST, $config->getMethod());
+        static::assertEquals([
             'method' => Request::METHOD_POST,
         ], $config->getOptions());
-        $this->assertSame(Request::METHOD_POST, $config->getMethod());
+        static::assertSame(Request::METHOD_POST, $config->getMethod());
 
         $config->setMethod(Request::METHOD_PATCH);
 
-        $this->assertSame(Request::METHOD_PATCH, $config->getMethod());
-        $this->assertEquals([
+        static::assertSame(Request::METHOD_PATCH, $config->getMethod());
+        static::assertEquals([
             'method' => Request::METHOD_PATCH,
         ], $config->getOptions());
     }
@@ -147,6 +147,6 @@ final class FormConfigTest extends TestCase
         $config->setMethod($method);
         $config->setSubmitClearMissing($submitClearMissing);
 
-        $this->assertEquals($validSubmitClearMissing, $config->getSubmitClearMissing());
+        static::assertEquals($validSubmitClearMissing, $config->getSubmitClearMissing());
     }
 }

@@ -30,9 +30,9 @@ final class ResourceEventTest extends TestCase
 
         $event = new PreCreatesEvent(\stdClass::class, $list);
 
-        $this->assertSame(\stdClass::class, $event->getClass());
-        $this->assertSame($list, $event->getResources());
-        $this->assertTrue($event->is(\stdClass::class));
-        $this->assertFalse($event->is(MockObject::class));
+        static::assertSame(\stdClass::class, $event->getClass());
+        static::assertSame($list, $event->getResources());
+        static::assertTrue($event->is(\stdClass::class));
+        static::assertFalse($event->is(MockObject::class));
     }
 }

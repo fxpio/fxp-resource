@@ -44,7 +44,7 @@ final class JsonConverterTest extends TestCase
 
     public function testBasic(): void
     {
-        $this->assertSame('json', $this->converter->getName());
+        static::assertSame('json', $this->converter->getName());
     }
 
     public function testInvalidConversion(): void
@@ -59,6 +59,6 @@ final class JsonConverterTest extends TestCase
     {
         $content = $this->converter->convert('{"foo": "bar"}');
 
-        $this->assertEquals(['foo' => 'bar'], $content);
+        static::assertEquals(['foo' => 'bar'], $content);
     }
 }

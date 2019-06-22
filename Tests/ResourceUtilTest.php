@@ -49,8 +49,8 @@ final class ResourceUtilTest extends TestCase
         ];
         $list = ResourceUtil::convertObjectsToResourceList($objects, \stdClass::class, $allowForm);
 
-        $this->assertInstanceOf(ResourceListInterface::class, $list);
-        $this->assertCount(3, $list);
+        static::assertInstanceOf(ResourceListInterface::class, $list);
+        static::assertCount(3, $list);
     }
 
     /**
@@ -62,7 +62,7 @@ final class ResourceUtilTest extends TestCase
     {
         $obj = new \stdClass();
         ResourceUtil::validateObjectResource($obj, \stdClass::class, $allowForm);
-        $this->assertNotNull($obj);
+        static::assertNotNull($obj);
     }
 
     /**
@@ -82,9 +82,9 @@ final class ResourceUtilTest extends TestCase
     {
         /** @var FormInterface|MockObject */
         $form = $this->getMockBuilder(FormInterface::class)->getMock();
-        $form->expects($this->once())
+        $form->expects(static::once())
             ->method('getData')
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
 
         ResourceUtil::validateObjectResource($form, \stdClass::class, 0, true);
@@ -97,7 +97,7 @@ final class ResourceUtilTest extends TestCase
 
         /** @var FormInterface|MockObject */
         $form = $this->getMockBuilder(FormInterface::class)->getMock();
-        $form->expects($this->never())
+        $form->expects(static::never())
             ->method('getData')
         ;
 

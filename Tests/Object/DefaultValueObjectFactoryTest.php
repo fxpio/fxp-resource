@@ -31,7 +31,7 @@ final class DefaultValueObjectFactoryTest extends TestCase
         $dvof = $this->getMockBuilder(DefaultValueObjectFactoryInterface::class)->getMock();
         $of = new DefaultValueObjectFactory($dvof);
 
-        $dvof->expects($this->once())
+        $dvof->expects(static::once())
             ->method('create')
             ->with(\stdClass::class, null, [])
             ->willReturn(new \stdClass())
@@ -39,6 +39,6 @@ final class DefaultValueObjectFactoryTest extends TestCase
 
         $val = $of->create(\stdClass::class);
 
-        $this->assertInstanceOf(\stdClass::class, $val);
+        static::assertInstanceOf(\stdClass::class, $val);
     }
 }

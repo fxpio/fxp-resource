@@ -35,28 +35,28 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $this->createDomain($this->softClass);
         $objects = $this->insertResources($domain, 2);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $this->em->remove($objects[0]);
         $this->em->flush();
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
 
         $this->softDeletable->enable();
         $objects = $domain->getRepository()->findAll();
-        $this->assertCount(1, $objects);
+        static::assertCount(1, $objects);
 
         // soft delete
         $this->em->remove($objects[0]);
         $this->em->flush();
         /** @var Bar[] $objects */
         $objects = $domain->getRepository()->findAll();
-        $this->assertCount(1, $objects);
-        $this->assertTrue($objects[0]->isDeleted());
+        static::assertCount(1, $objects);
+        static::assertTrue($objects[0]->isDeleted());
 
         // hard delete
         $this->em->remove($objects[0]);
         $this->em->flush();
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
     }
 
     public function getSoftDelete()
@@ -80,19 +80,19 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $object = $this->insertResource($domain);
 
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
 
         $res = $domain->delete($object, $softDelete);
 
-        $this->assertTrue($res->isValid());
-        $this->assertSame(ResourceStatutes::DELETED, $res->getStatus());
+        static::assertTrue($res->isValid());
+        static::assertSame(ResourceStatutes::DELETED, $res->getStatus());
 
         if (!$withSoftObject) {
-            $this->assertCount(0, $domain->getRepository()->findAll());
+            static::assertCount(0, $domain->getRepository()->findAll());
         } else {
             /** @var Bar[] $objects */
             $objects = $domain->getRepository()->findAll();
-            $this->assertCount($softDelete ? 1 : 0, $objects);
+            static::assertCount($softDelete ? 1 : 0, $objects);
         }
     }
 
@@ -107,28 +107,28 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertFalse($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertFalse($resources->hasErrors());
 
         foreach ($resources->all() as $resource) {
-            $this->assertTrue($resource->isValid());
-            $this->assertSame(ResourceStatutes::DELETED, $resource->getStatus());
+            static::assertTrue($resource->isValid());
+            static::assertSame(ResourceStatutes::DELETED, $resource->getStatus());
         }
 
         if (!$withSoftObject) {
-            $this->assertCount(0, $domain->getRepository()->findAll());
+            static::assertCount(0, $domain->getRepository()->findAll());
         } elseif (!$softDelete) {
-            $this->assertCount(0, $domain->getRepository()->findAll());
+            static::assertCount(0, $domain->getRepository()->findAll());
         } else {
             /** @var Bar[] $objects */
             $objects = $domain->getRepository()->findAll();
-            $this->assertCount(2, $objects);
+            static::assertCount(2, $objects);
 
             foreach ($objects as $object) {
-                $this->assertTrue($object->isDeleted());
+                static::assertTrue($object->isDeleted());
             }
         }
     }
@@ -144,28 +144,28 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = $this->insertResources($domain, 2);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertFalse($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertFalse($resources->hasErrors());
 
         foreach ($resources->all() as $resource) {
-            $this->assertTrue($resource->isValid());
-            $this->assertSame(ResourceStatutes::DELETED, $resource->getStatus());
+            static::assertTrue($resource->isValid());
+            static::assertSame(ResourceStatutes::DELETED, $resource->getStatus());
         }
 
         if (!$withSoftObject) {
-            $this->assertCount(0, $domain->getRepository()->findAll());
+            static::assertCount(0, $domain->getRepository()->findAll());
         } elseif (!$softDelete) {
-            $this->assertCount(0, $domain->getRepository()->findAll());
+            static::assertCount(0, $domain->getRepository()->findAll());
         } else {
             /** @var Bar[] $objects */
             $objects = $domain->getRepository()->findAll();
-            $this->assertCount(2, $objects);
+            static::assertCount(2, $objects);
 
             foreach ($objects as $object) {
-                $this->assertTrue($object->isDeleted());
+                static::assertTrue($object->isDeleted());
             }
         }
     }
@@ -183,13 +183,13 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $object = $domain->newInstance();
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $res = $domain->delete($object, $softDelete);
-        $this->assertFalse($res->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
+        static::assertFalse($res->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $res->getStatus());
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
     }
 
     /**
@@ -205,18 +205,18 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = [$domain->newInstance(), $domain->newInstance()];
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertTrue($resources->hasErrors());
 
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertTrue($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::CANCELED, $resources->get(1)->getStatus());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertTrue($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::CANCELED, $resources->get(1)->getStatus());
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
     }
 
     /**
@@ -232,18 +232,18 @@ final class DomainDeleteTest extends AbstractDomainTest
         $domain = $withSoftObject ? $this->createDomain($this->softClass) : $this->createDomain();
         $objects = [$domain->newInstance(), $domain->newInstance()];
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertTrue($resources->hasErrors());
 
         foreach ($resources->all() as $resource) {
-            $this->assertFalse($resource->isValid());
-            $this->assertSame(ResourceStatutes::ERROR, $resource->getStatus());
+            static::assertFalse($resource->isValid());
+            static::assertSame(ResourceStatutes::ERROR, $resource->getStatus());
         }
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
     }
 
     /**
@@ -258,29 +258,29 @@ final class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 1);
         array_unshift($objects, $domain->newInstance());
 
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertTrue($resources->hasErrors());
 
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertTrue($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::CANCELED, $resources->get(1)->getStatus());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertTrue($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::CANCELED, $resources->get(1)->getStatus());
 
         if (!$withSoftObject) {
-            $this->assertCount(1, $domain->getRepository()->findAll());
+            static::assertCount(1, $domain->getRepository()->findAll());
         } else {
             if (!$softDelete) {
-                $this->assertCount(1, $domain->getRepository()->findAll());
+                static::assertCount(1, $domain->getRepository()->findAll());
             } else {
                 /** @var Bar[] $objects */
                 $objects = $domain->getRepository()->findAll();
-                $this->assertCount(1, $objects);
+                static::assertCount(1, $objects);
 
                 foreach ($objects as $object) {
-                    $this->assertFalse($object->isDeleted());
+                    static::assertFalse($object->isDeleted());
                 }
             }
         }
@@ -298,29 +298,29 @@ final class DomainDeleteTest extends AbstractDomainTest
         $objects = $this->insertResources($domain, 1);
         array_unshift($objects, $domain->newInstance());
 
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertTrue($resources->hasErrors());
 
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertTrue($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::DELETED, $resources->get(1)->getStatus());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertTrue($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::DELETED, $resources->get(1)->getStatus());
 
         if (!$withSoftObject) {
-            $this->assertCount(0, $domain->getRepository()->findAll());
+            static::assertCount(0, $domain->getRepository()->findAll());
         } else {
             if (!$softDelete) {
-                $this->assertCount(0, $domain->getRepository()->findAll());
+                static::assertCount(0, $domain->getRepository()->findAll());
             } else {
                 /** @var Bar[] $objects */
                 $objects = $domain->getRepository()->findAll();
-                $this->assertCount(1, $objects);
+                static::assertCount(1, $objects);
 
                 foreach ($objects as $object) {
-                    $this->assertTrue($object->isDeleted());
+                    static::assertTrue($object->isDeleted());
                 }
             }
         }
@@ -348,22 +348,22 @@ final class DomainDeleteTest extends AbstractDomainTest
         $this->em->remove($objects[1]);
         $this->em->flush();
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, true, $autoCommit);
         foreach ($resources->all() as $resource) {
-            $this->assertSame(ResourceStatutes::DELETED, $resource->getStatus());
+            static::assertSame(ResourceStatutes::DELETED, $resource->getStatus());
         }
 
         $objects = $domain->getRepository()->findAll();
-        $this->assertCount(2, $objects);
+        static::assertCount(2, $objects);
 
         $resources = $domain->deletes($objects, false, $autoCommit);
         foreach ($resources->all() as $resource) {
-            $this->assertSame(ResourceStatutes::DELETED, $resource->getStatus());
+            static::assertSame(ResourceStatutes::DELETED, $resource->getStatus());
         }
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
     }
 
     /**
@@ -380,17 +380,17 @@ final class DomainDeleteTest extends AbstractDomainTest
 
         $this->em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete);
-        $this->assertTrue($resources->hasErrors());
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertSame('The entity does not deleted (violation exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertTrue($resources->hasErrors());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertSame('The entity does not deleted (violation exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
 
-        $this->assertTrue($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
-        $this->assertCount(0, $resources->get(1)->getErrors());
+        static::assertTrue($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
+        static::assertCount(0, $resources->get(1)->getErrors());
     }
 
     /**
@@ -407,17 +407,17 @@ final class DomainDeleteTest extends AbstractDomainTest
 
         $this->em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertTrue($resources->hasErrors());
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertSame('The entity does not deleted (exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertTrue($resources->hasErrors());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertSame('The entity does not deleted (exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
 
-        $this->assertFalse($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
-        $this->assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
+        static::assertFalse($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
+        static::assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
     }
 
     /**
@@ -434,17 +434,17 @@ final class DomainDeleteTest extends AbstractDomainTest
 
         $this->em->getEventManager()->addEventListener(Events::preFlush, $errorListener);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertTrue($resources->hasErrors());
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertSame('The entity does not deleted (violation exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertTrue($resources->hasErrors());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertSame('The entity does not deleted (violation exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
 
-        $this->assertFalse($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
-        $this->assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
+        static::assertFalse($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
+        static::assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
     }
 
     /**
@@ -461,17 +461,17 @@ final class DomainDeleteTest extends AbstractDomainTest
 
         $this->em->getEventManager()->addEventListener(Events::preRemove, $errorListener);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertTrue($resources->hasErrors());
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertSame('The entity does not deleted (exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertTrue($resources->hasErrors());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertSame('The entity does not deleted (exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
 
-        $this->assertFalse($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
-        $this->assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
+        static::assertFalse($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
+        static::assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
     }
 
     /**
@@ -488,16 +488,16 @@ final class DomainDeleteTest extends AbstractDomainTest
 
         $this->em->getEventManager()->addEventListener(Events::preRemove, $errorListener);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $resources = $domain->deletes($objects, $softDelete, true);
-        $this->assertTrue($resources->hasErrors());
-        $this->assertFalse($resources->get(0)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertSame('The entity does not deleted (violation exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertTrue($resources->hasErrors());
+        static::assertFalse($resources->get(0)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertSame('The entity does not deleted (violation exception)', $resources->get(0)->getErrors()->get(0)->getMessage());
 
-        $this->assertFalse($resources->get(1)->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
-        $this->assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
+        static::assertFalse($resources->get(1)->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(1)->getStatus());
+        static::assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
     }
 }

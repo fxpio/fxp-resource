@@ -119,19 +119,19 @@ final class DomainTest extends TestCase
     {
         $mockRepo = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $qbMock = $this->getMockBuilder(QueryBuilder::class)->disableOriginalConstructor()->getMock();
-        $mockRepo->expects($this->once())
+        $mockRepo->expects(static::once())
             ->method('createQueryBuilder')
             ->willReturn($qbMock)
         ;
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects(static::once())
             ->method('getRepository')
             ->willReturn($mockRepo)
         ;
 
         $qb = $this->domain->createQueryBuilder('f');
 
-        $this->assertSame($this->objectManager, $this->domain->getObjectManager());
-        $this->assertSame($qbMock, $qb);
+        static::assertSame($this->objectManager, $this->domain->getObjectManager());
+        static::assertSame($qbMock, $qb);
     }
 
     public function testCreateQueryBuilderInvalidObjectManager(): void
@@ -159,7 +159,7 @@ final class DomainTest extends TestCase
         $this->expectExceptionMessageRegExp('/The "([\\w\\\\]+)" class is not managed by doctrine object manager/');
 
         $objectManager = $this->createMockObjectManager(ObjectManager::class);
-        $objectManager->expects($this->once())
+        $objectManager->expects(static::once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willThrowException(new MappingException())
@@ -179,7 +179,7 @@ final class DomainTest extends TestCase
     {
         $mockRepo = $this->getMockBuilder(ObjectRepository::class)->getMock();
 
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects(static::once())
             ->method('getRepository')
             ->with(\stdClass::class)
             ->willReturn($mockRepo)
@@ -187,14 +187,14 @@ final class DomainTest extends TestCase
 
         $repo = $this->domain->getRepository();
 
-        $this->assertSame($mockRepo, $repo);
+        static::assertSame($mockRepo, $repo);
     }
 
     public function testNewInstance(): void
     {
         $instance = new \stdClass();
 
-        $this->objectFactory->expects($this->once())
+        $this->objectFactory->expects(static::once())
             ->method('create')
             ->with(\stdClass::class, [])
             ->willReturn($instance)
@@ -202,7 +202,7 @@ final class DomainTest extends TestCase
 
         $val = $this->domain->newInstance();
 
-        $this->assertSame($instance, $val);
+        static::assertSame($instance, $val);
     }
 
     /**
@@ -219,13 +219,13 @@ final class DomainTest extends TestCase
 
         if (null === $meta) {
             $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
-            $meta->expects($this->any())
+            $meta->expects(static::any())
                 ->method('getName')
                 ->willReturn(\stdClass::class)
             ;
         }
 
-        $objectManager->expects($this->any())
+        $objectManager->expects(static::any())
             ->method('getClassMetadata')
             ->willReturn($meta)
         ;

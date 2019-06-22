@@ -46,12 +46,12 @@ final class DomainFormConfigListTest extends TestCase
 
     public function testBasic(): void
     {
-        $this->assertTrue($this->config->isTransactional());
+        static::assertTrue($this->config->isTransactional());
         $this->config->setTransactional(false);
         $this->config->setDefaultValueOptions([]);
         $this->config->setCreation(false);
         $this->config->setIdentifier('bar');
-        $this->assertFalse($this->config->isTransactional());
+        static::assertFalse($this->config->isTransactional());
     }
 
     public function testConvertObjectsCreation(): void
@@ -75,21 +75,21 @@ final class DomainFormConfigListTest extends TestCase
             new Foo(),
         ];
 
-        $this->domain->expects($this->at(0))
+        $this->domain->expects(static::at(0))
             ->method('newInstance')
-            ->will($this->returnValue($instances[0]))
+            ->willReturn($instances[0])
         ;
 
-        $this->domain->expects($this->at(1))
+        $this->domain->expects(static::at(1))
             ->method('newInstance')
-            ->will($this->returnValue($instances[1]))
+            ->willReturn($instances[1])
         ;
 
         $res = $this->config->convertObjects($list);
 
-        $this->assertCount(2, $res);
-        $this->assertSame($instances[0], $res[0]);
-        $this->assertSame($instances[1], $res[1]);
+        static::assertCount(2, $res);
+        static::assertSame($instances[0], $res[0]);
+        static::assertSame($instances[1], $res[1]);
     }
 
     public function testConvertObjectsUpdate(): void
@@ -119,26 +119,26 @@ final class DomainFormConfigListTest extends TestCase
         $instances[1]->setBar('test2');
 
         $repo = $this->getMockBuilder(ObjectRepository::class)->getMock();
-        $repo->expects($this->once())
+        $repo->expects(static::once())
             ->method('findBy')
-            ->will($this->returnValue($instances))
+            ->willReturn($instances)
         ;
 
-        $this->domain->expects($this->once())
+        $this->domain->expects(static::once())
             ->method('getRepository')
-            ->will($this->returnValue($repo))
+            ->willReturn($repo)
         ;
 
-        $this->domain->expects($this->once())
+        $this->domain->expects(static::once())
             ->method('newInstance')
-            ->will($this->returnValue($new))
+            ->willReturn($new)
         ;
 
         $res = $this->config->convertObjects($list);
 
-        $this->assertCount(3, $res);
-        $this->assertSame($instances[0], $res[0]);
-        $this->assertSame($instances[1], $res[1]);
-        $this->assertSame($new, $res[2]);
+        static::assertCount(3, $res);
+        static::assertSame($instances[0], $res[0]);
+        static::assertSame($instances[1], $res[1]);
+        static::assertSame($new, $res[2]);
     }
 }

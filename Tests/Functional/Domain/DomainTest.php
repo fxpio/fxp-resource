@@ -36,7 +36,7 @@ final class DomainTest extends AbstractDomainTest
     {
         $domain = $this->createDomain();
 
-        $this->assertInstanceOf('Doctrine\Common\Persistence\ObjectRepository', $domain->getRepository());
+        static::assertInstanceOf('Doctrine\Common\Persistence\ObjectRepository', $domain->getRepository());
     }
 
     public function testNewInstance(): void
@@ -45,6 +45,6 @@ final class DomainTest extends AbstractDomainTest
         $resource1 = $domain->newInstance();
         $resource2 = $this->objectFactory->create(Foo::class);
 
-        $this->assertEquals($resource2, $resource1);
+        static::assertEquals($resource2, $resource1);
     }
 }

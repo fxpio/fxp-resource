@@ -120,16 +120,16 @@ final class DomainUpsertTest extends AbstractDomainTest
             }
         });
 
-        $this->assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
 
         $resource = $domain->upsert($foo);
-        $this->assertCount(0, $resource->getErrors());
-        $this->assertSame($isUpdate ? 'Foo' : 'Bar', $resource->getData()->getName());
+        static::assertCount(0, $resource->getErrors());
+        static::assertSame($isUpdate ? 'Foo' : 'Bar', $resource->getData()->getName());
 
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
+        static::assertTrue($preEvent);
+        static::assertTrue($postEvent);
 
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
     }
 
     /**
@@ -241,19 +241,19 @@ final class DomainUpsertTest extends AbstractDomainTest
             }
         });
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
         $resources = $domain->upserts($objects, true);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
 
-        $this->assertTrue($resources->hasErrors());
-        $this->assertRegExp('/This value should not be blank./', $resources->get(0)->getErrors()->get(0)->getMessage());
-        $this->assertRegExp($this->getIntegrityViolationMessage(), $resources->get(1)->getErrors()->get(0)->getMessage());
+        static::assertTrue($resources->hasErrors());
+        static::assertRegExp('/This value should not be blank./', $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertRegExp($this->getIntegrityViolationMessage(), $resources->get(1)->getErrors()->get(0)->getMessage());
 
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
+        static::assertTrue($preEvent);
+        static::assertTrue($postEvent);
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
     }
 
     /**
@@ -302,23 +302,23 @@ final class DomainUpsertTest extends AbstractDomainTest
             }
         });
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
         $resources = $domain->upserts($objects, true);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
 
-        $this->assertTrue($resources->hasErrors());
+        static::assertTrue($resources->hasErrors());
 
-        $this->assertCount(1, $resources->get(0)->getErrors());
-        $this->assertCount(1, $resources->get(1)->getErrors());
+        static::assertCount(1, $resources->get(0)->getErrors());
+        static::assertCount(1, $resources->get(1)->getErrors());
 
-        $this->assertRegExp($this->getIntegrityViolationMessage(), $resources->get(0)->getErrors()->get(0)->getMessage());
-        $this->assertRegExp('/Caused by previous internal database error/', $resources->get(1)->getErrors()->get(0)->getMessage());
+        static::assertRegExp($this->getIntegrityViolationMessage(), $resources->get(0)->getErrors()->get(0)->getMessage());
+        static::assertRegExp('/Caused by previous internal database error/', $resources->get(1)->getErrors()->get(0)->getMessage());
 
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
+        static::assertTrue($preEvent);
+        static::assertTrue($postEvent);
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
     }
 
     /**
@@ -347,17 +347,17 @@ final class DomainUpsertTest extends AbstractDomainTest
             $objects = [$foo1, $foo2];
         }
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
         $resources = $domain->upserts($objects, true);
-        $this->assertCount($isUpdate ? 2 : 1, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 1, $domain->getRepository()->findAll());
 
-        $this->assertCount(2, $resources);
-        $this->assertInstanceOf(ResourceInterface::class, $resources->get(0));
-        $this->assertInstanceOf(ResourceInterface::class, $resources->get(1));
+        static::assertCount(2, $resources);
+        static::assertInstanceOf(ResourceInterface::class, $resources->get(0));
+        static::assertInstanceOf(ResourceInterface::class, $resources->get(1));
 
-        $this->assertSame(ResourceListStatutes::MIXED, $resources->getStatus());
-        $this->assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
-        $this->assertSame($isUpdate ? ResourceStatutes::UPDATED
+        static::assertSame(ResourceListStatutes::MIXED, $resources->getStatus());
+        static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
+        static::assertSame($isUpdate ? ResourceStatutes::UPDATED
             : ResourceStatutes::CREATED, $resources->get(1)->getStatus());
     }
 
@@ -396,18 +396,18 @@ final class DomainUpsertTest extends AbstractDomainTest
             $objects = [$foo1, $foo2];
         }
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
         $resources = $domain->upserts($objects, $autoCommit);
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
-        $this->assertCount(2, $resources);
-        $this->assertInstanceOf(ResourceInterface::class, $resources->get(0));
-        $this->assertInstanceOf(ResourceInterface::class, $resources->get(1));
+        static::assertCount(2, $resources);
+        static::assertInstanceOf(ResourceInterface::class, $resources->get(0));
+        static::assertInstanceOf(ResourceInterface::class, $resources->get(1));
 
-        $this->assertSame(ResourceListStatutes::SUCCESSFULLY, $resources->getStatus());
-        $this->assertSame($isUpdate ? ResourceStatutes::UPDATED
+        static::assertSame(ResourceListStatutes::SUCCESSFULLY, $resources->getStatus());
+        static::assertSame($isUpdate ? ResourceStatutes::UPDATED
             : ResourceStatutes::CREATED, $resources->get(0)->getStatus());
-        $this->assertSame($isUpdate ? ResourceStatutes::UPDATED
+        static::assertSame($isUpdate ? ResourceStatutes::UPDATED
             : ResourceStatutes::CREATED, $resources->get(1)->getStatus());
     }
 
@@ -444,7 +444,7 @@ final class DomainUpsertTest extends AbstractDomainTest
         }
 
         $resource = $domain->upsert($object);
-        $this->assertTrue($resource->isValid());
+        static::assertTrue($resource->isValid());
     }
 
     protected function runTestUpsertException(DomainInterface $domain, $object, $errorMessage, $isUpdate): void
@@ -467,16 +467,16 @@ final class DomainUpsertTest extends AbstractDomainTest
             }
         });
 
-        $this->assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
 
         $resource = $domain->upsert($object);
-        $this->assertCount(1, $resource->getErrors());
-        $this->assertRegExp($errorMessage, $resource->getErrors()->get(0)->getMessage());
+        static::assertCount(1, $resource->getErrors());
+        static::assertRegExp($errorMessage, $resource->getErrors()->get(0)->getMessage());
 
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
+        static::assertTrue($preEvent);
+        static::assertTrue($postEvent);
 
-        $this->assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
     }
 
     protected function runTestUpsertsException(DomainInterface $domain, array $objects, $errorMessage, $autoCommit = false, $isUpdate = false): void
@@ -501,24 +501,24 @@ final class DomainUpsertTest extends AbstractDomainTest
                 : ResourceStatutes::ERROR, $resources[1]->getStatus());
         });
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
         $resources = $domain->upserts($objects);
-        $this->assertInstanceOf(ResourceListInterface::class, $resources);
-        $this->assertTrue($resources->hasErrors());
+        static::assertInstanceOf(ResourceListInterface::class, $resources);
+        static::assertTrue($resources->hasErrors());
 
         /** @var ConstraintViolationListInterface $errors */
         $errors = $autoCommit
             ? $resources->get(0)->getErrors()
             : $resources->getErrors();
-        $this->assertCount(1, $errors);
-        $this->assertRegExp($errorMessage, $errors[0]->getMessage());
+        static::assertCount(1, $errors);
+        static::assertRegExp($errorMessage, $errors[0]->getMessage());
 
-        $this->assertTrue($preEvent);
-        $this->assertTrue($postEvent);
+        static::assertTrue($preEvent);
+        static::assertTrue($postEvent);
 
-        $this->assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
-        $this->assertSame($autoCommit ? ResourceListStatutes::MIXED
+        static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
+        static::assertSame($autoCommit ? ResourceListStatutes::MIXED
             : ResourceListStatutes::ERROR, $resources->getStatus());
     }
 }

@@ -31,15 +31,15 @@ final class ResourceItemTest extends TestCase
         $data = $this->getMockBuilder(\stdClass::class)->getMock();
         $resource = new ResourceItem($data);
 
-        $this->assertSame(ResourceStatutes::PENDING, $resource->getStatus());
+        static::assertSame(ResourceStatutes::PENDING, $resource->getStatus());
         $resource->setStatus(ResourceStatutes::CANCELED);
-        $this->assertSame(ResourceStatutes::CANCELED, $resource->getStatus());
+        static::assertSame(ResourceStatutes::CANCELED, $resource->getStatus());
 
-        $this->assertSame($data, $resource->getData());
-        $this->assertSame($data, $resource->getRealData());
-        $this->assertCount(0, $resource->getErrors());
-        $this->assertFalse($resource->isForm());
-        $this->assertTrue($resource->isValid());
+        static::assertSame($data, $resource->getData());
+        static::assertSame($data, $resource->getRealData());
+        static::assertCount(0, $resource->getErrors());
+        static::assertFalse($resource->isForm());
+        static::assertTrue($resource->isValid());
     }
 
     public function testGetFormErrorsWithObjectData(): void
@@ -60,19 +60,19 @@ final class ResourceItemTest extends TestCase
 
         /** @var FormInterface|MockObject $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\FormInterface')->getMock();
-        $form->expects($this->any())
+        $form->expects(static::any())
             ->method('getData')
-            ->will($this->returnValue($this->getMockBuilder(\stdClass::class)->getMock()))
+            ->willReturn($this->getMockBuilder(\stdClass::class)->getMock())
         ;
-        $form->expects($this->any())
+        $form->expects(static::any())
             ->method('getErrors')
-            ->will($this->returnValue($fErrors))
+            ->willReturn($fErrors)
         ;
 
         $resource = new ResourceItem($form);
         $errors = $resource->getFormErrors();
 
-        $this->assertInstanceOf('Symfony\Component\Form\FormErrorIterator', $errors);
+        static::assertInstanceOf('Symfony\Component\Form\FormErrorIterator', $errors);
     }
 
     public function testUnexpectedTypeException(): void
@@ -96,9 +96,9 @@ final class ResourceItemTest extends TestCase
 
         /** @var FormInterface|MockObject $form */
         $form = $this->getMockBuilder('Symfony\Component\Form\FormInterface')->getMock();
-        $form->expects($this->any())
+        $form->expects(static::any())
             ->method('getData')
-            ->will($this->returnValue($object))
+            ->willReturn($object)
         ;
 
         new ResourceItem($form);

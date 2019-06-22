@@ -46,9 +46,9 @@ final class DomainManagerTest extends TestCase
         $this->domain = $this->getMockBuilder(DomainInterface::class)->getMock();
         $this->factory = $this->getMockBuilder(DomainFactoryInterface::class)->getMock();
 
-        $this->domain->expects($this->any())
+        $this->domain->expects(static::any())
             ->method('getClass')
-            ->will($this->returnValue('Foo'))
+            ->willReturn('Foo')
         ;
 
         $this->manager = new DomainManager($this->factory);
@@ -56,40 +56,40 @@ final class DomainManagerTest extends TestCase
 
     public function testHas(): void
     {
-        $this->factory->expects($this->any())
+        $this->factory->expects(static::any())
             ->method('isManagedClass')
             ->willReturnCallback(static function ($value) {
                 return 'Foo' === $value;
             })
         ;
 
-        $this->assertTrue($this->manager->has('Foo'));
-        $this->assertFalse($this->manager->has('Bar'));
+        static::assertTrue($this->manager->has('Foo'));
+        static::assertFalse($this->manager->has('Bar'));
     }
 
     public function testGet(): void
     {
-        $this->factory->expects($this->once())
+        $this->factory->expects(static::once())
             ->method('isManagedClass')
             ->with('FooInterface')
             ->willReturn(true)
         ;
 
-        $this->assertTrue($this->manager->has('FooInterface'));
+        static::assertTrue($this->manager->has('FooInterface'));
 
-        $this->factory->expects($this->once())
+        $this->factory->expects(static::once())
             ->method('getManagedClass')
             ->with('FooInterface')
             ->willReturn('Foo')
         ;
 
-        $this->factory->expects($this->once())
+        $this->factory->expects(static::once())
             ->method('create')
             ->with('Foo')
             ->willReturn($this->domain)
         ;
 
-        $this->assertSame($this->domain, $this->manager->get('FooInterface'));
-        $this->assertTrue($this->manager->has('Foo'));
+        static::assertSame($this->domain, $this->manager->get('FooInterface'));
+        static::assertTrue($this->manager->has('Foo'));
     }
 }

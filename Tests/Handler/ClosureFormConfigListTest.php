@@ -28,9 +28,9 @@ final class ClosureFormConfigListTest extends TestCase
     {
         $config = new ClosureFormConfigList(FormType::class);
 
-        $this->assertTrue($config->isTransactional());
+        static::assertTrue($config->isTransactional());
         $config->setTransactional(false);
-        $this->assertFalse($config->isTransactional());
+        static::assertFalse($config->isTransactional());
     }
 
     public function testConvertObjectsWithoutClosure(): void
@@ -38,8 +38,8 @@ final class ClosureFormConfigListTest extends TestCase
         $config = new ClosureFormConfigList(FormType::class);
         $list = ['mock'];
 
-        $this->assertNotSame($list, $config->convertObjects($list));
-        $this->assertEquals([], $config->convertObjects($list));
+        static::assertNotSame($list, $config->convertObjects($list));
+        static::assertEquals([], $config->convertObjects($list));
     }
 
     public function testConvertObjectsWithClosure(): void
@@ -51,16 +51,16 @@ final class ClosureFormConfigListTest extends TestCase
             return $list;
         });
 
-        $this->assertEquals($list, $config->convertObjects($list));
+        static::assertEquals($list, $config->convertObjects($list));
     }
 
     public function testLimit(): void
     {
         $config = new ClosureFormConfigList(FormType::class);
 
-        $this->assertNull($config->getLimit());
+        static::assertNull($config->getLimit());
         $config->setLimit(5);
-        $this->assertSame(5, $config->getLimit());
+        static::assertSame(5, $config->getLimit());
     }
 
     public function testFindList(): void
@@ -71,7 +71,7 @@ final class ClosureFormConfigListTest extends TestCase
         ];
 
         $list = $config->findList($data);
-        $this->assertSame($data['records'], $list);
+        static::assertSame($data['records'], $list);
     }
 
     public function testFindListWithTransactionalOption(): void
@@ -82,11 +82,11 @@ final class ClosureFormConfigListTest extends TestCase
             'transaction' => false,
         ];
 
-        $this->assertTrue($config->isTransactional());
+        static::assertTrue($config->isTransactional());
 
         $list = $config->findList($data);
-        $this->assertSame($data['records'], $list);
-        $this->assertFalse($config->isTransactional());
+        static::assertSame($data['records'], $list);
+        static::assertFalse($config->isTransactional());
     }
 
     public function testFindListWithoutRecords(): void

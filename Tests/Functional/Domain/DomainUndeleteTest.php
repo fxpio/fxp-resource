@@ -68,17 +68,17 @@ final class DomainUndeleteTest extends AbstractDomainTest
         /** @var Bar $object */
         $object = $this->insertResource($domain);
 
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
 
         $em = $this->getEntityManager();
         $em->remove($object);
         $em->flush();
 
-        $this->assertTrue($object->isDeleted());
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertTrue($object->isDeleted());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $em->getFilters()->disable('soft_deletable');
-        $this->assertCount(1, $domain->getRepository()->findAll());
+        static::assertCount(1, $domain->getRepository()->findAll());
         $em->getFilters()->enable('soft_deletable');
 
         $em->clear();
@@ -89,9 +89,9 @@ final class DomainUndeleteTest extends AbstractDomainTest
             $res = $domain->undelete(1);
         }
 
-        $this->assertInstanceOf($domain->getClass(), $res->getRealData());
-        $this->assertSame(ResourceStatutes::UNDELETED, $res->getStatus());
-        $this->assertTrue($res->isValid());
+        static::assertInstanceOf($domain->getClass(), $res->getRealData());
+        static::assertSame(ResourceStatutes::UNDELETED, $res->getStatus());
+        static::assertTrue($res->isValid());
     }
 
     /**
@@ -108,19 +108,19 @@ final class DomainUndeleteTest extends AbstractDomainTest
         /** @var Bar[] $objects */
         $objects = $this->insertResources($domain, 2);
 
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $em = $this->getEntityManager();
         $em->remove($objects[0]);
         $em->remove($objects[1]);
         $em->flush();
 
-        $this->assertTrue($objects[0]->isDeleted());
-        $this->assertTrue($objects[1]->isDeleted());
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertTrue($objects[0]->isDeleted());
+        static::assertTrue($objects[1]->isDeleted());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $em->getFilters()->disable('soft_deletable');
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertCount(2, $domain->getRepository()->findAll());
         $em->getFilters()->enable('soft_deletable');
 
         $em->clear();
@@ -131,15 +131,15 @@ final class DomainUndeleteTest extends AbstractDomainTest
             $res = $domain->undeletes([1, 2], $autoCommit);
         }
 
-        $this->assertFalse($res->hasErrors());
-        $this->assertSame(ResourceListStatutes::SUCCESSFULLY, $res->getStatus());
+        static::assertFalse($res->hasErrors());
+        static::assertSame(ResourceListStatutes::SUCCESSFULLY, $res->getStatus());
 
-        $this->assertInstanceOf($domain->getClass(), $res->get(0)->getRealData());
-        $this->assertSame(ResourceStatutes::UNDELETED, $res->get(0)->getStatus());
-        $this->assertTrue($res->get(0)->isValid());
-        $this->assertInstanceOf($domain->getClass(), $res->get(1)->getRealData());
-        $this->assertSame(ResourceStatutes::UNDELETED, $res->get(1)->getStatus());
-        $this->assertTrue($res->get(1)->isValid());
+        static::assertInstanceOf($domain->getClass(), $res->get(0)->getRealData());
+        static::assertSame(ResourceStatutes::UNDELETED, $res->get(0)->getStatus());
+        static::assertTrue($res->get(0)->isValid());
+        static::assertInstanceOf($domain->getClass(), $res->get(1)->getRealData());
+        static::assertSame(ResourceStatutes::UNDELETED, $res->get(1)->getStatus());
+        static::assertTrue($res->get(1)->isValid());
     }
 
     /**
@@ -161,16 +161,16 @@ final class DomainUndeleteTest extends AbstractDomainTest
             : 1;
 
         $res = $domain->undelete($val);
-        $this->assertFalse($res->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
-        $this->assertCount(2, $res->getErrors());
+        static::assertFalse($res->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $res->getStatus());
+        static::assertCount(2, $res->getErrors());
 
         if ('object' === $resourceType) {
-            $this->assertSame('This value should not be blank.', $res->getErrors()->get(0)->getMessage());
-            $this->assertSame('The resource cannot be undeleted because it has not an identifier', $res->getErrors()->get(1)->getMessage());
+            static::assertSame('This value should not be blank.', $res->getErrors()->get(0)->getMessage());
+            static::assertSame('The resource cannot be undeleted because it has not an identifier', $res->getErrors()->get(1)->getMessage());
         } else {
-            $this->assertSame('The object with the identifier "1" does not exist', $res->getErrors()->get(0)->getMessage());
-            $this->assertSame('The resource type can not be undeleted', $res->getErrors()->get(1)->getMessage());
+            static::assertSame('The object with the identifier "1" does not exist', $res->getErrors()->get(0)->getMessage());
+            static::assertSame('The resource type can not be undeleted', $res->getErrors()->get(1)->getMessage());
         }
     }
 
@@ -195,34 +195,34 @@ final class DomainUndeleteTest extends AbstractDomainTest
 
         $res = $domain->undeletes($val, $autoCommit);
 
-        $this->assertTrue($res->hasErrors());
-        $this->assertSame(ResourceStatutes::ERROR, $res->get(0)->getStatus());
-        $this->assertSame($autoCommit ? ResourceStatutes::ERROR
+        static::assertTrue($res->hasErrors());
+        static::assertSame(ResourceStatutes::ERROR, $res->get(0)->getStatus());
+        static::assertSame($autoCommit ? ResourceStatutes::ERROR
             : ResourceStatutes::CANCELED, $res->get(1)->getStatus());
 
-        $this->assertCount(2, $res->get(0)->getErrors());
+        static::assertCount(2, $res->get(0)->getErrors());
 
         if ('object' === $resourceType) {
-            $this->assertSame('This value should not be blank.', $res->get(0)->getErrors()->get(0)->getMessage());
-            $this->assertSame('The resource cannot be undeleted because it has not an identifier', $res->get(0)->getErrors()->get(1)->getMessage());
+            static::assertSame('This value should not be blank.', $res->get(0)->getErrors()->get(0)->getMessage());
+            static::assertSame('The resource cannot be undeleted because it has not an identifier', $res->get(0)->getErrors()->get(1)->getMessage());
 
             if ($autoCommit) {
-                $this->assertCount(2, $res->get(1)->getErrors());
-                $this->assertSame('This value should not be blank.', $res->get(1)->getErrors()->get(0)->getMessage());
-                $this->assertSame('The resource cannot be undeleted because it has not an identifier', $res->get(1)->getErrors()->get(1)->getMessage());
+                static::assertCount(2, $res->get(1)->getErrors());
+                static::assertSame('This value should not be blank.', $res->get(1)->getErrors()->get(0)->getMessage());
+                static::assertSame('The resource cannot be undeleted because it has not an identifier', $res->get(1)->getErrors()->get(1)->getMessage());
             } else {
-                $this->assertCount(0, $res->get(1)->getErrors());
+                static::assertCount(0, $res->get(1)->getErrors());
             }
         } else {
-            $this->assertSame('The object with the identifier "1" does not exist', $res->get(0)->getErrors()->get(0)->getMessage());
-            $this->assertSame('The resource type can not be undeleted', $res->get(0)->getErrors()->get(1)->getMessage());
+            static::assertSame('The object with the identifier "1" does not exist', $res->get(0)->getErrors()->get(0)->getMessage());
+            static::assertSame('The resource type can not be undeleted', $res->get(0)->getErrors()->get(1)->getMessage());
 
             if ($autoCommit) {
-                $this->assertCount(2, $res->get(1)->getErrors());
-                $this->assertSame('The object with the identifier "2" does not exist', $res->get(1)->getErrors()->get(0)->getMessage());
-                $this->assertSame('The resource type can not be undeleted', $res->get(1)->getErrors()->get(1)->getMessage());
+                static::assertCount(2, $res->get(1)->getErrors());
+                static::assertSame('The object with the identifier "2" does not exist', $res->get(1)->getErrors()->get(0)->getMessage());
+                static::assertSame('The resource type can not be undeleted', $res->get(1)->getErrors()->get(1)->getMessage());
             } else {
-                $this->assertCount(1, $res->get(1)->getErrors());
+                static::assertCount(1, $res->get(1)->getErrors());
             }
         }
     }
@@ -241,48 +241,48 @@ final class DomainUndeleteTest extends AbstractDomainTest
         /** @var Bar[] $objects */
         $objects = $this->insertResources($domain, 4);
 
-        $this->assertCount(4, $domain->getRepository()->findAll());
+        static::assertCount(4, $domain->getRepository()->findAll());
 
         $em = $this->getEntityManager();
         $em->remove($objects[0]);
         $em->remove($objects[1]);
         $em->flush();
 
-        $this->assertTrue($objects[0]->isDeleted());
-        $this->assertTrue($objects[1]->isDeleted());
-        $this->assertCount(2, $domain->getRepository()->findAll());
+        static::assertTrue($objects[0]->isDeleted());
+        static::assertTrue($objects[1]->isDeleted());
+        static::assertCount(2, $domain->getRepository()->findAll());
 
         $em->getFilters()->disable('soft_deletable');
-        $this->assertCount(4, $domain->getRepository()->findAll());
+        static::assertCount(4, $domain->getRepository()->findAll());
         $em->getFilters()->enable('soft_deletable');
 
         $em->clear();
 
         $res = $domain->undeletes([0, $objects[0], 2], $autoCommit);
-        $this->assertTrue($res->hasErrors());
-        $this->assertSame(ResourceListStatutes::MIXED, $res->getStatus());
+        static::assertTrue($res->hasErrors());
+        static::assertSame(ResourceListStatutes::MIXED, $res->getStatus());
 
-        $this->assertInstanceOf($domain->getClass(), $res->get(0)->getRealData());
-        $this->assertSame($successStatus, $res->get(0)->getStatus());
-        $this->assertTrue($res->get(0)->isValid());
-        $this->assertInstanceOf($domain->getClass(), $res->get(1)->getRealData());
-        $this->assertSame($successStatus, $res->get(1)->getStatus());
-        $this->assertTrue($res->get(1)->isValid());
-        $this->assertInstanceOf('stdClass', $res->get(2)->getRealData());
-        $this->assertSame(ResourceStatutes::ERROR, $res->get(2)->getStatus());
-        $this->assertFalse($res->get(2)->isValid());
+        static::assertInstanceOf($domain->getClass(), $res->get(0)->getRealData());
+        static::assertSame($successStatus, $res->get(0)->getStatus());
+        static::assertTrue($res->get(0)->isValid());
+        static::assertInstanceOf($domain->getClass(), $res->get(1)->getRealData());
+        static::assertSame($successStatus, $res->get(1)->getStatus());
+        static::assertTrue($res->get(1)->isValid());
+        static::assertInstanceOf('stdClass', $res->get(2)->getRealData());
+        static::assertSame(ResourceStatutes::ERROR, $res->get(2)->getStatus());
+        static::assertFalse($res->get(2)->isValid());
     }
 
     public function testUndeleteAutoCommitNonExistentAndExistentObjects(): void
     {
         //TODO
-        $this->assertNull(null);
+        static::assertNull(null);
     }
 
     public function testDeleteAutoCommitErrorAndSuccessObjects(): void
     {
         //TODO
-        $this->assertNull(null);
+        static::assertNull(null);
     }
 
     /**
@@ -302,19 +302,19 @@ final class DomainUndeleteTest extends AbstractDomainTest
             ? $object
             : 1;
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $res = $domain->undelete($val);
-        $this->assertFalse($res->isValid());
-        $this->assertSame(ResourceStatutes::ERROR, $res->getStatus());
+        static::assertFalse($res->isValid());
+        static::assertSame(ResourceStatutes::ERROR, $res->getStatus());
 
         if ('object' === $resourceType) {
-            $this->assertCount(1, $res->getErrors());
-            $this->assertSame('The resource type can not be undeleted', $res->getErrors()->get(0)->getMessage());
+            static::assertCount(1, $res->getErrors());
+            static::assertSame('The resource type can not be undeleted', $res->getErrors()->get(0)->getMessage());
         } else {
-            $this->assertCount(2, $res->getErrors());
-            $this->assertSame('The object with the identifier "1" does not exist', $res->getErrors()->get(0)->getMessage());
-            $this->assertSame('The resource type can not be undeleted', $res->getErrors()->get(1)->getMessage());
+            static::assertCount(2, $res->getErrors());
+            static::assertSame('The object with the identifier "1" does not exist', $res->getErrors()->get(0)->getMessage());
+            static::assertSame('The resource type can not be undeleted', $res->getErrors()->get(1)->getMessage());
         }
     }
 
@@ -336,38 +336,38 @@ final class DomainUndeleteTest extends AbstractDomainTest
             ? $objects
             : [1, 2];
 
-        $this->assertCount(0, $domain->getRepository()->findAll());
+        static::assertCount(0, $domain->getRepository()->findAll());
 
         $res = $domain->undeletes($val, $autoCommit);
-        $this->assertTrue($res->hasErrors());
-        $this->assertSame($autoCommit ? ResourceListStatutes::ERROR
+        static::assertTrue($res->hasErrors());
+        static::assertSame($autoCommit ? ResourceListStatutes::ERROR
             : ResourceListStatutes::MIXED, $res->getStatus());
-        $this->assertSame(ResourceStatutes::ERROR, $res->get(0)->getStatus());
-        $this->assertSame($autoCommit ? ResourceStatutes::ERROR
+        static::assertSame(ResourceStatutes::ERROR, $res->get(0)->getStatus());
+        static::assertSame($autoCommit ? ResourceStatutes::ERROR
             : ResourceStatutes::CANCELED, $res->get(1)->getStatus());
 
         if ('object' === $resourceType) {
-            $this->assertCount(1, $res->get(0)->getErrors());
-            $this->assertSame('The resource type can not be undeleted', $res->get(0)->getErrors()->get(0)->getMessage());
+            static::assertCount(1, $res->get(0)->getErrors());
+            static::assertSame('The resource type can not be undeleted', $res->get(0)->getErrors()->get(0)->getMessage());
 
             if ($autoCommit) {
-                $this->assertCount(1, $res->get(1)->getErrors());
-                $this->assertSame('The resource type can not be undeleted', $res->get(1)->getErrors()->get(0)->getMessage());
+                static::assertCount(1, $res->get(1)->getErrors());
+                static::assertSame('The resource type can not be undeleted', $res->get(1)->getErrors()->get(0)->getMessage());
             } else {
-                $this->assertCount(0, $res->get(1)->getErrors());
+                static::assertCount(0, $res->get(1)->getErrors());
             }
         } else {
-            $this->assertCount(2, $res->get(0)->getErrors());
-            $this->assertSame('The object with the identifier "1" does not exist', $res->get(0)->getErrors()->get(0)->getMessage());
-            $this->assertSame('The resource type can not be undeleted', $res->get(0)->getErrors()->get(1)->getMessage());
+            static::assertCount(2, $res->get(0)->getErrors());
+            static::assertSame('The object with the identifier "1" does not exist', $res->get(0)->getErrors()->get(0)->getMessage());
+            static::assertSame('The resource type can not be undeleted', $res->get(0)->getErrors()->get(1)->getMessage());
 
             if ($autoCommit) {
-                $this->assertCount(2, $res->get(1)->getErrors());
-                $this->assertSame('The object with the identifier "2" does not exist', $res->get(1)->getErrors()->get(0)->getMessage());
-                $this->assertSame('The resource type can not be undeleted', $res->get(1)->getErrors()->get(1)->getMessage());
+                static::assertCount(2, $res->get(1)->getErrors());
+                static::assertSame('The object with the identifier "2" does not exist', $res->get(1)->getErrors()->get(0)->getMessage());
+                static::assertSame('The resource type can not be undeleted', $res->get(1)->getErrors()->get(1)->getMessage());
             } else {
-                $this->assertCount(1, $res->get(1)->getErrors());
-                $this->assertSame('The object with the identifier "2" does not exist', $res->get(1)->getErrors()->get(0)->getMessage());
+                static::assertCount(1, $res->get(1)->getErrors());
+                static::assertSame('The object with the identifier "2" does not exist', $res->get(1)->getErrors()->get(0)->getMessage());
             }
         }
     }

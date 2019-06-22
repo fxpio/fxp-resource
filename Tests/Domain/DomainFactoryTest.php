@@ -91,12 +91,12 @@ final class DomainFactoryTest extends TestCase
             $this->translator
         );
 
-        $this->objectManager->expects($this->any())
+        $this->objectManager->expects(static::any())
             ->method('getMetadataFactory')
             ->willReturn($this->metaFactory)
         ;
 
-        $this->registry->expects($this->any())
+        $this->registry->expects(static::any())
             ->method('getManagers')
             ->willReturn([$this->objectManager])
         ;
@@ -104,14 +104,14 @@ final class DomainFactoryTest extends TestCase
 
     public function testAddResolveTargets(): void
     {
-        $this->assertInstanceOf(DomainFactory::class, $this->factory->addResolveTargets(['FooInterface' => 'Foo']));
+        static::assertInstanceOf(DomainFactory::class, $this->factory->addResolveTargets(['FooInterface' => 'Foo']));
     }
 
     public function testIsManagedClass(): void
     {
         $res = $this->factory->isManagedClass(\stdClass::class);
 
-        $this->assertFalse($res);
+        static::assertFalse($res);
     }
 
     public function testIsManagedClassWithResolveTarget(): void
@@ -120,13 +120,13 @@ final class DomainFactoryTest extends TestCase
             's' => \stdClass::class,
         ]);
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(static::once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn(null)
         ;
 
-        $this->metaFactory->expects($this->once())
+        $this->metaFactory->expects(static::once())
             ->method('hasMetadataFor')
             ->with(\stdClass::class)
             ->willReturn(true)
@@ -134,12 +134,12 @@ final class DomainFactoryTest extends TestCase
 
         $res = $this->factory->isManagedClass('s');
 
-        $this->assertTrue($res);
+        static::assertTrue($res);
     }
 
     public function testGetManagedClass(): void
     {
-        $this->registry->expects($this->once())
+        $this->registry->expects(static::once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn($this->objectManager)
@@ -147,12 +147,12 @@ final class DomainFactoryTest extends TestCase
 
         /** @var ClassMetadata|MockObject $meta */
         $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
-        $meta->expects($this->any())
+        $meta->expects(static::any())
             ->method('getName')
-            ->will($this->returnValue(\stdClass::class))
+            ->willReturn(\stdClass::class)
         ;
 
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects(static::once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willReturn($meta)
@@ -160,7 +160,7 @@ final class DomainFactoryTest extends TestCase
 
         $res = $this->factory->getManagedClass(\stdClass::class);
 
-        $this->assertSame(\stdClass::class, $res);
+        static::assertSame(\stdClass::class, $res);
     }
 
     public function testGetManagedClassWithNonManagedClass(): void
@@ -168,13 +168,13 @@ final class DomainFactoryTest extends TestCase
         $this->expectException(\Fxp\Component\DoctrineExtra\Exception\ObjectManagerNotFoundException::class);
         $this->expectExceptionMessage('The doctrine manager for the "stdClass" class is not found');
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(static::once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn(null)
         ;
 
-        $this->metaFactory->expects($this->once())
+        $this->metaFactory->expects(static::once())
             ->method('hasMetadataFor')
             ->with(\stdClass::class)
             ->willReturn(false)
@@ -192,19 +192,19 @@ final class DomainFactoryTest extends TestCase
         $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
         $meta->isMappedSuperclass = true;
 
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects(static::once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willReturn($meta)
         ;
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(static::once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn(null)
         ;
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(static::once())
             ->method('getManagers')
             ->willReturn([$this->objectManager])
         ;
@@ -217,18 +217,18 @@ final class DomainFactoryTest extends TestCase
         /** @var MockObject|OrmClassMetadata $meta */
         $meta = $this->getMockBuilder(OrmClassMetadata::class)->disableOriginalConstructor()->getMock();
 
-        $meta->expects($this->once())
+        $meta->expects(static::once())
             ->method('getName')
             ->willReturn(\stdClass::class)
         ;
 
-        $this->objectManager->expects($this->any())
+        $this->objectManager->expects(static::any())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willReturn($meta)
         ;
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(static::once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn($this->objectManager)
@@ -236,7 +236,7 @@ final class DomainFactoryTest extends TestCase
 
         $domain = $this->factory->create(\stdClass::class);
 
-        $this->assertInstanceOf(Domain::class, $domain);
-        $this->assertSame(\stdClass::class, $domain->getClass());
+        static::assertInstanceOf(Domain::class, $domain);
+        static::assertSame(\stdClass::class, $domain->getClass());
     }
 }

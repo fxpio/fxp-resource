@@ -51,10 +51,10 @@ final class FormHandlerTest extends AbstractFormHandlerTest
 
         $form = $handler->processForm($config, $object);
 
-        $this->assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
-        $this->assertInstanceOf(\get_class($object), $form->getData());
-        $this->assertSame($object, $form->getData());
-        $this->assertTrue($form->isSubmitted());
+        static::assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
+        static::assertInstanceOf(\get_class($object), $form->getData());
+        static::assertSame($object, $form->getData());
+        static::assertTrue($form->isSubmitted());
     }
 
     public function testProcessForms(): void
@@ -84,18 +84,18 @@ final class FormHandlerTest extends AbstractFormHandlerTest
             new Foo(),
             new Foo(),
         ];
-        $config = $this->createFormConfigList($objects, $this->once());
+        $config = $this->createFormConfigList($objects, static::once());
 
         $forms = $handler->processForms($config);
 
-        $this->assertSame(\count($data['records']), \count($forms));
-        $this->assertTrue(\count($forms) > 0);
+        static::assertSame(\count($data['records']), \count($forms));
+        static::assertTrue(\count($forms) > 0);
 
         foreach ($forms as $i => $form) {
-            $this->assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
-            $this->assertInstanceOf(\get_class($objects[$i]), $form->getData());
-            $this->assertSame($objects[$i], $form->getData());
-            $this->assertTrue($form->isSubmitted());
+            static::assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
+            static::assertInstanceOf(\get_class($objects[$i]), $form->getData());
+            static::assertSame($objects[$i], $form->getData());
+            static::assertTrue($form->isSubmitted());
         }
     }
 
@@ -126,7 +126,7 @@ final class FormHandlerTest extends AbstractFormHandlerTest
             new Foo(),
             new Foo(),
         ];
-        $config = $this->createFormConfigList($objects, $this->never());
+        $config = $this->createFormConfigList($objects, static::never());
 
         $handler->processForms($config);
     }
@@ -152,7 +152,7 @@ final class FormHandlerTest extends AbstractFormHandlerTest
             new Foo(),
             new Foo(),
         ];
-        $config = $this->createFormConfigList($objects, $this->once());
+        $config = $this->createFormConfigList($objects, static::once());
 
         $handler->processForms($config);
     }
@@ -198,7 +198,7 @@ final class FormHandlerTest extends AbstractFormHandlerTest
         $request = Request::create('test', Request::METHOD_POST, [], [], [], [], json_encode($data));
         $handler = $this->createFormHandler($request, $defaultLimit);
 
-        $config = $this->createFormConfigList($objects, $this->any());
+        $config = $this->createFormConfigList($objects, static::any());
         $config->setLimit($methodLimit);
 
         $handler->processForms($config, $objects);
@@ -218,7 +218,7 @@ final class FormHandlerTest extends AbstractFormHandlerTest
         ;
         $config->expects($count)
             ->method('convertObjects')
-            ->will($this->returnValue($objects))
+            ->willReturn($objects)
         ;
 
         return $config;

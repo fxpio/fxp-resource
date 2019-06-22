@@ -60,9 +60,9 @@ final class ResourceListTest extends TestCase
 
         foreach ($resourceStatutes as $rStatus) {
             $resource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
-            $resource->expects($this->any())
+            $resource->expects(static::any())
                 ->method('getStatus')
-                ->will($this->returnValue($rStatus))
+                ->willReturn($rStatus)
             ;
 
             $resources[] = $resource;
@@ -70,7 +70,7 @@ final class ResourceListTest extends TestCase
 
         $list = new ResourceList($resources);
 
-        $this->assertSame($valid, $list->getStatus());
+        static::assertSame($valid, $list->getStatus());
     }
 
     public function testGetResources(): void
@@ -81,7 +81,7 @@ final class ResourceListTest extends TestCase
         ];
 
         $list = new ResourceList($resources);
-        $this->assertSame($resources, $list->getResources());
+        static::assertSame($resources, $list->getResources());
 
         $resources2 = [
             $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock(),
@@ -89,29 +89,29 @@ final class ResourceListTest extends TestCase
         ];
 
         $list2 = new ResourceList($resources2);
-        $this->assertSame($resources, $list->getResources());
+        static::assertSame($resources, $list->getResources());
 
         $all = array_merge($resources, $resources2);
         $list->addAll($list2);
-        $this->assertSame($all, $list->getResources());
-        $this->assertSame($all, $list->all());
+        static::assertSame($all, $list->getResources());
+        static::assertSame($all, $list->all());
 
-        $this->assertTrue($list->has(0));
-        $this->assertTrue($list->offsetExists(0));
-        $this->assertSame($all[0], $list->get(0));
-        $this->assertSame($all[0], $list->offsetGet(0));
-        $this->assertTrue($list->has(1));
-        $this->assertTrue($list->offsetExists(1));
-        $this->assertSame($all[1], $list->get(1));
-        $this->assertSame($all[1], $list->offsetGet(1));
-        $this->assertTrue($list->has(2));
-        $this->assertTrue($list->offsetExists(2));
-        $this->assertSame($all[2], $list->get(2));
-        $this->assertSame($all[2], $list->offsetGet(2));
-        $this->assertTrue($list->has(3));
-        $this->assertTrue($list->offsetExists(3));
-        $this->assertSame($all[3], $list->get(3));
-        $this->assertSame($all[3], $list->offsetGet(3));
+        static::assertTrue($list->has(0));
+        static::assertTrue($list->offsetExists(0));
+        static::assertSame($all[0], $list->get(0));
+        static::assertSame($all[0], $list->offsetGet(0));
+        static::assertTrue($list->has(1));
+        static::assertTrue($list->offsetExists(1));
+        static::assertSame($all[1], $list->get(1));
+        static::assertSame($all[1], $list->offsetGet(1));
+        static::assertTrue($list->has(2));
+        static::assertTrue($list->offsetExists(2));
+        static::assertSame($all[2], $list->get(2));
+        static::assertSame($all[2], $list->offsetGet(2));
+        static::assertTrue($list->has(3));
+        static::assertTrue($list->offsetExists(3));
+        static::assertSame($all[3], $list->get(3));
+        static::assertSame($all[3], $list->offsetGet(3));
     }
 
     public function testGetOUtOfBoundsException(): void
@@ -134,27 +134,27 @@ final class ResourceListTest extends TestCase
         /** @var ResourceInterface $new */
         $new = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
-        $this->assertNotSame($new, $list->get(0));
+        static::assertNotSame($new, $list->get(0));
         $list->set(0, $new);
-        $this->assertNotSame($resources[0], $list->get(0));
-        $this->assertSame($new, $list->get(0));
+        static::assertNotSame($resources[0], $list->get(0));
+        static::assertSame($new, $list->get(0));
 
         /** @var ResourceInterface $new2 */
         $new2 = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
-        $this->assertNotSame($new2, $list->offsetGet(1));
+        static::assertNotSame($new2, $list->offsetGet(1));
         $list->offsetSet(1, $new2);
-        $this->assertNotSame($resources[1], $list->offsetGet(1));
-        $this->assertSame($new2, $list->offsetGet(1));
+        static::assertNotSame($resources[1], $list->offsetGet(1));
+        static::assertSame($new2, $list->offsetGet(1));
 
         /** @var ResourceInterface $new3 */
         $new3 = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
 
-        $this->assertCount(2, $list);
+        static::assertCount(2, $list);
 
         $list->offsetSet(null, $new3);
-        $this->assertCount(3, $list);
-        $this->assertSame($new3, $list->offsetGet(2));
+        static::assertCount(3, $list);
+        static::assertSame($new3, $list->offsetGet(2));
     }
 
     public function testRemove(): void
@@ -165,15 +165,15 @@ final class ResourceListTest extends TestCase
         ];
         $list = new ResourceList($resources);
 
-        $this->assertCount(2, $list);
+        static::assertCount(2, $list);
 
         $list->remove(0);
-        $this->assertCount(1, $list);
-        $this->assertFalse($list->has(0));
-        $this->assertSame($resources[1], $list->get(1));
+        static::assertCount(1, $list);
+        static::assertFalse($list->has(0));
+        static::assertSame($resources[1], $list->get(1));
 
         $list->offsetUnset(1);
-        $this->assertCount(0, $list);
+        static::assertCount(0, $list);
     }
 
     public function testGetEmptyErrorsAndEmptyChildrenErrors(): void
@@ -184,9 +184,9 @@ final class ResourceListTest extends TestCase
         ];
         $list = new ResourceList($resources);
 
-        $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
-        $this->assertCount(0, $list->getErrors());
-        $this->assertFalse($list->hasErrors());
+        static::assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
+        static::assertCount(0, $list->getErrors());
+        static::assertFalse($list->hasErrors());
     }
 
     public function testGetErrorsAndEmptyChildrenErrors(): void
@@ -197,26 +197,26 @@ final class ResourceListTest extends TestCase
         ];
         $list = new ResourceList($resources);
 
-        $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
+        static::assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
 
         /** @var ConstraintViolationInterface $error */
         $error = $this->getMockBuilder('Symfony\Component\Validator\ConstraintViolationInterface')->getMock();
         $list->getErrors()->add($error);
-        $this->assertCount(1, $list->getErrors());
-        $this->assertTrue($list->hasErrors());
+        static::assertCount(1, $list->getErrors());
+        static::assertTrue($list->hasErrors());
     }
 
     public function testGetEmptyErrorsAndChildrenErrors(): void
     {
         /** @var MockObject|ResourceInterface $errorResource */
         $errorResource = $this->getMockBuilder('Fxp\Component\Resource\ResourceInterface')->getMock();
-        $errorResource->expects($this->any())
+        $errorResource->expects(static::any())
             ->method('getStatus')
-            ->will($this->returnValue(ResourceStatutes::ERROR))
+            ->willReturn(ResourceStatutes::ERROR)
         ;
-        $errorResource->expects($this->any())
+        $errorResource->expects(static::any())
             ->method('isValid')
-            ->will($this->returnValue(false))
+            ->willReturn(false)
         ;
 
         $resources = [
@@ -225,8 +225,8 @@ final class ResourceListTest extends TestCase
         ];
         $list = new ResourceList($resources);
 
-        $this->assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
-        $this->assertCount(0, $list->getErrors());
-        $this->assertTrue($list->hasErrors());
+        static::assertInstanceOf('Symfony\Component\Validator\ConstraintViolationListInterface', $list->getErrors());
+        static::assertCount(0, $list->getErrors());
+        static::assertTrue($list->hasErrors());
     }
 }

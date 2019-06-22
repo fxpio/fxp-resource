@@ -32,9 +32,9 @@ final class ConverterRegistryTest extends TestCase
     protected function setUp(): void
     {
         $converter = $this->getMockBuilder('Fxp\Component\Resource\Converter\ConverterInterface')->getMock();
-        $converter->expects($this->any())
+        $converter->expects(static::any())
             ->method('getName')
-            ->will($this->returnValue('foo'))
+            ->willReturn('foo')
         ;
 
         $this->registry = new ConverterRegistry([
@@ -54,8 +54,8 @@ final class ConverterRegistryTest extends TestCase
 
     public function testHas(): void
     {
-        $this->assertTrue($this->registry->has('foo'));
-        $this->assertFalse($this->registry->has('bar'));
+        static::assertTrue($this->registry->has('foo'));
+        static::assertFalse($this->registry->has('bar'));
     }
 
     public function testGetNonExistentConverter(): void
@@ -70,6 +70,6 @@ final class ConverterRegistryTest extends TestCase
     {
         $converter = $this->registry->get('foo');
 
-        $this->assertInstanceOf('Fxp\Component\Resource\Converter\ConverterInterface', $converter);
+        static::assertInstanceOf('Fxp\Component\Resource\Converter\ConverterInterface', $converter);
     }
 }

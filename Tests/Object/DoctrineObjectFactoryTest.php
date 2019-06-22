@@ -32,7 +32,7 @@ final class DoctrineObjectFactoryTest extends TestCase
         $em = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
         $of = new DoctrineObjectFactory($em);
 
-        $em->expects($this->once())
+        $em->expects(static::once())
             ->method('getClassMetadata')
             ->with(\stdClass::class)
             ->willReturn(new ClassMetadata(\stdClass::class))
@@ -40,6 +40,6 @@ final class DoctrineObjectFactoryTest extends TestCase
 
         $val = $of->create(\stdClass::class);
 
-        $this->assertInstanceOf(\stdClass::class, $val);
+        static::assertInstanceOf(\stdClass::class, $val);
     }
 }

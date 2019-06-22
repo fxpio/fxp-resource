@@ -72,9 +72,9 @@ final class FormHandlerTest extends TestCase
         $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
         /** @var MockObject|RequestStack $requestStack */
         $requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
-        $requestStack->expects($this->any())
+        $requestStack->expects(static::any())
             ->method('getCurrentRequest')
-            ->will($this->returnValue($request))
+            ->willReturn($request)
         ;
 
         $this->converterRegistry = $this->getMockBuilder(ConverterRegistryInterface::class)->getMock();
@@ -103,7 +103,7 @@ final class FormHandlerTest extends TestCase
 
         /** @var MockObject|RequestStack $requestStack */
         $requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
-        $requestStack->expects($this->once())
+        $requestStack->expects(static::once())
             ->method('getCurrentRequest')
         ;
 
@@ -118,7 +118,7 @@ final class FormHandlerTest extends TestCase
 
     public function testGetDefaultLimit(): void
     {
-        $this->assertSame($this->defaultLimit, $this->formHandler->getDefaultLimit());
+        static::assertSame($this->defaultLimit, $this->formHandler->getDefaultLimit());
     }
 
     public function testProcessForm(): void
@@ -128,7 +128,7 @@ final class FormHandlerTest extends TestCase
         $config = $this->configureProcessForms([$object], FormConfigInterface::class, '{}');
 
         $form = $this->formHandler->processForm($config, $object);
-        $this->assertInstanceOf(FormInterface::class, $form);
+        static::assertInstanceOf(FormInterface::class, $form);
     }
 
     public function testProcessForms(): void
@@ -142,9 +142,9 @@ final class FormHandlerTest extends TestCase
 
         $forms = $this->formHandler->processForms($config, $objects);
 
-        $this->assertInternalType('array', $forms);
-        $this->assertCount(1, $forms);
-        $this->assertInstanceOf(FormInterface::class, $forms[0]);
+        static::assertInternalType('array', $forms);
+        static::assertCount(1, $forms);
+        static::assertInstanceOf(FormInterface::class, $forms[0]);
     }
 
     public function testProcessFormWithCreationOfNewObject(): void
@@ -153,17 +153,17 @@ final class FormHandlerTest extends TestCase
             new \stdClass(),
         ];
         $config = $this->configureProcessForms($objects, FormConfigListInterface::class, '{records: [{}]}');
-        $config->expects($this->once())
+        $config->expects(static::once())
             ->method('convertObjects')
             ->with($objects)
-            ->will($this->returnValue($objects))
+            ->willReturn($objects)
         ;
 
         $forms = $this->formHandler->processForms($config, []);
 
-        $this->assertInternalType('array', $forms);
-        $this->assertCount(1, $forms);
-        $this->assertInstanceOf(FormInterface::class, $forms[0]);
+        static::assertInternalType('array', $forms);
+        static::assertCount(1, $forms);
+        static::assertInstanceOf(FormInterface::class, $forms[0]);
     }
 
     public function testProcessFormWithExceededPermittedLimit(): void
@@ -208,28 +208,28 @@ final class FormHandlerTest extends TestCase
         $config = $this->getMockBuilder($configClass)->getMock();
 
         if (FormConfigListInterface::class === $configClass) {
-            $config->expects($this->once())
+            $config->expects(static::once())
                 ->method('getLimit')
-                ->will($this->returnValue($limit))
+                ->willReturn($limit)
             ;
         }
 
         /** @var ConverterInterface|MockObject $converter */
         $converter = $this->getMockBuilder(ConverterInterface::class)->getMock();
 
-        $config->expects($this->once())
+        $config->expects(static::once())
             ->method('getConverter')
-            ->will($this->returnValue('json'))
+            ->willReturn('json')
         ;
 
-        $this->converterRegistry->expects($this->once())
+        $this->converterRegistry->expects(static::once())
             ->method('get')
-            ->will($this->returnValue($converter))
+            ->willReturn($converter)
         ;
 
-        $this->request->expects($this->any())
+        $this->request->expects(static::any())
             ->method('getContent')
-            ->will($this->returnValue($requestContent))
+            ->willReturn($requestContent)
         ;
 
         if (FormConfigListInterface::class === $configClass) {
@@ -248,48 +248,48 @@ final class FormHandlerTest extends TestCase
             $expectedSubmit = $expectedConvert;
         }
 
-        $converter->expects($this->once())
+        $converter->expects(static::once())
             ->method('convert')
             ->with($requestContent)
-            ->will($this->returnValue($expectedConvert))
+            ->willReturn($expectedConvert)
         ;
 
         if (FormConfigListInterface::class === $configClass) {
-            $config->expects($this->once())
+            $config->expects(static::once())
                 ->method('findList')
                 ->with($expectedConvert)
-                ->will($this->returnValue($dataList['records']))
+                ->willReturn($dataList['records'])
             ;
         }
 
         if (\count($objects) > 0 && null === $limit) {
-            $config->expects($this->once())
+            $config->expects(static::once())
                 ->method('getType')
-                ->will($this->returnValue(FormType::class))
+                ->willReturn(FormType::class)
             ;
 
-            $config->expects($this->once())
+            $config->expects(static::once())
                 ->method('getSubmitClearMissing')
-                ->will($this->returnValue(false))
+                ->willReturn(false)
             ;
 
-            $config->expects($this->once())
+            $config->expects(static::once())
                 ->method('getOptions')
-                ->will($this->returnValue([]))
+                ->willReturn([])
             ;
 
             $form = $this->getMockBuilder(FormInterface::class)->getMock();
-            $form->expects($this->any())
+            $form->expects(static::any())
                 ->method('getData')
-                ->will($this->returnValue($objects[0]))
+                ->willReturn($objects[0])
             ;
 
-            $this->formFactory->expects($this->at(0))
+            $this->formFactory->expects(static::at(0))
                 ->method('create')
-                ->will($this->returnValue($form))
+                ->willReturn($form)
             ;
 
-            $form->expects($this->once())
+            $form->expects(static::once())
                 ->method('submit')
                 ->with($expectedSubmit)
             ;
