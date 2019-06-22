@@ -206,6 +206,7 @@ class FormHandler implements FormHandlerInterface
     private function process(FormConfigInterface $config, array $objects): array
     {
         list($dataList, $objects) = $this->getDataListObjects($config, $objects);
+        $builderHandlers = $config->getBuilderHandlers();
         $forms = [];
 
         if (\count($objects) !== \count($dataList)) {
@@ -218,8 +219,13 @@ class FormHandler implements FormHandlerInterface
         }
 
         foreach ($objects as $i => $object) {
-            $form = $this->formFactory->create($config->getType(), $object, $config->getOptions());
+            $formBuilder = $this->formFactory->createBuilder($config->getType(), $object, $config->getOptions());
 
+            foreach ($builderHandlers as $builderHandler) {
+                $builderHandler($formBuilder);
+            }
+
+            $form = $formBuilder->getForm();
             $form->submit($dataList[$i], $config->getSubmitClearMissing());
             $forms[] = $form;
         }

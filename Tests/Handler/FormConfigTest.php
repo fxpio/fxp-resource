@@ -96,6 +96,18 @@ final class FormConfigTest extends TestCase
         ], $config->getOptions());
     }
 
+    public function testAddBuilderHandler(): void
+    {
+        $config = new FormConfig(FormType::class);
+        $handler = static function (): void {};
+
+        static::assertSame([], $config->getBuilderHandlers());
+
+        $config->addBuilderHandler($handler);
+
+        static::assertSame([$handler], $config->getBuilderHandlers());
+    }
+
     public function getRequestMethod()
     {
         return [

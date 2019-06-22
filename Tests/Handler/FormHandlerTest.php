@@ -21,6 +21,7 @@ use Fxp\Component\Resource\ResourceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -192,6 +193,32 @@ final class FormHandlerTest extends TestCase
         $this->formHandler->processForms($config, $objects);
     }
 
+    public function testProcessFormWithBuilderHandler(): void
+    {
+        $objects = [
+            new \stdClass(),
+        ];
+        $builderHandlerCalled = false;
+        $config = $this->configureProcessForms($objects, FormConfigListInterface::class, '{records: [{}]}');
+        $config->expects(static::once())
+            ->method('convertObjects')
+            ->with($objects)
+            ->willReturn($objects)
+        ;
+        $config->expects(static::once())->method('getBuilderHandlers')->willReturn([
+            static function () use (&$builderHandlerCalled): void {
+                $builderHandlerCalled = true;
+            },
+        ]);
+
+        $forms = $this->formHandler->processForms($config, []);
+
+        static::assertInternalType('array', $forms);
+        static::assertCount(1, $forms);
+        static::assertInstanceOf(FormInterface::class, $forms[0]);
+        static::assertTrue($builderHandlerCalled);
+    }
+
     /**
      * Configure the handler mocks to process forms.
      *
@@ -284,9 +311,19 @@ final class FormHandlerTest extends TestCase
                 ->willReturn($objects[0])
             ;
 
-            $this->formFactory->expects(static::at(0))
-                ->method('create')
+            $formBuilder = $this->getMockBuilder(FormBuilderInterface::class)->getMock();
+            $formBuilder->expects(static::any())
+                ->method('getForm')
                 ->willReturn($form)
+            ;
+            $formBuilder->expects(static::any())
+                ->method('addEventListener')
+                ->willReturn($form)
+            ;
+
+            $this->formFactory->expects(static::at(0))
+                ->method('createBuilder')
+                ->willReturn($formBuilder)
             ;
 
             $form->expects(static::once())

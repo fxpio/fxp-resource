@@ -91,4 +91,20 @@ interface FormConfigInterface
      * @return string
      */
     public function getConverter(): string;
+
+    /**
+     * Add the form builder handler for the request content.
+     *
+     * @param null|callable $callable The callable for the form builder
+     *
+     * @return static
+     */
+    public function addBuilderHandler(?callable $callable);
+
+    /**
+     * Get the form builder handlers for the request content.
+     *
+     * @return callable[]
+     */
+    public function getBuilderHandlers(): array;
 }

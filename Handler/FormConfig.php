@@ -46,6 +46,11 @@ class FormConfig implements FormConfigInterface
     protected $converter;
 
     /**
+     * @var callable[]
+     */
+    protected $builderHandlers = [];
+
+    /**
      * Constructor.
      *
      * @param string $type      The class name of form type
@@ -152,5 +157,23 @@ class FormConfig implements FormConfigInterface
     public function setConverter(string $converter): void
     {
         $this->converter = $converter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBuilderHandlers(): array
+    {
+        return $this->builderHandlers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addBuilderHandler(?callable $builderHandler): self
+    {
+        $this->builderHandlers[] = $builderHandler;
+
+        return $this;
     }
 }
