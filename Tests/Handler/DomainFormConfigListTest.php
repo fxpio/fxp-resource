@@ -11,6 +11,9 @@
 
 namespace Fxp\Component\Resource\Tests\Handler;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Fxp\Component\DefaultValue\Tests\Fixtures\Object\Foo;
 use Fxp\Component\Resource\Domain\DomainInterface;
@@ -140,5 +143,76 @@ final class DomainFormConfigListTest extends TestCase
         static::assertSame($instances[0], $res[0]);
         static::assertSame($instances[1], $res[1]);
         static::assertSame($new, $res[2]);
+    }
+
+    public function getOptionsData(): array
+    {
+        return [
+            ['Create', null],
+            ['Update', 'test1'],
+        ];
+    }
+
+    /**
+     * @dataProvider getOptionsData
+     *
+     * @param string          $expected
+     * @param null|int|string $id
+     */
+    public function testGetOptions(string $expected, $id): void
+    {
+        $this->config->setCreation(false);
+        $this->config->setIdentifier('bar');
+        $this->config->setOptions([
+            'foo_options' => 'bar',
+            'validation_groups' => ['Test'],
+        ]);
+
+        $object = new Foo();
+        $object->setBar($id);
+
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $metaFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $meta = $this->getMockBuilder(ClassMetadata::class)->getMock();
+
+        $this->domain->expects(static::once())
+            ->method('getObjectManager')
+            ->willReturn($om)
+        ;
+
+        $om->expects(static::once())
+            ->method('getMetadataFactory')
+            ->willReturn($metaFactory)
+        ;
+
+        $metaFactory->expects(static::once())
+            ->method('hasMetadataFor')
+            ->with(\get_class($object))
+            ->willReturn(true)
+        ;
+
+        $metaFactory->expects(static::once())
+            ->method('getMetadataFor')
+            ->with(\get_class($object))
+            ->willReturn($meta)
+        ;
+
+        $meta->expects(static::once())
+            ->method('getIdentifierValues')
+            ->with($object)
+            ->willReturn(null === $id ? [] : ['bar' => $id])
+        ;
+
+        $expectedOptions = [
+            'foo_options' => 'bar',
+            'validation_groups' => [
+                'Test',
+                'Default',
+                $expected,
+            ],
+            'method' => 'POST',
+        ];
+
+        static::assertSame($expectedOptions, $this->config->getOptions($object));
     }
 }

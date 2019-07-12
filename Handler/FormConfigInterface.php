@@ -46,9 +46,11 @@ interface FormConfigInterface
     /**
      * Get the form options.
      *
+     * @param null|object $object The object instance to retrieve the specified options for the object
+     *
      * @return array
      */
-    public function getOptions(): array;
+    public function getOptions($object = null): array;
 
     /**
      * Set the request method.

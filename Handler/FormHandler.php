@@ -219,7 +219,7 @@ class FormHandler implements FormHandlerInterface
         }
 
         foreach ($objects as $i => $object) {
-            $formBuilder = $this->formFactory->createBuilder($config->getType(), $object, $config->getOptions());
+            $formBuilder = $this->formFactory->createBuilder($config->getType(), $object, $config->getOptions($object));
 
             foreach ($builderHandlers as $builderHandler) {
                 $builderHandler($formBuilder);

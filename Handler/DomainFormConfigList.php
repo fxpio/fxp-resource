@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\Resource\Handler;
 
+use Fxp\Component\DoctrineExtra\Util\ClassUtils;
 use Fxp\Component\Resource\Domain\DomainInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -106,6 +107,29 @@ class DomainFormConfigList extends FormConfigList
         $this->creation = $isCreation;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions($object = null): array
+    {
+        $options = $this->options;
+
+        if (\is_object($object)) {
+            $class = ClassUtils::getClass($object);
+            $metaFactory = $this->domain->getObjectManager()->getMetadataFactory();
+
+            if ($metaFactory->hasMetadataFor($class)) {
+                $validationGroups = array_merge($options['validation_groups'] ?? [], ['Default']);
+                $validationGroups[] = empty($metaFactory->getMetadataFor($class)->getIdentifierValues($object))
+                    ? 'Create'
+                    : 'Update';
+                $options['validation_groups'] = array_unique($validationGroups);
+            }
+        }
+
+        return $options;
     }
 
     /**

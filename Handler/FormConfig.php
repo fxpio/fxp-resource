@@ -101,7 +101,7 @@ class FormConfig implements FormConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getOptions(): array
+    public function getOptions($object = null): array
     {
         return $this->options;
     }
