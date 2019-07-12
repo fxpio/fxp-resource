@@ -69,7 +69,7 @@ interface DomainInterface
     /**
      * Create a resource.
      *
-     * @param FormInterface|object $resource The object resource instance of defined class name
+     * @param FormInterface|object|WrapperInterface $resource The object resource instance of defined class name
      *
      * @return ResourceInterface
      */
@@ -80,9 +80,9 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param FormInterface[]|object[] $resources  The list of object resource instance
-     * @param bool                     $autoCommit Commit transaction for each resource or all
-     *                                             (continue the action even if there is an error on a resource)
+     * @param FormInterface[]|object[]|WrapperInterface[] $resources  The list of object resource instance
+     * @param bool                                        $autoCommit Commit transaction for each resource or all
+     *                                                                (continue the action even if there is an error on a resource)
      *
      * @return ResourceListInterface
      */
@@ -91,7 +91,7 @@ interface DomainInterface
     /**
      * Update a resource.
      *
-     * @param FormInterface|object $resource The object resource
+     * @param FormInterface|object|WrapperInterface $resource The object resource
      *
      * @return ResourceInterface
      */
@@ -102,9 +102,9 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param FormInterface[]|object[] $resources  The list of object resource instance
-     * @param bool                     $autoCommit Commit transaction for each resource or all
-     *                                             (continue the action even if there is an error on a resource)
+     * @param FormInterface[]|object[]|WrapperInterface[] $resources  The list of object resource instance
+     * @param bool                                        $autoCommit Commit transaction for each resource or all
+     *                                                                (continue the action even if there is an error on a resource)
      *
      * @return ResourceListInterface
      */
@@ -113,7 +113,7 @@ interface DomainInterface
     /**
      * Update or insert a resource.
      *
-     * @param FormInterface|object $resource The object resource
+     * @param FormInterface|object|WrapperInterface $resource The object resource
      *
      * @return ResourceInterface
      */
@@ -124,9 +124,9 @@ interface DomainInterface
      *
      * Warning: It's recommended to limit the number of resources.
      *
-     * @param FormInterface[]|object[] $resources  The list of object resource instance
-     * @param bool                     $autoCommit Commit transaction for each resource or all
-     *                                             (continue the action even if there is an error on a resource)
+     * @param FormInterface[]|object[]|WrapperInterface[] $resources  The list of object resource instance
+     * @param bool                                        $autoCommit Commit transaction for each resource or all
+     *                                                                (continue the action even if there is an error on a resource)
      *
      * @return ResourceListInterface
      */

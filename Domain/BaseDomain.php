@@ -184,7 +184,9 @@ abstract class BaseDomain extends AbstractDomain
                 $data->submit([]);
             }
         } else {
-            $errors = $this->validator->validate($data);
+            $groupValidation = $data instanceof ValidationWrapperInterface ? $data->getValidationGroups() : null;
+            $data = $data instanceof WrapperInterface ? $data->getData() : $data;
+            $errors = $this->validator->validate($data, null, $groupValidation);
             $resource->getErrors()->addAll($errors);
         }
 

@@ -19,6 +19,7 @@ use Fxp\Component\DefaultValue\ObjectRegistry;
 use Fxp\Component\DefaultValue\ResolvedObjectTypeFactory;
 use Fxp\Component\Resource\Domain\Domain;
 use Fxp\Component\Resource\Domain\DomainInterface;
+use Fxp\Component\Resource\Domain\Wrapper;
 use Fxp\Component\Resource\Object\DefaultValueObjectFactory;
 use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\Tests\Fixtures\Entity\Bar;
@@ -205,5 +206,28 @@ abstract class AbstractDomainTest extends TestCase
         }
 
         return '/Integrity constraint violation: (\d+) foo.detail may not be NULL/';
+    }
+
+    /**
+     * Wrap the data.
+     *
+     * @param object|object[] $data    The data
+     * @param bool            $wrapped Check if the data must be wrapped
+     *
+     * @return object|object[]|Wrapper|Wrapper[]
+     */
+    protected function wrap($data, bool $wrapped)
+    {
+        if ($wrapped) {
+            if (\is_array($data)) {
+                foreach ($data as $i => $val) {
+                    $data[$i] = new Wrapper($val);
+                }
+            } else {
+                $data = new Wrapper($data);
+            }
+        }
+
+        return $data;
     }
 }

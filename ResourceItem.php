@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\Resource;
 
+use Fxp\Component\Resource\Domain\WrapperInterface;
 use Fxp\Component\Resource\Exception\InvalidArgumentException;
 use Fxp\Component\Resource\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormErrorIterator;
@@ -84,9 +85,9 @@ class ResourceItem implements ResourceInterface
      */
     public function getRealData()
     {
-        return $this->data instanceof FormInterface
-            ? $this->data->getData()
-            : $this->data;
+        $data = $this->data instanceof WrapperInterface ? $this->data->getData() : $this->data;
+
+        return $data instanceof FormInterface ? $data->getData() : $data;
     }
 
     /**
@@ -138,9 +139,8 @@ class ResourceItem implements ResourceInterface
      */
     protected function validateData($data): void
     {
-        if ($data instanceof FormInterface) {
-            $data = $data->getData();
-        }
+        $data = $data instanceof WrapperInterface ? $data->getData() : $data;
+        $data = $data instanceof FormInterface ? $data->getData() : $data;
 
         if (!\is_object($data)) {
             throw new UnexpectedTypeException($data, 'object');

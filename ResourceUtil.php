@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\Resource;
 
+use Fxp\Component\Resource\Domain\WrapperInterface;
 use Fxp\Component\Resource\Exception\InvalidResourceException;
 use Fxp\Component\Resource\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
@@ -59,9 +60,8 @@ abstract class ResourceUtil
      */
     public static function validateObjectResource($object, string $requireClass, int $i, bool $allowForm = true): void
     {
-        if ($allowForm && $object instanceof FormInterface) {
-            $object = $object->getData();
-        }
+        $object = $object instanceof WrapperInterface ? $object->getData() : $object;
+        $object = $allowForm && $object instanceof FormInterface ? $object = $object->getData() : $object;
 
         if (!\is_object($object) || !$object instanceof $requireClass) {
             throw new UnexpectedTypeException($object, $requireClass, $i);

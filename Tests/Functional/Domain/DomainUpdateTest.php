@@ -30,25 +30,48 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 final class DomainUpdateTest extends AbstractDomainTest
 {
-    public function testUpdateWithErrorValidation(): void
+    public function getWrappedData(): array
+    {
+        return [
+            [false],
+            [true],
+        ];
+    }
+
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdateWithErrorValidation(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $foo = $this->insertResource($domain);
         $foo->setName(null);
 
-        $this->runTestUpdateException($domain, $foo, '/This value should not be blank./');
+        $this->runTestUpdateException($domain, $this->wrap($foo, $wrapped), '/This value should not be blank./');
     }
 
-    public function testUpdateWithErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdateWithErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $foo = $this->insertResource($domain);
         $foo->setDetail(null);
 
-        $this->runTestUpdateException($domain, $foo, $this->getIntegrityViolationMessage());
+        $this->runTestUpdateException($domain, $this->wrap($foo, $wrapped), $this->getIntegrityViolationMessage());
     }
 
-    public function testUpdate(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdate(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $foo = $this->insertResource($domain);
@@ -74,9 +97,9 @@ final class DomainUpdateTest extends AbstractDomainTest
 
         static::assertCount(1, $domain->getRepository()->findAll());
 
-        $resource = $domain->update($foo);
+        $resource = $domain->update($this->wrap($foo, $wrapped));
         static::assertCount(0, $resource->getErrors());
-        static::assertSame('Foo', $resource->getData()->getName());
+        static::assertSame('Foo', $resource->getRealData()->getName());
 
         static::assertTrue($preEvent);
         static::assertTrue($postEvent);
@@ -84,7 +107,12 @@ final class DomainUpdateTest extends AbstractDomainTest
         static::assertCount(1, $domain->getRepository()->findAll());
     }
 
-    public function testUpdatesWithErrorValidation(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdatesWithErrorValidation(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -93,10 +121,15 @@ final class DomainUpdateTest extends AbstractDomainTest
             $object->setName(null);
         }
 
-        $this->runTestUpdatesException($domain, $objects, '/This value should not be blank./', true);
+        $this->runTestUpdatesException($domain, $this->wrap($objects, $wrapped), '/This value should not be blank./', true);
     }
 
-    public function testUpdatesWithErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdatesWithErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -105,15 +138,25 @@ final class DomainUpdateTest extends AbstractDomainTest
             $object->setDetail(null);
         }
 
-        $this->runTestUpdatesException($domain, $objects, $this->getIntegrityViolationMessage(), false);
+        $this->runTestUpdatesException($domain, $this->wrap($objects, $wrapped), $this->getIntegrityViolationMessage(), false);
     }
 
-    public function testUpdates(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdates(bool $wrapped): void
     {
-        $this->runTestUpdates(false);
+        $this->runTestUpdates(false, $wrapped);
     }
 
-    public function testUpdatesAutoCommitWithErrorValidationAndErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdatesAutoCommitWithErrorValidationAndErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -141,7 +184,7 @@ final class DomainUpdateTest extends AbstractDomainTest
 
         static::assertCount(2, $domain->getRepository()->findAll());
 
-        $resources = $domain->updates($objects, true);
+        $resources = $domain->updates($this->wrap($objects, $wrapped), true);
         static::assertInstanceOf(ResourceListInterface::class, $resources);
 
         static::assertTrue($resources->hasErrors());
@@ -154,7 +197,12 @@ final class DomainUpdateTest extends AbstractDomainTest
         static::assertCount(2, $domain->getRepository()->findAll());
     }
 
-    public function testUpsertsAutoCommitWithErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpsertsAutoCommitWithErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -184,7 +232,7 @@ final class DomainUpdateTest extends AbstractDomainTest
 
         static::assertCount(2, $domain->getRepository()->findAll());
 
-        $resources = $domain->updates($objects, true);
+        $resources = $domain->updates($this->wrap($objects, $wrapped), true);
         static::assertInstanceOf(ResourceListInterface::class, $resources);
 
         static::assertTrue($resources->hasErrors());
@@ -201,7 +249,12 @@ final class DomainUpdateTest extends AbstractDomainTest
         static::assertCount(2, $domain->getRepository()->findAll());
     }
 
-    public function testUpdatesAutoCommitWithErrorValidationAndSuccess(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdatesAutoCommitWithErrorValidationAndSuccess(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -210,7 +263,7 @@ final class DomainUpdateTest extends AbstractDomainTest
         $objects[1]->setDetail('New Detail 2');
 
         static::assertCount(2, $domain->getRepository()->findAll());
-        $resources = $domain->updates($objects, true);
+        $resources = $domain->updates($this->wrap($objects, $wrapped), true);
         static::assertCount(2, $domain->getRepository()->findAll());
 
         static::assertCount(2, $resources);
@@ -222,12 +275,17 @@ final class DomainUpdateTest extends AbstractDomainTest
         static::assertSame(ResourceStatutes::UPDATED, $resources->get(1)->getStatus());
     }
 
-    public function testUpdatesAutoCommit(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testUpdatesAutoCommit(bool $wrapped): void
     {
-        $this->runTestUpdates(true);
+        $this->runTestUpdates(true, $wrapped);
     }
 
-    public function runTestUpdates($autoCommit): void
+    public function runTestUpdates($autoCommit, bool $wrapped): void
     {
         $domain = $this->createDomain();
         $objects = $this->insertResources($domain, 2);
@@ -238,7 +296,7 @@ final class DomainUpdateTest extends AbstractDomainTest
         }
 
         static::assertCount(2, $domain->getRepository()->findAll());
-        $resources = $domain->updates($objects, $autoCommit);
+        $resources = $domain->updates($this->wrap($objects, $wrapped), $autoCommit);
         static::assertCount(2, $domain->getRepository()->findAll());
 
         static::assertCount(2, $resources);
@@ -250,7 +308,12 @@ final class DomainUpdateTest extends AbstractDomainTest
         static::assertSame(ResourceStatutes::UPDATED, $resources->get(1)->getStatus());
     }
 
-    public function testInvalidObjectType(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testInvalidObjectType(bool $wrapped): void
     {
         $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
         $this->expectExceptionMessage('Expected argument of type "Fxp\\Component\\Resource\\Tests\\Fixtures\\Entity\\Foo", "integer" given at the position "0"');
@@ -259,10 +322,17 @@ final class DomainUpdateTest extends AbstractDomainTest
         /** @var object $object */
         $object = 42;
 
-        $domain->update($object);
+        $domain->update($this->wrap($object, $wrapped));
     }
 
-    public function testErrorIdentifier(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     *
+     * @throws
+     */
+    public function testErrorIdentifier(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $object */
@@ -272,7 +342,7 @@ final class DomainUpdateTest extends AbstractDomainTest
 
         $this->loadFixtures([]);
 
-        $resource = $domain->update($object);
+        $resource = $domain->update($this->wrap($object, $wrapped));
         static::assertFalse($resource->isValid());
         static::assertSame(ResourceStatutes::ERROR, $resource->getStatus());
         static::assertRegExp('/The resource cannot be updated because it has not an identifier/', $resource->getErrors()->get(0)->getMessage());

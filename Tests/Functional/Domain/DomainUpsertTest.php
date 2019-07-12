@@ -30,7 +30,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 final class DomainUpsertTest extends AbstractDomainTest
 {
-    public function getUpsertType()
+    public function getWrappedData(): array
     {
         return [
             [false],
@@ -38,12 +38,25 @@ final class DomainUpsertTest extends AbstractDomainTest
         ];
     }
 
+    public function getUpsertType(): array
+    {
+        return [
+            [false, false],
+            [true, false],
+            [false, true],
+            [true, true],
+        ];
+    }
+
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertWithErrorValidation($isUpdate): void
+    public function testUpsertWithErrorValidation(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -56,15 +69,18 @@ final class DomainUpsertTest extends AbstractDomainTest
             $foo = $domain->newInstance();
         }
 
-        $this->runTestUpsertException($domain, $foo, '/This value should not be blank./', $isUpdate);
+        $this->runTestUpsertException($domain, $this->wrap($foo, $wrapped), '/This value should not be blank./', $isUpdate);
     }
 
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertWithErrorDatabase($isUpdate): void
+    public function testUpsertWithErrorDatabase(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -78,15 +94,18 @@ final class DomainUpsertTest extends AbstractDomainTest
             $foo->setName('Bar');
         }
 
-        $this->runTestUpsertException($domain, $foo, $this->getIntegrityViolationMessage(), $isUpdate);
+        $this->runTestUpsertException($domain, $this->wrap($foo, $wrapped), $this->getIntegrityViolationMessage(), $isUpdate);
     }
 
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsert($isUpdate): void
+    public function testUpsert(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -122,9 +141,9 @@ final class DomainUpsertTest extends AbstractDomainTest
 
         static::assertCount($isUpdate ? 1 : 0, $domain->getRepository()->findAll());
 
-        $resource = $domain->upsert($foo);
+        $resource = $domain->upsert($this->wrap($foo, $wrapped));
         static::assertCount(0, $resource->getErrors());
-        static::assertSame($isUpdate ? 'Foo' : 'Bar', $resource->getData()->getName());
+        static::assertSame($isUpdate ? 'Foo' : 'Bar', $resource->getRealData()->getName());
 
         static::assertTrue($preEvent);
         static::assertTrue($postEvent);
@@ -136,8 +155,11 @@ final class DomainUpsertTest extends AbstractDomainTest
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertsWithErrorValidation($isUpdate): void
+    public function testUpsertsWithErrorValidation(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -156,15 +178,18 @@ final class DomainUpsertTest extends AbstractDomainTest
             $objects = [$foo1, $foo2];
         }
 
-        $this->runTestUpsertsException($domain, $objects, '/This value should not be blank./', true, $isUpdate);
+        $this->runTestUpsertsException($domain, $this->wrap($objects, $wrapped), '/This value should not be blank./', true, $isUpdate);
     }
 
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertsWithErrorDatabase($isUpdate): void
+    public function testUpsertsWithErrorDatabase(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -185,25 +210,31 @@ final class DomainUpsertTest extends AbstractDomainTest
             $objects = [$foo1, $foo2];
         }
 
-        $this->runTestUpsertsException($domain, $objects, $this->getIntegrityViolationMessage(), false, $isUpdate);
+        $this->runTestUpsertsException($domain, $this->wrap($objects, $wrapped), $this->getIntegrityViolationMessage(), false, $isUpdate);
     }
 
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpserts($isUpdate): void
+    public function testUpserts(bool $isUpdate, bool $wrapped): void
     {
-        $this->runTestUpserts(false, $isUpdate);
+        $this->runTestUpserts(false, $isUpdate, $wrapped);
     }
 
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertsAutoCommitWithErrorValidationAndErrorDatabase($isUpdate): void
+    public function testUpsertsAutoCommitWithErrorValidationAndErrorDatabase(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -243,7 +274,7 @@ final class DomainUpsertTest extends AbstractDomainTest
 
         static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
-        $resources = $domain->upserts($objects, true);
+        $resources = $domain->upserts($this->wrap($objects, $wrapped), true);
         static::assertInstanceOf(ResourceListInterface::class, $resources);
 
         static::assertTrue($resources->hasErrors());
@@ -260,8 +291,11 @@ final class DomainUpsertTest extends AbstractDomainTest
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertsAutoCommitWithErrorDatabase($isUpdate): void
+    public function testUpsertsAutoCommitWithErrorDatabase(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -304,7 +338,7 @@ final class DomainUpsertTest extends AbstractDomainTest
 
         static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
 
-        $resources = $domain->upserts($objects, true);
+        $resources = $domain->upserts($this->wrap($objects, $wrapped), true);
         static::assertInstanceOf(ResourceListInterface::class, $resources);
 
         static::assertTrue($resources->hasErrors());
@@ -325,8 +359,11 @@ final class DomainUpsertTest extends AbstractDomainTest
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertsAutoCommitWithErrorValidationAndSuccess($isUpdate): void
+    public function testUpsertsAutoCommitWithErrorValidationAndSuccess(bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -348,7 +385,7 @@ final class DomainUpsertTest extends AbstractDomainTest
         }
 
         static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
-        $resources = $domain->upserts($objects, true);
+        $resources = $domain->upserts($this->wrap($objects, $wrapped), true);
         static::assertCount($isUpdate ? 2 : 1, $domain->getRepository()->findAll());
 
         static::assertCount(2, $resources);
@@ -365,13 +402,16 @@ final class DomainUpsertTest extends AbstractDomainTest
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testUpsertsAutoCommit($isUpdate): void
+    public function testUpsertsAutoCommit(bool $isUpdate, bool $wrapped): void
     {
-        $this->runTestUpserts(true, $isUpdate);
+        $this->runTestUpserts(true, $isUpdate, $wrapped);
     }
 
-    public function runTestUpserts($autoCommit, $isUpdate): void
+    public function runTestUpserts(bool $autoCommit, bool $isUpdate, bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -397,7 +437,7 @@ final class DomainUpsertTest extends AbstractDomainTest
         }
 
         static::assertCount($isUpdate ? 2 : 0, $domain->getRepository()->findAll());
-        $resources = $domain->upserts($objects, $autoCommit);
+        $resources = $domain->upserts($this->wrap($objects, $wrapped), $autoCommit);
         static::assertCount(2, $domain->getRepository()->findAll());
 
         static::assertCount(2, $resources);
@@ -411,7 +451,12 @@ final class DomainUpsertTest extends AbstractDomainTest
             : ResourceStatutes::CREATED, $resources->get(1)->getStatus());
     }
 
-    public function testInvalidObjectType(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testInvalidObjectType(bool $wrapped): void
     {
         $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
         $this->expectExceptionMessage('Expected argument of type "Fxp\\Component\\Resource\\Tests\\Fixtures\\Entity\\Foo", "integer" given at the position "0"');
@@ -420,15 +465,18 @@ final class DomainUpsertTest extends AbstractDomainTest
         /** @var object $object */
         $object = 42;
 
-        $domain->upsert($object);
+        $domain->upsert($this->wrap($object, $wrapped));
     }
 
     /**
      * @dataProvider getUpsertType
      *
      * @param bool $isUpdate
+     * @param bool $wrapped
+     *
+     * @throws
      */
-    public function testErrorIdentifier($isUpdate): void
+    public function testErrorIdentifier(bool $isUpdate, bool $wrapped): void
     {
         $this->loadFixtures([]);
 
@@ -443,7 +491,7 @@ final class DomainUpsertTest extends AbstractDomainTest
             $object = $this->insertResource($domain);
         }
 
-        $resource = $domain->upsert($object);
+        $resource = $domain->upsert($this->wrap($object, $wrapped));
         static::assertTrue($resource->isValid());
     }
 

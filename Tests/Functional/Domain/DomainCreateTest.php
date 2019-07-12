@@ -32,26 +32,51 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 final class DomainCreateTest extends AbstractDomainTest
 {
-    public function testCreateWithErrorValidation(): void
+    public function getWrappedData(): array
+    {
+        return [
+            [false],
+            [true],
+        ];
+    }
+
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreateWithErrorValidation(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo */
         $foo = $domain->newInstance();
 
-        $this->runTestCreateException($domain, $foo, '/This value should not be blank./');
+        $this->runTestCreateException($domain, $this->wrap($foo, $wrapped), '/This value should not be blank./');
     }
 
-    public function testCreateWithErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreateWithErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo */
         $foo = $domain->newInstance();
         $foo->setName('Bar');
 
-        $this->runTestCreateException($domain, $foo, $this->getIntegrityViolationMessage());
+        $this->runTestCreateException($domain, $this->wrap($foo, $wrapped), $this->getIntegrityViolationMessage());
     }
 
-    public function testCreate(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     *
+     * @throws
+     */
+    public function testCreate(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo */
@@ -81,7 +106,7 @@ final class DomainCreateTest extends AbstractDomainTest
 
         static::assertCount(0, $domain->getRepository()->findAll());
 
-        $resource = $domain->create($foo);
+        $resource = $domain->create($this->wrap($foo, $wrapped));
         static::assertCount(0, $resource->getErrors());
 
         static::assertTrue($preEvent);
@@ -90,7 +115,12 @@ final class DomainCreateTest extends AbstractDomainTest
         static::assertCount(1, $domain->getRepository()->findAll());
     }
 
-    public function testCreatesWithErrorValidation(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreatesWithErrorValidation(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -98,10 +128,15 @@ final class DomainCreateTest extends AbstractDomainTest
         /** @var Foo $foo2 */
         $foo2 = $domain->newInstance();
 
-        $this->runTestCreatesException($domain, [$foo1, $foo2], '/This value should not be blank./', true);
+        $this->runTestCreatesException($domain, $this->wrap([$foo1, $foo2], $wrapped), '/This value should not be blank./', true);
     }
 
-    public function testCreatesWithErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreatesWithErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -111,20 +146,35 @@ final class DomainCreateTest extends AbstractDomainTest
         $foo2 = $domain->newInstance();
         $foo2->setName('Bar');
 
-        $this->runTestCreatesException($domain, [$foo1, $foo2], $this->getIntegrityViolationMessage(), false);
+        $this->runTestCreatesException($domain, $this->wrap([$foo1, $foo2], $wrapped), $this->getIntegrityViolationMessage(), false);
     }
 
-    public function testCreates(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreates(bool $wrapped): void
     {
-        $this->runTestCreates(false);
+        $this->runTestCreates(false, $wrapped);
     }
 
-    public function testCreatesAutoCommit(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreatesAutoCommit(bool $wrapped): void
     {
-        $this->runTestCreates(true);
+        $this->runTestCreates(true, $wrapped);
     }
 
-    public function testCreatesAutoCommitWithErrorValidationAndErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreatesAutoCommitWithErrorValidationAndErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -157,7 +207,7 @@ final class DomainCreateTest extends AbstractDomainTest
 
         static::assertCount(0, $domain->getRepository()->findAll());
 
-        $resources = $domain->creates($objects, true);
+        $resources = $domain->creates($this->wrap($objects, $wrapped), true);
         static::assertInstanceOf(ResourceListInterface::class, $resources);
 
         static::assertTrue($resources->hasErrors());
@@ -170,7 +220,14 @@ final class DomainCreateTest extends AbstractDomainTest
         static::assertCount(0, $domain->getRepository()->findAll());
     }
 
-    public function testCreatesAutoCommitWithErrorDatabase(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     *
+     * @throws
+     */
+    public function testCreatesAutoCommitWithErrorDatabase(bool $wrapped): void
     {
         $domain = $this->createDomain();
 
@@ -205,7 +262,7 @@ final class DomainCreateTest extends AbstractDomainTest
 
         static::assertCount(0, $domain->getRepository()->findAll());
 
-        $resources = $domain->creates($objects, true);
+        $resources = $domain->creates($this->wrap($objects, $wrapped), true);
         static::assertInstanceOf(ResourceListInterface::class, $resources);
 
         static::assertTrue($resources->hasErrors());
@@ -222,7 +279,14 @@ final class DomainCreateTest extends AbstractDomainTest
         static::assertCount(0, $domain->getRepository()->findAll());
     }
 
-    public function testCreatesAutoCommitWithErrorValidationAndSuccess(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     *
+     * @throws
+     */
+    public function testCreatesAutoCommitWithErrorValidationAndSuccess(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -237,7 +301,7 @@ final class DomainCreateTest extends AbstractDomainTest
         $this->loadFixtures([]);
 
         static::assertCount(0, $domain->getRepository()->findAll());
-        $resources = $domain->creates($objects, true);
+        $resources = $domain->creates($this->wrap($objects, $wrapped), true);
         static::assertCount(1, $domain->getRepository()->findAll());
 
         static::assertCount(2, $resources);
@@ -249,7 +313,12 @@ final class DomainCreateTest extends AbstractDomainTest
         static::assertSame(ResourceStatutes::CREATED, $resources->get(1)->getStatus());
     }
 
-    public function testInvalidObjectType(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testInvalidObjectType(bool $wrapped): void
     {
         $this->expectException(\Fxp\Component\Resource\Exception\UnexpectedTypeException::class);
         $this->expectExceptionMessage('Expected argument of type "Fxp\\Component\\Resource\\Tests\\Fixtures\\Entity\\Foo", "integer" given at the position "0"');
@@ -258,21 +327,31 @@ final class DomainCreateTest extends AbstractDomainTest
         /** @var object $object */
         $object = 42;
 
-        $domain->create($object);
+        $domain->create($this->wrap($object, $wrapped));
     }
 
-    public function testErrorIdentifier(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testErrorIdentifier(bool $wrapped): void
     {
         $domain = $this->createDomain();
         $object = $this->insertResource($domain);
 
-        $resource = $domain->create($object);
+        $resource = $domain->create($this->wrap($object, $wrapped));
         static::assertFalse($resource->isValid());
         static::assertSame(ResourceStatutes::ERROR, $resource->getStatus());
         static::assertRegExp('/The resource cannot be created because it has an identifier/', $resource->getErrors()->get(0)->getMessage());
     }
 
-    public function testCreateAutoCommitErrorOnPrePersistAndSuccessObjectsWithViolationException(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     */
+    public function testCreateAutoCommitErrorOnPrePersistAndSuccessObjectsWithViolationException(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -293,7 +372,7 @@ final class DomainCreateTest extends AbstractDomainTest
 
         static::assertCount(0, $domain->getRepository()->findAll());
 
-        $resources = $domain->creates($objects, true);
+        $resources = $domain->creates($this->wrap($objects, $wrapped), true);
         static::assertTrue($resources->hasErrors());
         static::assertFalse($resources->get(0)->isValid());
         static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
@@ -304,7 +383,14 @@ final class DomainCreateTest extends AbstractDomainTest
         static::assertSame('Caused by previous internal database error', $resources->get(1)->getErrors()->get(0)->getMessage());
     }
 
-    public function testCreateAutoCommitErrorOnPrePersistAndSuccessObjects(): void
+    /**
+     * @dataProvider getWrappedData
+     *
+     * @param bool $wrapped
+     *
+     * @throws
+     */
+    public function testCreateAutoCommitErrorOnPrePersistAndSuccessObjects(bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -325,7 +411,7 @@ final class DomainCreateTest extends AbstractDomainTest
 
         static::assertCount(0, $domain->getRepository()->findAll());
 
-        $resources = $domain->creates($objects, true);
+        $resources = $domain->creates($this->wrap($objects, $wrapped), true);
         static::assertTrue($resources->hasErrors());
         static::assertFalse($resources->get(0)->isValid());
         static::assertSame(ResourceStatutes::ERROR, $resources->get(0)->getStatus());
@@ -415,7 +501,7 @@ final class DomainCreateTest extends AbstractDomainTest
             : ResourceListStatutes::ERROR, $resources->getStatus());
     }
 
-    protected function runTestCreates($autoCommit): void
+    protected function runTestCreates(bool $autoCommit, bool $wrapped): void
     {
         $domain = $this->createDomain();
         /** @var Foo $foo1 */
@@ -432,7 +518,7 @@ final class DomainCreateTest extends AbstractDomainTest
         $this->loadFixtures([]);
 
         static::assertCount(0, $domain->getRepository()->findAll());
-        $resources = $domain->creates($objects, $autoCommit);
+        $resources = $domain->creates($this->wrap($objects, $wrapped), $autoCommit);
         static::assertCount(2, $domain->getRepository()->findAll());
 
         static::assertCount(2, $resources);
