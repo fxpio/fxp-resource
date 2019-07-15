@@ -29,6 +29,7 @@ use Fxp\Component\Resource\ResourceInterface;
 use Fxp\Component\Resource\ResourceListInterface;
 use Fxp\Component\Resource\ResourceStatutes;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -201,6 +202,11 @@ abstract class DomainUtil
             $message = static::getDatabaseErrorMessage($translator, $exception, $debug);
 
             return static::extractDriverExceptionMessage($exception, $message, $debug);
+        }
+
+        if ($translator instanceof TranslatorBagInterface
+                && $translator->getCatalogue()->has($exception->getMessage(), 'validators')) {
+            return $translator->trans($exception->getMessage(), [], 'validators');
         }
 
         return $debug
