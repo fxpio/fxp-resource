@@ -53,6 +53,11 @@ class FormHandler implements FormHandlerInterface
     protected $defaultLimit;
 
     /**
+     * @var int
+     */
+    protected $maxLimit;
+
+    /**
      * Constructor.
      *
      * @param ConverterRegistryInterface $converterRegistry The converter registry
@@ -60,6 +65,7 @@ class FormHandler implements FormHandlerInterface
      * @param RequestStack               $requestStack      The request stack
      * @param TranslatorInterface        $translator        The translator
      * @param null|int                   $defaultLimit      The limit of max data rows
+     * @param null|int                   $maxLimit          The max limit of max data rows
      *
      * @throws InvalidArgumentException When the current request is request stack is empty
      */
@@ -68,13 +74,15 @@ class FormHandler implements FormHandlerInterface
         FormFactoryInterface $formFactory,
         RequestStack $requestStack,
         TranslatorInterface $translator,
-        ?int $defaultLimit = null
+        ?int $defaultLimit = null,
+        ?int $maxLimit = null
     ) {
         $this->converterRegistry = $converterRegistry;
         $this->formFactory = $formFactory;
         $this->request = $requestStack->getCurrentRequest();
         $this->translator = $translator;
         $this->defaultLimit = $this->validateLimit($defaultLimit);
+        $this->maxLimit = $this->validateLimit($maxLimit);
 
         if (null === $this->request) {
             throw new InvalidArgumentException('The current request is required in request stack');
@@ -105,6 +113,14 @@ class FormHandler implements FormHandlerInterface
     public function getDefaultLimit(): ?int
     {
         return $this->defaultLimit;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMaxLimit(): ?int
+    {
+        return $this->maxLimit ?? $this->defaultLimit;
     }
 
     /**
@@ -172,9 +188,9 @@ class FormHandler implements FormHandlerInterface
      */
     protected function getLimit(?int $limit = null): ?int
     {
-        if (null === $limit) {
-            $limit = $this->getDefaultLimit();
-        }
+        $max = $this->getMaxLimit();
+        $limit = $limit ?? $this->getDefaultLimit();
+        $limit = null !== $limit && null !== $max ? min($max, $limit) : $limit;
 
         return $this->validateLimit($limit);
     }

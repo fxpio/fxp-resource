@@ -46,4 +46,11 @@ interface FormHandlerInterface
      * @return null|int
      */
     public function getDefaultLimit(): ?int;
+
+    /**
+     * Get the max limit. If the value is null, then there is not limit of quantity of rows.
+     *
+     * @return null|int
+     */
+    public function getMaxLimit(): ?int;
 }
