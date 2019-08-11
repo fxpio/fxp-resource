@@ -38,6 +38,7 @@ Features include:
   - to return the list of resources with the status of the action (created, updated, error ...) on each resource of the list
 - Request content converter:
   - JSON converter
+  - XML converter
 - Form handler to work with Symfony Form
 
 > **Note:**
