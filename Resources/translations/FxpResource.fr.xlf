@@ -61,6 +61,11 @@
                 <source>converter.json.invalid_body</source>
                 <target>Le corps de la requête doit être un objet JSON</target>
             </trans-unit>
+
+            <trans-unit id="13">
+                <source>converter.xml.invalid_body</source>
+                <target>Le corps de la requête doit être un objet XML</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

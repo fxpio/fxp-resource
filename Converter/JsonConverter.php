@@ -12,38 +12,20 @@
 namespace Fxp\Component\Resource\Converter;
 
 use Fxp\Component\Resource\Exception\InvalidJsonConverterException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A request content converter interface.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class JsonConverter implements ConverterInterface
+class JsonConverter extends AbstractConverter
 {
-    public const NAME = 'json';
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * Constructor.
-     *
-     * @param TranslatorInterface $translator The translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getName(): string
     {
-        return static::NAME;
+        return 'json';
     }
 
     /**
@@ -51,12 +33,12 @@ class JsonConverter implements ConverterInterface
      */
     public function convert(string $content): array
     {
-        $content = json_decode($content, true);
+        $value = json_decode($content, true);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidJsonConverterException($this->translator->trans('converter.json.invalid_body', [], 'FxpResource'));
         }
 
-        return \is_array($content) ? $content : [];
+        return \is_array($value) ? $value : [];
     }
 }
